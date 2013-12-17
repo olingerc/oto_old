@@ -1,0 +1,62 @@
+<div ng-controller='UsersController' class=''>
+   <h2>Users</h3>
+
+   <h3>Add user</h3>
+   <form novalidate class="form-inline" role='form' name='userForm'>
+      <div class="form-group">
+
+         <input placeholder='username' required class='form-control' type="text" ng-model="user.username" />
+      </div>
+      <div class="form-group">
+         <input placeholder='full name' required class='form-control' type="text" ng-model="user.name" />
+      </div>
+      <div class="form-group">
+         <input placeholder='password' required class='form-control' type="password" ng-model="user.password" />
+      </div>
+      <div class="form-group">
+         <select required class='form-control' ng-model="user.role" placeholder='role'>
+            <option selected='selected'>user</option>
+            <option>admin</option>
+         </select>
+      </div>
+      <button type="submit" class="btn btn-default"
+         ng-click="userFormAction(user)"
+         ng-disabled="userForm.$invalid  || isUnchanged(user)">
+         {{userFormState.action}}
+      </button>
+      <button class="btn btn-default"
+         ng-click="resetForm()">
+         reset
+      </button>
+      <span class='text-warning' ng-show='userFormState.errorAlreadyExists'>Username already exists</span>
+   </form>
+
+   <h3>Existing users</h3>
+   <table class='table table-hover table-condensed'>
+      <thead>
+         <th>Login</th>
+         <th>Full name</th>
+         <th>Role</th>
+         <th>Actions</th>
+      </thead>
+
+      <tbody>
+         <tr
+         ng-repeat='user in users'>
+            <td> {{user.username}} </td>
+            <td> {{user.name}} </td>
+            <td> {{user.role}} </td>
+            <td>
+               <button
+               ng-click='deleteUser($index)'>
+                  Delete
+               </button>
+               <button
+               ng-click='updateUser($index)'>
+                  Update
+               </button>
+            </td>
+         </tr>
+      </tbody>
+   </table>
+</div>

@@ -1,0 +1,11 @@
+In Angular
+
+How to modify view after delete/update?
+Instead or relaying on the $index - which - as you have noticed - will point to the index in a sorted / filtered array, you can pass the item itself to your removeItem function:
+
+<a><img src="img/delete.png" ng-click="removeItem(item)">{{$index}}</a>
+and modify the removeItem function to find an index using the indexOf method of an array as follows:
+
+$scope.removeItem = function(item){
+   $scope.items.splice($scope.items.indexOf(item),1);
+}

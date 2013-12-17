@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en" ng-app="oto">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <title>Organize the Olingers</title>
+
+      <link rel="stylesheet" href="/static/css/bootstrap.css">
+      <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
+      <link rel="stylesheet" href="/static/css/main.css">
+
+   </head>
+   <body ng-cloak>
+      {%raw %}
+      <nav id="navbar" class="navbar navbar-default" role="navigation"
+         ng-controller="NavController"
+         ng-cloak>
+         <div class='navbar-header'>
+             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+             </button>
+            <a class="navbar-brand" title='Organize the Olingers' href="/"><strong>OtO </strong><small class='text-muted'>Organize the Olingers</small></a>
+         </div>
+
+         <!-- Collect the nav links, forms, and other content for toggling -->
+         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+               <li active-nav>
+                  <a href="/"
+                     access-level='accessLevels.user'>Home</a>
+               </li>
+               <li active-nav>
+                  <a href="/notes"
+                     access-level='accessLevels.user'>Notes</a>
+               </li>
+               <li active-nav>
+                  <a href="/automation"
+                     access-level='accessLevels.user'>Automation</a>
+               </li>
+               <li active-nav>
+                  <a href="/admin"
+                     access-level='accessLevels.admin'>Admin</a>
+               </li>
+          </ul>
+         <ul class="nav navbar-nav navbar-right">
+               <li active-nav>
+                  <a href="/about"
+                     access-level='accessLevels.public'>About</a>
+               </li>
+               <li active-nav>
+                  <a class="navbar-link" href="/login"
+                     access-level='accessLevels.anon'>Log in</a>
+               </li>
+               <li>
+                  <a class="navbar-link" href="#"
+                     access-level='accessLevels.user'
+                     ng-click='logout()'>Log out, {{user.username}}</a>
+               </li>
+         </ul>
+         </div>
+      </nav>
+      {% endraw %}
+
+
+      {% block app %}{% endblock %}
+
+      <script src="/static/lib/jquery/jquery.min.js"></script>
+      <script src="/static/lib/bootstrap/bootstrap.min.js"></script>
+      <script src='http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js'></script>
+      <script src="/static/lib/angular-file-upload/angular-file-upload-html5-shim.min.js"></script>
+      <script src="/static/lib/angular/angular.js"></script>
+      <script src="/static/lib/angular/angular-resource.js"></script>
+      <script src="/static/lib/angular/angular-route.js"></script>
+      <script src="/static/lib/angular/angular-cookies.js"></script>
+      <script src="/static/lib/angularui/ui-bootstrap-tpls.min.js"></script>
+      <script src="/static/lib/angular-file-upload/angular-file-upload.min.js"></script>
+
+      <script src="/static/js/core/routingConfig.js"></script>
+      <script src="/static/js/core/app.js"></script>
+      <script src="/static/js/core/helperFunctions.js"></script>
+      <script src="/static/js/core/authenticationServices.js"></script>
+      <script src="/static/js/core/NavController.js"></script>
+      <script src="/static/js/core/authenticationDirectives.js"></script>
+
+      <script src="/static/js/notes/NotesViewController.js"></script>
+      <script src="/static/js/notes/CardController.js"></script>
+      <script src="/static/js/notes/StackController.js"></script>
+      <script src="/static/js/notes/notesFilters.js"></script>
+
+      <script src="/static/js/admin/UsersController.js"></script>
+
+      <script src="/static/js/login/LoginController.js"></script>
+
+      <script src="/static/js/landing/LandingController.js"></script>
+
+      <script src="/static/js/automation/AutomationControllers.js"></script>
+   </body>
+</html>

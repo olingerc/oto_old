@@ -1,0 +1,87 @@
+/*body {padding-top:71px /*for navbar fixed-top*/}*/
+/*---STACKS---*/
+#stackactions {display:inline;padding:2px, margin-top:-15px}
+#stackactions .btn-xs {margin: 5px 2px 0 0}
+
+.stacklist {margin-top:10px;width:100%; padding-right:0}
+
+/*---CARD VIEW OPTIONS--*/
+.cards_order_options a.active{font-weight:bold}
+
+
+/*---CARDS---*/
+.card {
+  background: #f0f0f0;
+}
+
+.card:hover {background:#e5e5e5}
+.card.edit {border-color:#0044CC;}
+.card .card_actions_btn {margin-right:-10px}
+
+
+.att_thumb {height:80px}
+.att_thumb:hover {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.attprogress {
+  left:-80px;
+  position:relative;
+  color:#d0d0d0;
+  top:0px;
+}
+
+.uploadProgress {
+  left:-40px;
+  position:relative;
+  top:0px;
+  display:inline
+}
+.label-list {
+   margin:0
+}
+
+.thumblist {
+   margin:0
+}
+
+.thumbnailProgress {
+  left:-80px;
+  position:relative;
+  top:0px;
+}
+
+.linkprogress {
+  left:35px;
+  position:relative;
+  top:-65px;
+}
+
+.attdelbutton:hover {
+  color:red
+}
+
+.card .form_action {margin:5px}
+
+.thumb-caption {
+  padding:2px;
+  position:relative;
+  top:-25px;
+  left:-20px;
+  background:white;
+  opacity:0.7;
+  border-top-right-radius: 3px
+}
+
+/*--ADD CARD FORM--*/
+#cardFormContainer {background:#666}
+#cardForm {padding-top:10px}
+#addFileFormBtn {margin-left:35px;}
+
+#addLinkFormContainer {display:inline-block;width:300px}
+#addLinkFormInput {display:inline-block;width:100px;}
+#addLinkFormBtnOk {display:inline-block;}
+#addLinkFormBtnCancel {display:inline-block}

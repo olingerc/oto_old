@@ -1,0 +1,375 @@
+<div id="cardView" class="row"
+   ng-controller="NotesViewController">
+   <section id="sidebar" class="col-lg-2 "
+      ng-controller="StackController">
+      <!--Title and actions-->
+      <ul class='list-inline'>
+         <li><h4 id='stackstitle'>Stacks</h4></li>
+         <li id="addStackButton" class="inline btn btn-success btn-xs"
+         ng-click="startAddStack()">
+            +
+         </li>
+      </ul>
+      <div id="stackactions">
+
+
+      <form name="addStackForm" class='form-group'
+         ng-show="isVisibleStackAdd">
+         <input placeholder="title" name="addStackInput" type="text" class="form-control inline"
+         ng-model="addStackInput"
+         ng-required="isVisibleStackAdd">
+         <small class="text-warning"
+         ng-show='stackActionError'>{{stackActionErrorMsg}}</small>
+         <button type="submit" class="inline btn btn-success btn-xs"
+         ng-click="stackActionError=false;addStack()"
+         ng-disabled="addStackForm.addStackInput.$invalid">
+            ok
+         </button>
+         <button class="inline btn btn-success btn-xs"
+         ng-click="isVisibleStackAdd=false;stackActionError=false">
+            cancel
+         </button>
+      </form>
+      <form name="renameStackForm"  class='form-group'
+         ng-show="isVisibleStackRename">
+         <small>Rename {{stackToRename.title}} to</small>
+         <input name="renameStackInput" type="text" class="form-control inline"
+         ng-model="renameStackInput"
+         ng-required="isVisibleStackRename">
+         <small class="text-warning"
+         ng-show='stackActionError'>{{stackActionErrorMsg}}</small>
+         <button type="submit" class="inline btn btn-success btn-xs"
+         ng-click="stackActionError=false;renameStack(stackToRename)"
+         ng-disabled="renameStackForm.renameStackInput.$invalid || renameStackInput == stackToRename.title">
+            ok
+         </button>
+         <button class="inline btn btn-success btn-xs"
+         ng-click="isVisibleStackRename=false;stackActionError=false">
+            cancel
+         </button>
+      </form>
+      <div  class='form-group'
+         ng-show="isVisibleStackDelete" >
+         <small>Delete {{stackToDelete.title}} ?</small>
+         <div class="clearfix"></div>
+         <button class="inline btn btn-warning btn-xs"
+         ng-click="deleteStack(stackToDelete)">
+            yes
+         </button>
+         <button class="inline btn btn-success btn-xs"
+         ng-click="isVisibleStackDelete=false">
+            cancel
+         </button>
+      </div>
+            </div>
+
+      <!--Fix stacks-->
+      <div class="btn-group">
+
+         <div class="stack btn btn-default"
+         ng-click="listStackUser(floatingStack)"
+         ng-class="{true: 'active btn-primary', false: 'btn-default'}[stackIsActive(floatingStack.title)]">
+            Floating
+         </div>
+      </div>
+      <div class="btn-group">
+         <a title="Archive" id="archive_button" class="stack btn btn-default"
+         ng-class="{true: 'active btn-primary', false: 'btn-default'}[stackIsActive('Archive')]"
+         ng-click="listStackArchive()"><i class="glyphicon glyphicon-inbox"></i></a>
+         <div class="btn stack"
+         ng-class="{true: 'active btn-primary', false: 'btn-default'}[stackIsActive('All')]"
+         ng-click="listStackAll()">
+            All
+         </div>
+      </div>
+
+      <!--User stacks-->
+      <ul class="stacklist list-group">
+         <li class="stack list-group-item"
+         ng-repeat="stack in stacks | orderBy:'createdat'"
+         ng-class="{true: 'active', false: ''}[stackIsActive(stack.title)]"
+         ng-click="listStackUser(stack)"
+         ng-mouseover="hoveredStack[stack.id] = true"
+         ng-mouseleave="hoveredStack[stack.id] = false">
+            <span class="pull-left">{{stack.title}}</span>
+            <span class="pull-right badge"
+            ng-bind="stackSizes[stack.id]"></span>
+            <ul class='stackactions list-inline pull-right'
+            ng-show='hoveredStack[stack.id]'>
+               <li class="btn btn-default btn-xs stack_actions_btn"
+               ng-click="startDeleteStack(stack, $event)">
+                  <i class="glyphicon  glyphicon-trash"></i>
+               </li>
+               <li class="btn btn-default btn-xs stack_actions_btn"
+               ng-click="startRenameStack(stack, $event)">
+                  <i class="glyphicon  glyphicon-pencil"></i>
+               </li>
+            </ul>
+            <div class="clearfix"></div>
+         </li>
+      </ul>
+      <hr>
+   </section>
+   <section id="middlebar" class="col-lg-9 ">
+      <ul class="list-inline">
+         <li>
+            <input class="form-control" title="Includes attachment file names" type="text" placeholder="Search card"
+               ng-model="query">
+         </li>
+         <li>
+            <button ng-click="startAddCard()" class="btn btn-primary"
+               ng-hide="inArchive()">
+               Add Card
+            </button>
+         </li>
+      </ul>
+      <!--Card Form-->
+      <div id='cardFormContainer'
+         ng-show="isCardFormVisible">
+         <form name="cardForm" id='cardForm' class="form-group">
+            <div class="form-group">
+               <label for="inputTitle" class="col-lg-1 control-label">Title</label>
+               <div class="col-lg-11">
+                  <input ng-model="cardFormCard.title" type="text" class="form-control" placeholder="Title"
+                  ng-required="isCardFormVisible">
+                  <span class="text-warning"
+                     ng-show="titleError">{{titleErrorMessage}}</span>
+               </div>
+            </div>
+            <div class="form-group">
+               <label for="inputContent" class="col-lg-1 control-label">Content</label>
+               <div class="col-lg-11">
+                  <textarea type="text" class="form-control" rows="3"
+                     ng-model="cardFormCard.content">
+                  </textarea>
+               </div>
+            </div>
+            <div class="form-group">
+               <label for="inputDuedate" class="col-lg-1 control-label">Due</label>
+               <div class="col-lg-11">
+                  <input id="duedate" type="date" class="form-control"
+                     ng-model="cardFormCard.duedate">
+               </div>
+            </div>
+         </form>
+         <div id='cardFormActions' class="row col-md-12"
+            ng-show='isCardFormVisible' >
+            <button id="submitAddCardFormBtn" type="submit" class="btn btn-primary"
+               ng-click="doCardFormAction()"
+               ng-disabled="isSaveDisabled()">
+               {{{new: 'add', edit: 'save'}[cardFormAction]}}
+            </button>
+            <button class="btn btn-default"
+               ng-click="cancelCardForm()">
+               cancel
+            </button>
+            <button type="button" id="addFileFormBtn" class="btn btn-success"
+               ng-click="initFileUpload()">
+               add file
+            </button>
+            <input type="url"
+               ng-show="isLinkInputVisible"
+               ng-model='formActions.linkInputValue'>
+            <button type="button" id="addLinkFormBtn" class="btn btn-success"
+               ng-click="initAddLink()"
+               ng-hide='isLinkInputVisible'>
+               add link
+            </button>
+            <button type="button" class="btn btn-success"
+               ng-click="addLink()"
+               ng-show='isLinkInputVisible'
+               ng-disabled="isLinkInputValueInvalid()">
+               ok
+            </button>
+            <button type="button" class="btn btn-success"
+               ng-click="cancelAddLink()"
+               ng-show='isLinkInputVisible'>
+               cancel
+            </button>
+            <input id="fileInput" type="file" multiple
+               ng-file-select="onFileSelect($files)"
+               ng-show=false>
+         </div>
+         <div class="thumblist row col-md-12">
+            <div class="pull-left" ng-repeat="att in fileAttachmentsList | orderBy:'position'"
+               ng-click="$event.stopPropagation()">
+               <a class="inline att_thumb_link" title="{{att.filename}}"
+                  ng-href="{{att.fileLink}}">
+                  <img class="att_thumb img-rounded"
+                     ng-src="{{att.thumbLink}}">
+               </a>
+               <span class="uploadProgress"
+                  ng-show='uploadProgress[$index]'>
+                  {{uploadProgressValue[$index]}}
+               </span>
+               <img src="/static/img/knob.gif" class="thumbnailProgress"
+                  ng-show='thumbnailProgress[$index]'>
+               <i class="inline attdelbutton glyphicon glyphicon-trash"
+                  ng-click="$event.stopPropagation();removeAtt(att.position)"
+                  ng-show="att.delVisible">
+               </i>
+            </div>
+         </div>
+         <div class="thumblist row col-md-12">
+            <div class="pull-left" ng-repeat="att in urlAttachmentsList | orderBy:'position'"
+               ng-click="$event.stopPropagation()">
+               <a class="inline att_thumb_link" title="{{att.url}}"
+                  ng-href="{{att.url}}">
+                  <img class="att_thumb img-rounded"
+                     ng-src="{{att.thumbLink}}">
+                  <small class="thumb-caption"><i class="glyphicon  glyphicon-share-alt"></i></small>
+               </a>
+               <img src="/static/img/knob.gif" class="thumbnailProgress"
+                  ng-show='urlThumbnailProgress[$index]'>
+               <i class="inline attdelbutton glyphicon glyphicon-trash"
+                  ng-click="$event.stopPropagation();removeLink(att.position)"
+                  ng-show="att.delVisible">
+               </i>
+            </div>
+         </div>
+      </div>
+      <hr>
+
+      <!--Cards list header-->
+
+      <h3><span>{{activestacktitle}}</span>
+      <div class="btn-group pull-right">
+         <a class="active btn btn-sm btn-default" href=""><i class="glyphicon  glyphicon-tasks"></i></a>
+         <a class="btn btn-sm btn-default" href=""><i class="glyphicon  glyphicon-calendar"></i></a>
+      </div>
+      <div class="pull-right btn-group cards_order_options">
+         <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+            Sort: {{orderPropVerbose}} <span class="caret"></span>
+         </button>
+         <ul class="dropdown-menu" role="menu">
+            <li>
+               <a
+               ng-click="setOrder('-modifiedat')"
+               ng-class="{true: 'active', false: ''}[orderProp=='-modifiedat']">Last modified</a>
+            </li>
+            <li>
+               <a
+               ng-click="setOrder('-createdat')"
+               ng-class="{true: 'active', false: ''}[orderProp=='-createdat']">Last created</a>
+            </li>
+            <li>
+               <a
+               ng-click="setOrder('title')"
+               ng-class="{true: 'active', false: ''}[orderProp=='title']">Title</a>
+            </li>
+         </ul>
+      </div></h3>
+
+      <p class="text-muted sortlabel">
+         2013-05-05
+      </p>
+
+      <!--Cards list-->
+
+      <div ng-controller="CardController" class='list-group'>
+         <div class="card list-group-item"
+         ng-click="startEditCard(card)"
+         ng-repeat="card in cards | orderBy:orderProp | handlearchive:inArchive() | bystackid:search:inArchive() | filter:query">
+            <!-- Card title row -->
+            <div class="pull-left">
+               <ul class="label-list list-inline">
+                  <li>
+                     <h4 list-group-item-heading>{{card.title}}</h4>
+                  </li>
+                  <li class="label label-default"
+                  ng-show=!inArchive()>
+                     {{getStacktitle(card.stackid)}}
+                  </li>
+                  <li class="label label-default"
+                  ng-show="isNotNull(card.stacktitleafterarchived)">
+                     original: {{card.stacktitleafterarchived}}
+                  </li>
+                  <li title="due date" class="card_due_label label label-default"
+                  ng-show="isNotNull(card.duedate)">
+                     <small><i class="glyphicon  glyphicon-time"></i> {{card.duedate  | date:'yyyy-MM-dd'}}</small>
+                  </li>
+               </ul>
+            </div>
+
+            <!--Card Actions-->
+            <div class="pull-right card_actions_btn btn-group">
+               <button type="button" class="pull-left btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+               </button>
+               <ul class="dropdown-menu">
+                  <li>
+                     <a href="javascript:void(0)"
+                     ng-click="$event.stopPropagation();startEditCard(card)">Edit</a>
+                  </li>
+                  <li>
+                     <a href="javascript:void(0)"
+                     ng-click="$event.stopPropagation();triggerFileUpload('')">Add file</a>
+                  </li>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">
+                     Move to stack
+                  </li>
+                  <li>
+                     <a
+                     ng-click="$event.stopPropagation();moveCard(card.id, card, floatingStack.id)">Floating</a>
+                  </li>
+                  <li
+                  ng-repeat="stack in stacks">
+                     <a
+                     ng-click="$event.stopPropagation();moveCard(card.id, card, stack.id)">{{stack.title}}</a>
+                  <li class="divider"></li>
+                  <li class="dropdown-header">
+                     Other
+                  </li>
+                  <li>
+                     <a
+                     ng-click="$event.stopPropagation();removCard(card.id, card)">{{{true: 'Delete permanently', false: 'Archive'}[inArchive()]}}</a>
+                  </li>
+               </ul>
+            </div>
+            <div class="clearfix"></div>
+
+            <!--Card Content-->
+            <p>
+               {{card.content}}
+            </p>
+
+            <!--Tumbnails-->
+            <ul class='list-inline thumblist'>
+               <!--file Attachments-->
+               <li ng-repeat="att in card.fileattachments">
+                  <a class="att_thumb_link" title="{{att.filename}}"
+                  ng-href="/download/{{att.id}}"> <img class="att_thumb img-rounded"
+                  ng-src="/thumbnail/{{att.id}}"> </a>
+               </li>
+
+               <!--url Attachments-->
+               <li
+               ng-repeat="att in card.urlattachments">
+                  <a class="link_thumb_link" title="{{att.url}}" target="_blank"
+                  ng-href="{{att.url}}"> <img class="att_thumb img-rounded"
+                  ng-src="/thumbnaillink/{{att.id}}"> <small class="thumb-caption"><i class="glyphicon  glyphicon-share-alt"></i></small> </a>
+               </li>
+            </ul>
+
+            <!--Card status-->
+            <small>
+            <ul class="label-list list-inline">
+               <li class="card_time_label" >
+                  <small title="created at" class="text-muted"><i class="glyphicon  glyphicon-asterisk"></i>&nbsp;{{card.createdat |date:'yyyy-MM-dd HH:mm:ss'}}</small>
+               </li>
+               <li class="card_mod_label"
+               ng-show="card.modifiedat != card.createdat">
+                  <small title="modified at" class="text-muted"><i class="glyphicon  glyphicon-pencil"></i>&nbsp;{{card.modifiedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
+               </li>
+               <li class="card_mod_label"
+               ng-show="isNotNull(card.archivedat)">
+                  <small title="archived at" class="text-muted"><i class="glyphicon  glyphicon-trash"></i>&nbsp;{{card.archivedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
+               </li>
+            </ul></small>
+         </div>
+      </div>
+
+   </section>
+   <section id="rightbar" class="col-lg-1"></section>
+</div>
