@@ -1,9 +1,15 @@
-from flask import request, session, abort
+from flask import request, session, abort, send_file
 from flask_cuddlyrest.views import ListMongoResource, SingleMongoResource, catch_all
 from flask_cuddlyrest.marshaller import Marshaller
 from flask_cuddlyrest import CuddlyRest
 from functools import wraps
 from werkzeug.security import check_password_hash, generate_password_hash
+
+
+import subprocess
+import uuid
+import tarfile
+import shutil
 
 from mongoengine.queryset import DoesNotExist
 
@@ -130,3 +136,27 @@ def get_from_session():
            'role':session['role']
            }
    return json.dumps(user), 200
+
+@app.route('/exportdb')
+@requires_auth_admin
+def export_db():
+   fileid = str(uuid.uuid1())
+   dumpdir = '/var/tmp/' + fileid
+   
+   cmd = 'mongodump --host 148.110.26.132 --db binarylooksp --out "' + dumpdir + '"'
+   
+   try:
+      subprocess.call(cmd, shell=True)
+   except:
+      raise
+   
+   try:
+      tar = tarfile.open("/var/tmp/" + fileid + ".tar.gz", "w:gz")
+      tar.add(dumpdir + "/")
+      tar.close()
+   except:
+      raise
+   
+   #shutil.rmtree(dumpdir)
+   
+   return send_file("/var/tmp/" + fileid + ".tar.gz", as_attachment=True)
