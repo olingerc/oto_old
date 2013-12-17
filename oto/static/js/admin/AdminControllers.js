@@ -96,3 +96,10 @@ function UsersController ($scope, $http, $resource) {
       });
    };
 }
+
+
+function ActionsController ($scope, $http) {
+   $scope.exportDB = function () {
+      window.open('/exportdb');
+   };
+}
