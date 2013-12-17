@@ -1,8 +1,9 @@
 # OrganizeTheOlingers
 
 ### Starting point was: https://github.com/rxl/angular-flask
-### but then I decided to use flask only as json provider (and special api calls)
-### I then went with the modularity approach in http://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript
+but then I decided to use flask only as json provider (and special api calls) and use a client templating system.
+I went for angularjs
+I then went with the modularity approach in http://cliffmeyers.com/blog/2013/4/21/code-organization-angularjs-javascript
 
 1. python runserver.py
 2. the original author had a manage step to create the db: python manage.py create_db && python manage.py seed_db --seedfile 'data/db_items.json'
@@ -19,5 +20,5 @@ server: adminapi api.py and auth.py , client detects this using an interceptor i
 client: routingConfig.js
 
 #404 and 401
-Handled by flask
+Handled by angular, flask only sends a 401 or 404
 

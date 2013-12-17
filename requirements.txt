@@ -19,6 +19,4 @@ flask-cuddlyrest
 Wand
 apt-get install libmagickwand-dev
 
-So what am I doing
-
 
