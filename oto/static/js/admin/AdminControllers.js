@@ -99,7 +99,20 @@ function UsersController ($scope, $http, $resource) {
 
 
 function ActionsController ($scope, $http) {
+   $scope.exportok = false;
+   $scope.exporterror = false;
+   $scope.exportprogress = false;
+
    $scope.exportDB = function () {
-      window.open('/exportdb');
+      $scope.exportprogress = true;
+      $http.get('/exportdb')
+      .success(function(response) {
+         $scope.exportprogress = false;
+         $scope.exportok = true;
+      })
+      .error(function(response) {
+         $scope.exportprogress = false;
+         $scope.exporterror = true;
+      });
    };
 }

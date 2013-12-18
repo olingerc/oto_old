@@ -1,4 +1,4 @@
-from flask import request, session, abort, send_file
+from flask import request, session, abort, send_file, after_this_request
 from flask_cuddlyrest.views import ListMongoResource, SingleMongoResource, catch_all
 from flask_cuddlyrest.marshaller import Marshaller
 from flask_cuddlyrest import CuddlyRest
@@ -7,9 +7,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 
 import subprocess
-import uuid
 import tarfile
 import shutil
+import os
+import oto.settings as settings
 
 from mongoengine.queryset import DoesNotExist
 
@@ -18,6 +19,7 @@ import json
 from oto.notesapi.models import *  # @UnusedWildImport
 from oto.adminapi.models import *  # @UnusedWildImport
 from oto import app
+from oto.settings import MONGODB_SETTINGS
 
 #RESTful api manager
 api = CuddlyRest(app)
@@ -140,23 +142,40 @@ def get_from_session():
 @app.route('/exportdb')
 @requires_auth_admin
 def export_db():
-   fileid = str(uuid.uuid1())
-   dumpdir = '/var/tmp/' + fileid
+   dumpdir = '/var/tmp/mongodump'
+   filename = "mongodump.tar.gz"
+   host = MONGODB_SETTINGS['host']
+   db = MONGODB_SETTINGS['DB']
    
-   cmd = 'mongodump --host 148.110.26.132 --db binarylooksp --out "' + dumpdir + '"'
+   cmd = 'mongodump --host ' + host + ' --db ' + db + ' --out "' + dumpdir + '"'
    
    try:
       subprocess.call(cmd, shell=True)
    except:
+      return 'error', 500
       raise
    
+   os.chdir('/var/tmp/')
+
    try:
-      tar = tarfile.open("/var/tmp/" + fileid + ".tar.gz", "w:gz")
-      tar.add(dumpdir + "/")
+      tar = tarfile.open("/var/tmp/" + filename, "w:gz")
+      tar.add('mongodump')
       tar.close()
    except:
+      return 'error', 500
       raise
    
-   #shutil.rmtree(dumpdir)
+   shutil.rmtree(dumpdir)
+   return 'ok', 200
+
+@app.route('/exportdbdownload')
+@requires_auth_admin
+def export_db_download():
+   filename = "mongodump.tar.gz"
    
-   return send_file("/var/tmp/" + fileid + ".tar.gz", as_attachment=True)
+   @after_this_request
+   def cleanup(response):
+      os.remove("/var/tmp/" + filename)
+      return response
+   
+   return send_file("/var/tmp/" + filename, as_attachment=True)
