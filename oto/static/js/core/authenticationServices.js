@@ -29,14 +29,15 @@ angular.module('oto')
             return accessLevel.bitMask & role.bitMask;
         },
         isLoggedIn: function(user) {
+            if(user === undefined) {
+                user = currentUser;
+             }
             if(typeof(currentUser.role) === 'string') {
                currentUser.role = userRoles[currentUser.role];
             }
             if(typeof(user.role) === 'string') {
                user.role = userRoles[user.role];
             }
-            if(user === undefined)
-                user = currentUser;
             return user.role.title == userRoles.user.title || user.role.title == userRoles.admin.title;
         },
         login: function(user, success, error) {

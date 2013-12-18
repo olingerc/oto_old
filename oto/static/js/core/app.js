@@ -72,7 +72,6 @@ angular.module('oto', [
             function (event, next, current) {
                $rootScope.error = null;
                if (!Auth.authorize(next.access)) {
-                  console.log('not.authorized');
                   if(Auth.isLoggedIn()) {
                      if ($rootScope.savedLocation) {
                         if (Auth.authorize(next.access)) {
@@ -87,8 +86,6 @@ angular.module('oto', [
                      $rootScope.savedLocation = $location.url();
                      $location.path('/login');
                   }
-               } else {
-                  console.log('authorized');
                }
            }
          );

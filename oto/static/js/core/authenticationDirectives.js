@@ -12,8 +12,9 @@ angular.module('oto')
                if (typeof(user.role) === 'string') {
                   user.role = Auth.userRoles[user.role];
                }
-                if(user.role)
+               if(user.role) {
                     userRole = user.role;
+                 }
                 updateCSS();
             }, true);
 
