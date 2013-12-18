@@ -3,7 +3,7 @@ import mimetypes
 import json
 from datetime import datetime
 import StringIO
-from os import remove
+import os
 from subprocess import call
 
 from models import Card, UrlAttachment
@@ -14,6 +14,7 @@ def saveLinkToMongo():
    att = json.loads(data['att'])
    url = att['url']
    positionInUi = att['position']
+   cwd = os.path.dirname(os.path.realpath(__file__))
    
    cardid = data['cardid']
     
@@ -22,7 +23,7 @@ def saveLinkToMongo():
    try:
       #Create thumbnail
       filename = 'url.jpg'
-      programdir = "/home/christophe/workspace/oto/external/"
+      programdir = os.path.dirname(os.path.dirname(cwd)) + '/external/'
       
       command = "phantomjs " + programdir + "rasterize.js '" + url + "' '/var/tmp/url.jpg'"
       print command
@@ -33,7 +34,7 @@ def saveLinkToMongo():
          urlAttachment.thumbfile.put(fileobject, content_type = mimetypes.guess_type(filename)[0])
         
       #remove from filesystem
-      remove('/var/tmp/' + filename)
+      os.remove('/var/tmp/' + filename)
     
       urlAttachment.thumb = True
         
