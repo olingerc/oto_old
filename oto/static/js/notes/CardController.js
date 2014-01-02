@@ -30,7 +30,7 @@ app.controller('CardController', ['$scope', '$rootScope', 'Cards', function($sco
 
    $scope.moveCard = function(card, stackid) {
       Cards.move(
-         cardid,
+         card.id,
          stackid,
          function(updatedCard) {
             $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
