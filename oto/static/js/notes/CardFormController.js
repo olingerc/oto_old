@@ -1,41 +1,16 @@
 app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', function($scope, $filter, $http, $upload) {
+   
+   /*************
+    * 
+    * Initial form status
+    * 
+    ***********/
    $scope.isCardFormVisible = false;
-   $scope.cardFormAction = 'new';
-   $scope.originalCard = null;
-   $scope.cardFormCard = null;
-
-   $scope.fileAttachmentsList = {};
-   var fileAttachmentsAdded = [];
-   var fileAttachmentsRemoved = [];
-
-   $scope.urlAttachmentsList = {};
-   var urlAttachmentsAdded = [];
-   var urlAttachmentsRemoved = [];
-
-   $scope.attachmentsChanged = false;
-
-   $scope.uploadProgress = {};
-   $scope.uploadProgressValue = {};
-   $scope.thumbnailProgress = {};
-   $scope.urlThumbnailProgress = {};
-
-   $scope.isLinkInputVisible = false;
-   $scope.formActions = {
-      linkInputValue: 'http://www.google.com'
-   };
-
-   var emptyCard = {
-      title : '',
-      content : '',
-      duedate : ''
-   };
-
+   resetCardForm();
 
    /*************
     *
-    *
     * CardForm Actions
-    *
     *
     ************/
    function resetCardForm() {
@@ -50,12 +25,28 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       urlAttachmentsAdded = [];
       urlAttachmentsRemoved = [];
 
+      $scope.attachmentsChanged = false;
+   
+      $scope.uploadProgress = {};
+      $scope.uploadProgressValue = {};
+      $scope.thumbnailProgress = {};
+      $scope.urlThumbnailProgress = {};
+   
+      $scope.isLinkInputVisible = false;
+      $scope.formActions = {
+         linkInputValue: 'http://www.google.com'
+      };
 
       //Take away error meassages
       $scope.titleError = false;
       $scope.titleErrorMessage = '';
       //Set temporary objects to empty
       $scope.originalCard = null;
+      var emptyCard = {
+         title : '',
+         content : '',
+         duedate : ''
+      };
       $scope.cardFormCard = angular.copy(emptyCard);
 
       $scope.isLinkInputVisible = false;
@@ -71,14 +62,13 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          addCard();
       }
    };
-
+   
+   //ADD CARD
    $scope.$on('startAddCard', function() {
-      $scope.isCardFormVisible = true;
-      //inherited
       resetCardForm();
+      $scope.isCardFormVisible = true;
       $scope.cardFormCard.id = 'new';
    });
-
 
    var addCard = function() {
       var newCard = $scope.cardFormCard;
@@ -99,8 +89,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          card.fileattachments = angular.copy($scope.fileAttachmentsList);
          card.urlattachments = angular.copy($scope.urlAttachmentsList);
          $scope.cards.push(card);
-         //cards inherited
-         //function inherited
          $scope.isCardFormVisible = false;
          resetCardForm();
       }).error(function(error) {
@@ -108,85 +96,15 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       });
    };
    
-   $scope.$on('cancelCardForm', function() {
-      $scope.cancelCardForm();
-   });
-
-   $scope.cancelCardForm = function() {
-      //TODO: only do this if cardform is visible because of lots of broadcast to cancelcardform?
-      $scope.isCardFormVisible = false;
-      if ($scope.cardFormAction === 'edit') {
-         //Handle file attachments first
-         var filesToDelete = [];
-         //1)Those in added AND removed --> delete
-         jQuery.each(fileAttachmentsAdded, function(key, value) {
-            if (fileAttachmentsRemoved.indexOf(value) > -1) {
-               filesToDelete.push(value);
-            }
-         });
-         //2)Those in removed --> delete
-         filesToDelete = filesToDelete.concat(fileAttachmentsAdded);
-         //3)those in added --> do nothing
-
-         //Handle url attachments next
-         var urlsToDelete = [];
-         //1)Those in added AND removed --> delete
-         jQuery.each(urlAttachmentsAdded, function(key, value) {
-            if (urlAttachmentsRemoved.indexOf(value) > -1) {
-               urlsToDelete.push(value);
-            }
-         });
-         //2)Those in removed --> delete
-         urlsToDelete = urlsToDelete.concat(urlAttachmentsAdded);
-         //3)those in added --> do nothing
-
-         cancelEditCardForm(filesToDelete, urlsToDelete);
-      } else {
-         //remove ALL added
-         cancelEditCardForm(fileAttachmentsAdded, urlAttachmentsAdded);
-      }
-      resetCardForm();
-   };
-
-   function cancelEditCardForm(filesToDelete, urlsToDelete) {
-      //-->DELETE thoe in toDelete
-      if (filesToDelete.length > 0) {
-         $http({
-            method : 'POST',
-            url : '/deleteatts',
-            headers : {
-               'Content-Type' : 'application/x-www-form-urlencoded'
-            },
-            data : $.param({
-               cardid : $scope.cardFormCard.id,
-               array : JSON.stringify(_.uniq(filesToDelete)),
-               changeModifiedat : false
-            })
-         });
-      }
-      if (urlsToDelete.length > 0) {
-         $http({
-            method : 'POST',
-            url : '/deletelink',
-            headers : {
-               'Content-Type' : 'application/x-www-form-urlencoded'
-            },
-            data : $.param({
-               cardid : $scope.cardFormCard.id,
-               array : JSON.stringify(_.uniq(urlsToDelete)),
-               changeModifiedat : false
-            })
-         });
-      }
-   }
-
+   //EDIT
    $scope.$on('startCardEdit', function(event, card) {
       $scope.isCardFormVisible = true;
       $scope.cardFormAction = 'edit';
 
       $scope.cardFormCard = card;
-      if (card.duedate)
+      if (card.duedate) {
          card.duedate = $card.duedate.substring(0, 10);
+      }
       //otherwise not recognized
 
       $scope.originalCard = angular.copy(card);
@@ -218,31 +136,11 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          });
       }
    });
-
-   $scope.isSaveDisabled = function() {
-      if ($scope.cardFormAction === 'edit') {
-         //invalid is always bad:
-         if ($scope.cardForm.$invalid)
-            return true;
-
-         if ($scope.attachmentsChanged === true && angular.equals($scope.cardFormCard, $scope.originalCard))
-            return false;
-         if ($scope.attachmentsChanged === false && !angular.equals($scope.cardFormCard, $scope.originalCard))
-            return false;
-         if ($scope.attachmentsChanged === true && !angular.equals($scope.cardFormCard, $scope.originalCard))
-            return false;
-
-         //TODO, changing duedate does not actvate button
-         return true;
-      } else {
-         return $scope.cardForm.$invalid;
-      }
-   };
-
+   
    var editCard = function() {
-      if ($scope.cardForm.$invalid)
-         return;
-      //safeguard
+      if ($scope.cardForm.$invalid) {
+         return; //safeguard
+      }
 
       //Handle attachments first
       var filesToDelete = [];
@@ -270,18 +168,14 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          });
       }
 
-      //Handle urls next
+      //Handle urls next the same way
       var urlsToDelete = [];
-      //1)Those in added AND removed --> delete
       jQuery.each(urlAttachmentsAdded, function(key, value) {
          if (urlAttachmentsRemoved.indexOf(value) > -1) {
             urlsToDelete.push(value);
          }
       });
-      //2)Those in removed --> delete
       urlsToDelete = urlsToDelete.concat(urlAttachmentsRemoved);
-      //3)those in added --> do nothing
-      //-->DELETE
       if (urlsToDelete.length > 0) {
          $http({
             method : 'POST',
@@ -308,7 +202,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       $http.put('/cards/' + $scope.cardFormCard.id, updatedCardToSend)
       .success(function(updatedCard) {
          //Update attachments in model (server already ok)
-
          var filtered = $filter('filter')($scope.cards, {id : updatedCard.id});
 
          $scope.cards[$scope.cards.indexOf(filtered[0])] = angular.copy(updatedCard);
@@ -319,8 +212,102 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          $scope.cardFormCard.urlattachments = angular.copy($scope.urlAttachmentsList);
          resetCardForm();
       }).error(function(error) {
-            console.log(error);
+         console.log(error);
       });
+   };
+   
+   //CANCEL
+   $scope.$on('cancelCardForm', function() {
+      $scope.cancelCardForm();
+   });
+
+   $scope.cancelCardForm = function() {
+      //TODO: only do this if cardform is visible because of lots of broadcast to cancelcardform?
+      $scope.isCardFormVisible = false;
+      if ($scope.cardFormAction === 'edit') {
+         //Handle file attachments first
+         var filesToDelete = [];
+         //1)Those in added AND removed --> delete
+         jQuery.each(fileAttachmentsAdded, function(key, value) {
+            if (fileAttachmentsRemoved.indexOf(value) > -1) {
+               filesToDelete.push(value);
+            }
+         });
+         //2)Those in removed --> delete
+         filesToDelete = filesToDelete.concat(fileAttachmentsAdded);
+         //3)those in added --> do nothing
+
+         //Handle url attachments next and the same way
+         var urlsToDelete = [];
+         jQuery.each(urlAttachmentsAdded, function(key, value) {
+            if (urlAttachmentsRemoved.indexOf(value) > -1) {
+               urlsToDelete.push(value);
+            }
+         });
+         urlsToDelete = urlsToDelete.concat(urlAttachmentsAdded);
+
+         cleanAttsOnCancel(filesToDelete, urlsToDelete);
+      } else {
+         //remove ALL added
+         cleanAttsOnCancel(fileAttachmentsAdded, urlAttachmentsAdded);
+      }
+      resetCardForm();
+   };
+
+   function cleanAttsOnCancel(filesToDelete, urlsToDelete) {
+      if (filesToDelete.length > 0) {
+         $http({
+            method : 'POST',
+            url : '/deleteatts',
+            headers : {
+               'Content-Type' : 'application/x-www-form-urlencoded'
+            },
+            data : $.param({
+               cardid : $scope.cardFormCard.id,
+               array : JSON.stringify(_.uniq(filesToDelete)),
+               changeModifiedat : false
+            })
+         });
+      }
+      if (urlsToDelete.length > 0) {
+         $http({
+            method : 'POST',
+            url : '/deletelink',
+            headers : {
+               'Content-Type' : 'application/x-www-form-urlencoded'
+            },
+            data : $.param({
+               cardid : $scope.cardFormCard.id,
+               array : JSON.stringify(_.uniq(urlsToDelete)),
+               changeModifiedat : false
+            })
+         });
+      }
+   }
+
+   //Save button enable/disable
+   $scope.isSaveDisabled = function() {
+      if ($scope.cardFormAction === 'edit') {
+         //invalid is always bad:
+         if ($scope.cardForm.$invalid) {
+            return true;
+         }
+
+         if ($scope.attachmentsChanged === true && angular.equals($scope.cardFormCard, $scope.originalCard)) {
+            return false;
+         }
+         if ($scope.attachmentsChanged === false && !angular.equals($scope.cardFormCard, $scope.originalCard)) {
+            return false;
+         }
+         if ($scope.attachmentsChanged === true && !angular.equals($scope.cardFormCard, $scope.originalCard)) {
+            return false;
+         }
+
+         //TODO, changing duedate does not actvate button
+         return true;
+      } else {
+         return $scope.cardForm.$invalid;
+      }
    };
 
    /*******************
@@ -428,6 +415,8 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          });
       }
    };
+   
+   //Attachments handling
 
    $scope.removeAtt = function(position) {
       fileAttachmentsRemoved.push($scope.fileAttachmentsList[position].id);
