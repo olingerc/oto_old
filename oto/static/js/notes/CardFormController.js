@@ -21,7 +21,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       fileAttachmentsAdded = [];
       fileAttachmentsRemoved = [];
 
-      $scope.urlttachmentsList = {};
+      $scope.urlAttachmentsList = {};
       urlAttachmentsAdded = [];
       urlAttachmentsRemoved = [];
 
