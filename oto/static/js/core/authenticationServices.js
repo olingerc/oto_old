@@ -61,7 +61,8 @@ app.factory('Auth', function($rootScope, $http, $cookieStore){
     };
 });
 
-app.factory('$ServerLogin', function($thhp){
+/*
+app.factory('$ServerLogin', function($http){
   return function(){
      var userRoles = routingConfig.userRoles;
      $http.get('/_usersession')
@@ -72,3 +73,4 @@ app.factory('$ServerLogin', function($thhp){
       .error();
   };
 });
+*/
