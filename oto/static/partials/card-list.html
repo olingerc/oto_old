@@ -125,7 +125,8 @@
       </ul>
       <!--Card Form-->
       <div id='cardFormContainer'
-         ng-show="isCardFormVisible">
+         ng-show="isCardFormVisible"
+         ng-controller='CardFormController'>
          <form name="cardForm" id='cardForm' class="form-group">
             <div class="form-group">
                <label for="inputTitle" class="col-lg-1 control-label">Title</label>
@@ -268,7 +269,7 @@
 
       <div ng-controller="CardController" class='list-group'>
          <div class="card list-group-item"
-         ng-click="startEditCard(card)"
+         ng-click="loadCardIntoForm(card)"
          ng-repeat="card in cards | orderBy:orderProp | handlearchive:inArchive() | bystackid:search:inArchive() | filter:query">
             <!-- Card title row -->
             <div class="pull-left">
