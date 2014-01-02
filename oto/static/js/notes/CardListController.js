@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('CardController', ['$scope', '$rootScope', 'Cards', function($scope, $rootScope, Cards) {
+app.controller('CardListController', ['$scope', '$rootScope', 'Cards', function($scope, $rootScope, Cards) {
    
    //Card actions
    $scope.removeCard = function(card) {

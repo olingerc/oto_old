@@ -267,7 +267,7 @@
 
       <!--Cards list-->
 
-      <div ng-controller="CardController" class='list-group'>
+      <div ng-controller="CardListController" class='list-group'>
          <div class="card list-group-item"
          ng-click="startEditCard(card)"
          ng-repeat="card in cards | orderBy:orderProp | handlearchive:inArchive() | bystackid:search:inArchive() | filter:query">
