@@ -64,7 +64,6 @@ app.controller('NotesViewController', ['$scope', '$http', '$filter', '$upload', 
    $http.get('/cards/')
    .success(function(response) {
       $scope.cards = response;
-      $scope.updateStackSizes();
    })
    .error(function(error) {
       console.log(error);
@@ -129,19 +128,7 @@ app.controller('NotesViewController', ['$scope', '$http', '$filter', '$upload', 
       return $scope.activestackid === 'archive' ? true : false;
    };
 
-   //Number of cards. Call this on every stack content change (add, remove, move)
-   $scope.updateStackSizes = function() {
-      jQuery.each($scope.stacks, function(i, stack) {
-         var count = 0;
-         jQuery.each($scope.cards, function(i, card) {
-            if (card.stackid === stack.id && !card.archivedat) {
-               count++;
-            }
-         });
-         $scope.stackSizes[stack.id] = count;
-         //TODO: optimize this?
-      });
-   };
+
 
    /*
    *
@@ -228,7 +215,6 @@ app.controller('NotesViewController', ['$scope', '$http', '$filter', '$upload', 
          card.urlattachments = angular.copy($scope.urlAttachmentsList);
          $scope.cards.push(card);
          //cards inherited
-         $scope.updateStackSizes();
          //function inherited
          $scope.isCardFormVisible = false;
          resetCardForm();

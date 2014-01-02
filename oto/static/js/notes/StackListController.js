@@ -1,16 +1,28 @@
 /**********************
  *
- *
- * Stack controller
- *
+ * Stack list controller
  *
  *******************/
 'use strict';
 
-app.controller('StackController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
+app.controller('StackListController', ['$scope', '$http', '$filter', 'Stacks', function ($scope, $http, $filter, Stacks) {
    $scope.hoveredStack = {};
    $scope.stackActionError = false;
    $scope.stackActionErrorMsg = '';
+
+   $scope.$watch('cards', function() {
+      //Update badges for stack sizes
+      jQuery.each($scope.stacks, function(i, stack) {
+         var count = 0;
+         jQuery.each($scope.cards, function(i, card) {
+            if (card.stackid === stack.id && !card.archivedat) {
+               count++;
+            }
+         });
+         $scope.stackSizes[stack.id] = count;
+         //TODO: optimize this?
+      });
+   }, true);
 
    $scope.startAddStack = function() {
       $scope.addStackInput = '';
@@ -41,19 +53,20 @@ app.controller('StackController', ['$scope', '$http', '$filter', function ($scop
       var newStack = {
          'title' : $scope.addStackInput
       };
-      $http.post('/stacks/', newStack)
-      .success(function(data) {
-         $scope.stacks.push(data);
-         //stacks inherited
-         $scope.isVisibleStackAdd = false;
-         $scope.stackSizes[data.id] = 0;
-      })
-      .error(function(response) {
-         if (response.error.search('not unique') > 0) {
-            $scope.stackActionError = true;
-            $scope.stackActionErrorMsg = 'Stack with that title already exists';
+      Stacks.add(
+         newStack,
+         function(stack) {
+            $scope.stacks.push(stack);
+            $scope.isVisibleStackAdd = false;
+            $scope.stackSizes[stack.id] = 0;
+         },
+         function(response) {
+            if (response.error.search('not unique') > 0) {
+               $scope.stackActionError = true;
+               $scope.stackActionErrorMsg = 'Stack with that title already exists';
+            }
          }
-      });
+      );
    };
 
    $scope.renameStack = function() {
@@ -61,16 +74,14 @@ app.controller('StackController', ['$scope', '$http', '$filter', function ($scop
          return;
       }
 
-      var title = $scope.renameStackInput;
-      $http.put('/stacks/' + $scope.stackToRename.id, {
-         'title' : title
-      })
-      .success(function(newstack) {
-         $scope.stacks[$scope.stacks.indexOf($scope.stackToRename)] = newstack;
-         //stacks inherited
-         $scope.isVisibleStackRename = false;
-      })
-      .error(function(response) {
+      Stacks.rename(
+         $scope.stackToRename.id,
+         $scope.renameStackInput,
+         function(newstack) {
+            $scope.stacks[$scope.stacks.indexOf($scope.stackToRename)] = newstack;
+            $scope.isVisibleStackRename = false;
+         },
+         function(response) {
          if (response.error.search('not unique') > 0) {
             $scope.stackActionError = true;
             $scope.stackActionErrorMsg = 'Stack with that title already exists';
@@ -97,7 +108,6 @@ app.controller('StackController', ['$scope', '$http', '$filter', function ($scop
       $http.delete ('/stacks/' + $scope.stackToDelete.id)
       .success(function() {
          $scope.stacks.splice($scope.stacks.indexOf($scope.stackToDelete), 1);
-         //stacks inherited
          $scope.isVisibleStackDelete = false;
       })
       .error(function(error) {

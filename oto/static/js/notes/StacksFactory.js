@@ -18,13 +18,19 @@ app.factory('Stacks', ['$http', function($http) {
                }
             });
             callback(allStacks, floatingStack);
-            //$scope.updateStackSizes();
          })
          .error(function(error) {
             console.log(error);
             callback([], null);
          });
       },
-      userStack: floatingStack
+      add: function(newStack, success, error) {
+         $http.post('/stacks', newStack).success(success).error(error);
+      },
+      rename: function(stackid, newTitle, success, error) {
+         $http.put('/stacks/' + stackid, {
+            'title' : newTitle
+         }).success(success).error(error);
+      }
    };
 }]);
