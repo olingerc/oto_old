@@ -11,57 +11,55 @@
          </li>
       </ul>
       <div id="stackactions">
-
-
-      <form name="addStackForm" class='form-group'
-         ng-show="isVisibleStackAdd">
-         <input placeholder="title" name="addStackInput" type="text" class="form-control inline"
-         ng-model="addStackInput"
-         ng-required="isVisibleStackAdd">
-         <small class="text-warning"
-         ng-show='stackActionError'>{{stackActionErrorMsg}}</small>
-         <button type="submit" class="inline btn btn-success btn-xs"
-         ng-click="stackActionError=false;addStack()"
-         ng-disabled="addStackForm.addStackInput.$invalid">
-            ok
-         </button>
-         <button class="inline btn btn-success btn-xs"
-         ng-click="isVisibleStackAdd=false;stackActionError=false">
-            cancel
-         </button>
-      </form>
-      <form name="renameStackForm"  class='form-group'
-         ng-show="isVisibleStackRename">
-         <small>Rename {{stackToRename.title}} to</small>
-         <input name="renameStackInput" type="text" class="form-control inline"
-         ng-model="renameStackInput"
-         ng-required="isVisibleStackRename">
-         <small class="text-warning"
-         ng-show='stackActionError'>{{stackActionErrorMsg}}</small>
-         <button type="submit" class="inline btn btn-success btn-xs"
-         ng-click="stackActionError=false;renameStack(stackToRename)"
-         ng-disabled="renameStackForm.renameStackInput.$invalid || renameStackInput == stackToRename.title">
-            ok
-         </button>
-         <button class="inline btn btn-success btn-xs"
-         ng-click="isVisibleStackRename=false;stackActionError=false">
-            cancel
-         </button>
-      </form>
-      <div  class='form-group'
-         ng-show="isVisibleStackDelete" >
-         <small>Delete {{stackToDelete.title}} ?</small>
-         <div class="clearfix"></div>
-         <button class="inline btn btn-warning btn-xs"
-         ng-click="deleteStack(stackToDelete)">
-            yes
-         </button>
-         <button class="inline btn btn-success btn-xs"
-         ng-click="isVisibleStackDelete=false">
-            cancel
-         </button>
+         <form name="addStackForm" class='form-group'
+            ng-show="isVisibleStackAdd">
+            <input placeholder="title" name="addStackInput" type="text" class="form-control inline"
+            ng-model="addStackInput"
+            ng-required="isVisibleStackAdd">
+            <small class="text-warning"
+            ng-show='stackActionError'>{{stackActionErrorMsg}}</small>
+            <button type="submit" class="inline btn btn-success btn-xs"
+            ng-click="stackActionError=false;addStack()"
+            ng-disabled="addStackForm.addStackInput.$invalid">
+               ok
+            </button>
+            <button class="inline btn btn-success btn-xs"
+            ng-click="isVisibleStackAdd=false;stackActionError=false">
+               cancel
+            </button>
+         </form>
+         <form name="renameStackForm"  class='form-group'
+            ng-show="isVisibleStackRename">
+            <small>Rename {{stackToRename.title}} to</small>
+            <input name="renameStackInput" type="text" class="form-control inline"
+            ng-model="renameStackInput"
+            ng-required="isVisibleStackRename">
+            <small class="text-warning"
+            ng-show='stackActionError'>{{stackActionErrorMsg}}</small>
+            <button type="submit" class="inline btn btn-success btn-xs"
+            ng-click="stackActionError=false;renameStack(stackToRename)"
+            ng-disabled="renameStackForm.renameStackInput.$invalid || renameStackInput == stackToRename.title">
+               ok
+            </button>
+            <button class="inline btn btn-success btn-xs"
+            ng-click="isVisibleStackRename=false;stackActionError=false">
+               cancel
+            </button>
+         </form>
+         <div  class='form-group'
+            ng-show="isVisibleStackDelete" >
+            <small>Delete {{stackToDelete.title}} ?</small>
+            <div class="clearfix"></div>
+            <button class="inline btn btn-warning btn-xs"
+            ng-click="deleteStack(stackToDelete)">
+               yes
+            </button>
+            <button class="inline btn btn-success btn-xs"
+            ng-click="isVisibleStackDelete=false">
+               cancel
+            </button>
+         </div>
       </div>
-            </div>
 
       <!--Fix stacks-->
       <div class="btn-group">
