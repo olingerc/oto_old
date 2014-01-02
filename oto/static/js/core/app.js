@@ -82,10 +82,10 @@ angular.module('oto', [
                         if (Auth.authorize(next.access)) {
                            $location.path($rootScope.savedLocation);
                         } else {
-                           $location.path('/401');
+                           $location.path('/401').replace();
                         }
                      } else {
-                        $location.path('/401');
+                        $location.path('/401').replace();
                      }
                   } else {
                      $rootScope.savedLocation = $location.url();
