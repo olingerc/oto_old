@@ -1,5 +1,4 @@
-angular.module('oto')
-.controller('WirelessController', ['$scope', function($scope, $http) {
+app.controller('WirelessController', ['$scope', function($scope, $http) {
    $scope.wirelessStatus = '';
    $scope.wirelessOn = function($http) {
 

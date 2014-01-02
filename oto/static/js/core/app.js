@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('oto', [
+var app = angular.module('oto', [
    'oto.filters',
    'ui.bootstrap',
    'angularFileUpload',

@@ -1,4 +1,3 @@
-angular.module('oto')
-.controller('LandingController', ['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
+app.controller('LandingController', ['$scope', 'Auth', function($scope, Auth) {
     $scope.accessLevels = Auth.accessLevels;
 }]);

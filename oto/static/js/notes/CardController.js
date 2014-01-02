@@ -1,14 +1,11 @@
 /*************************
  *
- *
  * Card controller
  *
- *
- *
  *************************/
-'use strict';
 
-function CardController($scope, $http) {
+'use strict';
+app.controller('CardController', ['$scope', '$http', function($scope, $http) {
    $scope.removCard = function(cardid, card) {
       if ($scope.inArchive()) {
          $http.delete ('/cards/' + cardid).success(function() {
@@ -42,4 +39,4 @@ function CardController($scope, $http) {
          //function inherited
       });
    };
-}
+}]);

@@ -1,5 +1,4 @@
-angular.module('oto')
-.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
+app.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth', function($rootScope, $scope, $location, Auth) {
     $scope.user = Auth.user;
     $scope.userRoles = Auth.userRoles;
     $scope.accessLevels = Auth.accessLevels;
@@ -13,11 +12,8 @@ angular.module('oto')
     };
 }]);
 
-
 //Todo: put into directive.js
-
-angular.module('oto')
-.directive('activeNav', ['$location', function($location) {
+app.directive('activeNav', ['$location', function($location) {
     return {
         restrict: 'A',
         link: function(scope, element, attrs) {
@@ -33,7 +29,5 @@ angular.module('oto')
                 }
             });
         }
-
     };
-
 }]);

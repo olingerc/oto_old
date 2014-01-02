@@ -7,7 +7,7 @@
  *******************/
 'use strict';
 
-function StackController($scope, $http, $filter) {
+app.controller('StackController', ['$scope', '$http', '$filter', function ($scope, $http, $filter) {
    $scope.hoveredStack = {};
    $scope.stackActionError = false;
    $scope.stackActionErrorMsg = '';
@@ -104,5 +104,5 @@ function StackController($scope, $http, $filter) {
          console.log(error);
       });
    };
-}
+}]);
 

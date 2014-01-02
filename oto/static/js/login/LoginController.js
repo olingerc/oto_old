@@ -1,7 +1,5 @@
 'use strict';
-
-function loginFormController ($rootScope, $scope, $location, Auth) {
-
+app.controller('loginFormController', ['$rootScope', '$scope', '$location', 'Auth', function ($rootScope, $scope, $location, Auth) {
    $scope.loginFormState = {
       loginError: false
    };
@@ -22,4 +20,4 @@ function loginFormController ($rootScope, $scope, $location, Auth) {
                $scope.loginFormState.loginError = true;
             });
     };
-}
+}]);

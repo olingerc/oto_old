@@ -1,8 +1,6 @@
 'use strict';
 
-angular.module('oto')
-.factory('Auth', function($rootScope, $http, $cookieStore){
-
+app.factory('Auth', function($rootScope, $http, $cookieStore){
     var accessLevels = routingConfig.accessLevels,
         userRoles = routingConfig.userRoles,
         currentUser = JSON.parse($cookieStore.get('user').replace('|',',')) || { username: '', role: userRoles.public };
@@ -63,8 +61,7 @@ angular.module('oto')
     };
 });
 
-var login = angular.module('oto').
-factory('$ServerLogin', function($thhp){
+app.factory('$ServerLogin', function($thhp){
   return function(){
      var userRoles = routingConfig.userRoles;
      $http.get('/_usersession')

@@ -1,6 +1,6 @@
 'use strict';
 
-function NotesViewController($scope, $http, $filter, $upload) {
+app.controller('NotesViewController', ['$scope', '$http', '$filter', '$upload', function($scope, $http, $filter, $upload) {
 
    /********************
     *
@@ -651,5 +651,5 @@ function NotesViewController($scope, $http, $filter, $upload) {
       delete $scope.urlAttachmentsList[position];
       $scope.attachmentsChanged = true;
    };
-}
+}]);
 

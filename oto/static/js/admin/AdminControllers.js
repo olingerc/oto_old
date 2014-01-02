@@ -1,6 +1,5 @@
 'use strict';
-
-function UsersController ($scope, $http, $resource) {
+app.controller('UsersController', ['$scope', '$http', '$resource', function($scope, $http, $resource) {
    $scope.users = {};
    $scope.master = {};
    $scope.user = {};
@@ -95,10 +94,9 @@ function UsersController ($scope, $http, $resource) {
          $scope.users.splice(index, 1);
       });
    };
-}
+}]);
 
-
-function ActionsController ($scope, $http) {
+app.controller('ActionsController', ['$scope', '$http', function($scope, $http) {
    $scope.exportok = false;
    $scope.exporterror = false;
    $scope.exportprogress = false;
@@ -115,4 +113,4 @@ function ActionsController ($scope, $http) {
          $scope.exporterror = true;
       });
    };
-}
+}]);

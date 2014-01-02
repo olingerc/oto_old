@@ -1,5 +1,4 @@
-angular.module('oto')
-.directive('accessLevel', ['Auth', function(Auth) {
+app.directive('accessLevel', ['Auth', function(Auth) {
     return {
         restrict: 'A',
         link: function($scope, element, attrs) {
