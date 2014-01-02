@@ -21,6 +21,8 @@ import adminapi.api
 @app.route('/about')
 @app.route('/admin')
 @app.route('/login')
+@app.route('/401')
+@app.route('/automation')
 def basic_pages(**kwargs):
    resp = make_response(render_template('app.html'))
    set_user_cookie(resp)

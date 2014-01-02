@@ -13,6 +13,7 @@ angular.module('oto', [
 
          var access = routingConfig.accessLevels;
 
+         //Define routes also on server!
       	$routeProvider.when('/', {
       	   templateUrl: 'static/partials/landing.html',
       		access: access.user
@@ -36,6 +37,10 @@ angular.module('oto', [
          $routeProvider.when('/automation', {
             templateUrl: 'static/partials/automation.html',
             access: access.user
+         });
+         $routeProvider.when('/401', {
+            templateUrl: 'static/partials/401.html',
+            access: access.public
          });
       	$routeProvider.otherwise({
       		templateUrl: 'static/partials/404.html',
@@ -77,10 +82,10 @@ angular.module('oto', [
                         if (Auth.authorize(next.access)) {
                            $location.path($rootScope.savedLocation);
                         } else {
-                           $location.path('/');
+                           $location.path('/401');
                         }
                      } else {
-                        $location.path('/');
+                        $location.path('/401');
                      }
                   } else {
                      $rootScope.savedLocation = $location.url();
