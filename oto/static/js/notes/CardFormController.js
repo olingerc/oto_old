@@ -5,7 +5,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
     * Initial form status
     * 
     ***********/
-   $scope.isCardFormVisible = false;
+   $scope.isCardFormVisible = true;
    resetCardForm();
 
    /*************
@@ -33,9 +33,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       $scope.urlThumbnailProgress = {};
    
       $scope.isLinkInputVisible = false;
-      $scope.formActions = {
-         linkInputValue: 'http://www.google.com'
-      };
+      $scope.linkInputValue = 'http://www.google.com';
 
       //Take away error meassages
       $scope.titleError = false;
@@ -430,7 +428,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
 
    $scope.cancelAddLink = function() {
       $scope.isLinkInputVisible = false;
-      $scope.formActions.linkInputValue = '';
+      $scope.linkInputValue = '';
    };
 
    $scope.addLink = function() {
@@ -452,7 +450,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
 
       //Start displaying thumb placeholder with progress
       var newAtt = {
-         url : $scope.formActions.linkInputValue,
+         url : $scope.linkInputValue,
          thumbLink : '/static/img/att_default_thumb.png',
          delVisible : false,
          position : index,
@@ -492,7 +490,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
    };
 
    $scope.isLinkInputValueInvalid = function() {
-      if ($scope.formActions.linkInputValue) {
+      if ($scope.linkInputValue) {
          return false;
       } else {
          return true;
