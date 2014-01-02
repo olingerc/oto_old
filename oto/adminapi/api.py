@@ -1,4 +1,4 @@
-from flask import request, session, abort, send_file, after_this_request
+from flask import request, session, send_file, after_this_request, make_response, render_template
 from flask_cuddlyrest.views import ListMongoResource, SingleMongoResource, catch_all
 from flask_cuddlyrest.marshaller import Marshaller
 from flask_cuddlyrest import CuddlyRest
@@ -28,7 +28,7 @@ def requires_auth(f):
    @wraps(f)
    def decorated_function(*args, **kwargs):
       if 'username' not in session or session['username'] is None or session['username'] == '':
-         return abort(401)
+         make_response(render_template('app.html')), 401
       return f(*args, **kwargs)
    return decorated_function
 
@@ -36,10 +36,10 @@ def requires_auth_admin(f):
    @wraps(f)
    def decorated_function(*args, **kwargs):
       if 'username' not in session or session['username'] is None or session['username'] == '':
-         return abort(401)
+         make_response(render_template('app.html')), 401
       else:
          if session['role'] != 'admin':
-            return abort(401)
+            make_response(render_template('app.html')), 401
       return f(*args, **kwargs)
    return decorated_function
 

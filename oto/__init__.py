@@ -36,9 +36,12 @@ def favicon():
 def page_not_found(e):
    return make_response(render_template('app.html')), 404
 
+'''
 @app.errorhandler(401)
 def not_authorized(e):
-   return make_response(render_template('app.html')), 401, { "Authorization" : "BasicCustom" }
+   print 'FORBIDDDDD'
+   return make_response(render_template('app.html')), 401
+'''
 
 '''
 @app.before_request

@@ -1,7 +1,7 @@
 from mongoengine.queryset import DoesNotExist
 from datetime import datetime
 from functools import wraps
-from flask import session, abort
+from flask import session, make_response, render_template
 
 from oto import app
 from models import Stack
@@ -22,7 +22,7 @@ def init_notesapp(function):
    @wraps(function)
    def decorated_function(*args, **kwargs):
       if 'username' not in session or session['username'] is None or session['username'] == '':
-         return abort(401)
+         return make_response(render_template('app.html')), 401
       #Check if this user already has a floating stack
       try:
          user = User.objects.get(username=session['username'])  # @UndefinedVariable
