@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', '$http', '$filter', '$upload', function($scope, $http, $filter, $upload) {
+app.controller('NotesViewController', ['$scope', '$http', '$filter', '$upload', 'Stacks', function($scope, $http, $filter, $upload, Stacks) {
 
    /********************
     *
@@ -56,21 +56,9 @@ app.controller('NotesViewController', ['$scope', '$http', '$filter', '$upload', 
     *
     *
     ******************/
-   $http.get('/stacks/')
-   .success(function(response) {
-      //Only user stacks
-      jQuery.each(response, function(i, stack) {
-         if (stack.title !== 'Archive' && stack.title !== 'Floating') {
-            $scope.stacks.push(stack);
-         }
-         if (stack.title === 'Floating') {
-            $scope.floatingStack = stack;
-         }
-      });
-      $scope.updateStackSizes();
-   })
-   .error(function(error) {
-      console.log(error);
+   Stacks.getAll(function (allStacks, floatingStack) {
+      $scope.stacks = allStacks;
+      $scope.floatingStack = floatingStack;
    });
 
    $http.get('/cards/')
