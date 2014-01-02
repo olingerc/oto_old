@@ -269,7 +269,7 @@
 
       <div ng-controller="CardController" class='list-group'>
          <div class="card list-group-item"
-         ng-click="loadCardIntoForm(card)"
+         ng-click="startEditCard(card)"
          ng-repeat="card in cards | orderBy:orderProp | handlearchive:inArchive() | bystackid:search:inArchive() | filter:query">
             <!-- Card title row -->
             <div class="pull-left">
@@ -298,33 +298,24 @@
                   <span class="caret"></span>
                </button>
                <ul class="dropdown-menu">
-                  <li>
-                     <a href="javascript:void(0)"
-                     ng-click="$event.stopPropagation();startEditCard(card)">Edit</a>
-                  </li>
-                  <li>
-                     <a href="javascript:void(0)"
-                     ng-click="$event.stopPropagation();triggerFileUpload('')">Add file</a>
-                  </li>
-                  <li class="divider"></li>
                   <li class="dropdown-header">
                      Move to stack
                   </li>
                   <li>
                      <a
-                     ng-click="$event.stopPropagation();moveCard(card.id, card, floatingStack.id)">Floating</a>
+                     ng-click="$event.stopPropagation();moveCard(card, floatingStack.id)">Floating</a>
                   </li>
                   <li
                   ng-repeat="stack in stacks">
                      <a
-                     ng-click="$event.stopPropagation();moveCard(card.id, card, stack.id)">{{stack.title}}</a>
+                     ng-click="$event.stopPropagation();moveCard(card, stack.id)">{{stack.title}}</a>
                   <li class="divider"></li>
                   <li class="dropdown-header">
                      Other
                   </li>
                   <li>
                      <a
-                     ng-click="$event.stopPropagation();removCard(card.id, card)">{{{true: 'Delete permanently', false: 'Archive'}[inArchive()]}}</a>
+                     ng-click="$event.stopPropagation();removeCard(card)">{{{true: 'Delete permanently', false: 'Archive'}[inArchive()]}}</a>
                   </li>
                </ul>
             </div>

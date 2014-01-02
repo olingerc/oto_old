@@ -8,7 +8,7 @@ app.factory('Stacks', ['$http', function($http) {
 
          $http.get('/stacks/')
          .success(function(response) {
-            //Only user stacks
+            //Only user stacks, archive stack does not exist and flaoting is handled differently
             jQuery.each(response, function(i, stack) {
                if (stack.title !== 'Archive' && stack.title !== 'Floating') {
                   allStacks.push(stack);
@@ -24,13 +24,19 @@ app.factory('Stacks', ['$http', function($http) {
             callback([], null);
          });
       },
-      add: function(newStack, success, error) {
+      add: function(newStackTitle, success, error) {
+         var newStack = {
+            'title' : newStackTitle
+         };
          $http.post('/stacks', newStack).success(success).error(error);
       },
       rename: function(stackid, newTitle, success, error) {
          $http.put('/stacks/' + stackid, {
             'title' : newTitle
          }).success(success).error(error);
+      },
+      remove: function(stackid, success, error) {
+         $http.delete ('/stacks/' + stackid).success(success).error(error);
       }
    };
 }]);

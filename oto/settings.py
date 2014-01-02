@@ -1,8 +1,8 @@
 MONGODB_SETTINGS = {
                     'DB': "binarylooksp",
                     #'host': 'localhost'
-                    #'host': '199.195.118.87'
-                    'host': '148.110.26.132'
+	            'host': '199.195.118.87'
+                    #'host': '148.110.26.132'
                     }
 TRAP_BAD_REQUEST_ERRORS = True
 

@@ -1,39 +1,65 @@
-/*************************
- *
- * Card controller
- *
- *************************/
-
 'use strict';
-app.controller('CardController', ['$scope', '$http', function($scope, $http) {
-   $scope.removCard = function(cardid, card) {
+
+app.controller('CardController', ['$scope', '$rootScope', 'Cards', function($scope, $rootScope, Cards) {
+   
+   //Card actions
+   $scope.removeCard = function(card) {
       if ($scope.inArchive()) {
-         $http.delete ('/cards/' + cardid).success(function() {
-            $scope.cards.splice($scope.cards.indexOf(card), 1);
-            //cards inherited
-            //function inherited
-         });
+         Cards.remove(
+            card.id,
+            function() {
+               $scope.cards.splice($scope.cards.indexOf(card), 1);
+            },
+            function(error) {
+               console.log(error);
+            }
+         );
       } else {
-         $http.put('/cards/' + cardid, {
-            'archivedat' : new Date().toString(),
-            'stacktitleafterarchived' : $scope.getStacktitle(card.stackid)
-         }).success(function(updatedCard) {
-            //TODO:Strangely attachments only appear in archive after reload
-            $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
-            //cards inherited
-            //function inherited
-         });
+         Cards.archive(
+            card.id,
+            $scope.getStacktitle(card.stackid),
+            function(updatedCard) {
+               $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
+            },
+            function(error) {
+               console.log(error);
+            }
+         );
       }
    };
 
-   $scope.moveCard = function(cardid, card, stackid) {
-      $http.put('/cards/' + cardid, {
-         'stackid' : stackid,
-         'archivedat' : null,
-         'stacktitleafterarchived' : null
-      }).success(function(updatedCard) {
-         $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
-         //function inherited
+   $scope.moveCard = function(card, stackid) {
+      Cards.move(
+         cardid,
+         stackid,
+         function(updatedCard) {
+            $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
+         },
+         function(error) {
+            console.log(error);
+         }
+      );
+   };
+   
+   $scope.startEditCard = function(card) {
+      if ($scope.inArchive()) {
+         return;
+      }
+      $rootScope.$broadcast('startCardEdit', card);
+   };
+
+   //Stacktitle by stackid. In the card I only store id
+   //TODO: put into stacks factory  and avoid stacks on parent scope?
+   $scope.getStacktitle = function(stackid) {
+      var stack = $scope.stacks.filter(function(stack) {
+         if (stack['id'] === stackid) {
+            return stack;
+         }
       });
+      if (stack.length === 1) {
+         return stack[0].title;
+      } else {
+         return 'Floating';
+      }
    };
 }]);

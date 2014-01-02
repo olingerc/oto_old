@@ -1,4 +1,4 @@
-app.controller('CardFormController', ['$scope', '$http', '$upload', function($scope, $http, $upload) {
+app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', function($scope, $filter, $http, $upload) {
    $scope.isCardFormVisible = false;
    $scope.cardFormAction = 'new';
    $scope.originalCard = null;
@@ -107,8 +107,13 @@ app.controller('CardFormController', ['$scope', '$http', '$upload', function($sc
          console.log(error);
       });
    };
+   
+   $scope.$on('cancelCardForm', function() {
+      $scope.cancelCardForm();
+   });
 
    $scope.cancelCardForm = function() {
+      //TODO: only do this if cardform is visible because of lots of broadcast to cancelcardform?
       $scope.isCardFormVisible = false;
       if ($scope.cardFormAction === 'edit') {
          //Handle file attachments first
@@ -510,11 +515,5 @@ app.controller('CardFormController', ['$scope', '$http', '$upload', function($sc
       delete $scope.urlAttachmentsList[position];
       $scope.attachmentsChanged = true;
    };
-
-
-
-
-
-
 
 }]);

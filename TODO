@@ -6,11 +6,11 @@ https://github.com/witoldsz/angular-http-auth
 #Bugs
 uploading big files crashes server in save to mongo
 multiple file upload thumbs only visible after last has uploaded
-no primitive values for scope, use objects
+no primitive values for scope, use objects to prevent parent scope shadowing
 I took some inputs out of the card form, but also the submit button. hitting enter no longer works
-activenav thingy
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
+if all stacfks are empty, size badges not visible
 
 #Framework questions
 do I need an archive stack like the floating stack?
@@ -18,8 +18,6 @@ can I set required = False for stackid and set stackid = null in archive? Since 
 
 #Last thing worked on:
 refactor notes
-
-have to create cancelcardform with broadcast/emit w
 
 
 
