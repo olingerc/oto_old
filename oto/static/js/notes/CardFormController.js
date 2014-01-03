@@ -70,7 +70,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
 
    var addCard = function() {
       var newCard = $scope.cardFormCard;
-      newCard.stackid = $scope.activestackid;
+      newCard.stackid = $scope.activestack.id;
 
       $http({
          method : 'POST',

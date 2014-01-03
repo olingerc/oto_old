@@ -31,10 +31,10 @@
             </button>
             <ul class="dropdown-menu" role="menu">
                <li>
-                  <a ng-click="startDeleteStack(stack, $event)">Delete</a>
+                  <a ng-click="startDeleteStack(activestack)">Delete</a>
                </li>
                <li>
-                  <a ng-click="startRenameStack(stack, $event)">Rename</a>
+                  <a ng-click="startRenameStack(activestack)">Rename</a>
                </li>
             </ul>
          </div>
@@ -111,7 +111,7 @@
       <!--Cards list header-->
       <div class='row'>
             <div id='stackHeader' class='col-lg-3'>
-               <h3>{{activestacktitle}}</h3>
+               <h3>{{activestack.title}}</h3>
             </div>
             <div class='col-lg-5'>
                <ul class='list-inline'>
@@ -330,7 +330,7 @@
                      <h4 class='pull-left list-group-item-heading'>{{card.title}}</h4>
                      <ul class="clearfix list-inline label-list"><!--just add pull-right to align right-->
                         <li></li>
-                        <li class="label label-default" ng-show='activestacktitle==="All"'>{{getStacktitle(card.stackid)}}</li>
+                        <li class="label label-default" ng-show='activestack.title==="All"'>{{getStacktitle(card.stackid)}}</li>
                         <li class="label label-default" ng-show="isNotNull(card.stacktitleafterarchived)">original: {{card.stacktitleafterarchived}}</li>
                         <li title="due date" class="card_due_label label label-default" ng-show="isNotNull(card.duedate)">
                            <small><i class="glyphicon  glyphicon-time"></i> {{card.duedate  | date:'yyyy-MM-dd'}}</small>

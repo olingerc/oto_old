@@ -21,15 +21,15 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
 
    //css for active stack
    $scope.stackIsActive = function(stacktitle) {
-      return stacktitle == $scope.activestacktitle ? true : false;
+      return stacktitle == $scope.activestack.title ? true : false;
    };
 
 
    $scope.stackIsEditable = function() {
       if (
-            $scope.$parent.activestacktitle == 'Floating' ||
-            $scope.$parent.activestacktitle == 'Archive' ||
-            $scope.$parent.activestacktitle == 'All'
+            $scope.$parent.activestack.title == 'Floating' ||
+            $scope.$parent.activestack.title == 'Archive' ||
+            $scope.$parent.activestack.title == 'All'
           ) {
              return true;
           } else {
@@ -42,14 +42,14 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
       $scope.addStackInput = '';
       $scope.isVisibleStackAdd = true;
    };
-   $scope.startRenameStack = function(stack, $event) {
+   $scope.startRenameStack = function(stack) {
       $scope.renameStackInput = '';
       $scope.isVisibleStackAdd = false;
       $scope.isVisibleStackRename = true;
       $scope.isVisibleStackDelete = false;
       $scope.stackToRename = stack;
    };
-   $scope.startDeleteStack = function(stack, $event) {
+   $scope.startDeleteStack = function(stack) {
       $scope.isVisibleStackAdd = false;
       $scope.isVisibleStackRename = false;
       $scope.isVisibleStackDelete = true;
@@ -80,8 +80,8 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
          function(renamedStack) {
             $scope.stacks[$scope.stacks.indexOf($scope.stackToRename)] = renamedStack;
             $scope.isVisibleStackRename = false;
-            if ($scope.$parent.activestackid == renamedStack.id) {
-               $scope.$parent.activestacktitle = renamedStack.title;
+            if ($scope.$parent.activestack.id == renamedStack.id) {
+               $scope.$parent.activestack.title = renamedStack.title;
             }
          },
          function(response) {
@@ -114,7 +114,7 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
          function() {
             $scope.stacks.splice($scope.stacks.indexOf($scope.stackToDelete), 1);
             $scope.isVisibleStackDelete = false;
-            if ($scope.$parent.activestackid == $scope.stackToDelete.id) {
+            if ($scope.$parent.activestack.id == $scope.stackToDelete.id) {
                $scope.listStackUser($scope.$parent.floatingStack);
             }
          },
@@ -129,23 +129,26 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
       $rootScope.$broadcast('cancelCardForm');
       $rootScope.$broadcast('unselectCard');
       $scope.$parent.search = stack.id;
-      $scope.$parent.activestacktitle = stack.title;
-      $scope.$parent.activestackid = stack.id;
+      $scope.$parent.activestack = stack;
    };
 
-   $scope.listStackAll = function(stack) {
+   $scope.listStackAll = function() {
       $rootScope.$broadcast('cancelCardForm');
       $rootScope.$broadcast('unselectCard');
       $scope.$parent.search = "";
-      $scope.$parent.activestacktitle = 'All';
-      $scope.$parent.activestackid = '';
+      $scope.$parent.activestack = {
+         'title':'All',
+         'id':''
+      };
    };
-   $scope.listStackArchive = function(stack) {
+   $scope.listStackArchive = function() {
       $rootScope.$broadcast('cancelCardForm');
       $rootScope.$broadcast('unselectCard');
       $scope.$parent.search = "archive";
-      $scope.$parent.activestacktitle = 'Archive';
-      $scope.$parent.activestackid = 'archive';
+      $scope.$parent.activestack = {
+         'title':'Archive',
+         'id':'archive'
+      };
    };
 
 }]);

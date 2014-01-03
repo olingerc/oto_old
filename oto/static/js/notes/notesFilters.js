@@ -87,9 +87,6 @@ app.directive('sortLabel', function () {
          scope.$watch('orderProp', function(orderProp) {
             defineSortElement(orderProp);
          });
-         /*scope.$watch('activestacktitle', function() {
-            //defineSortElement(scope.orderProp);
-         });*/
       }
     };
 });

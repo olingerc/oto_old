@@ -7,8 +7,10 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
     *
     ******************/
 
-   $scope.activestacktitle = "Floating";
-   $scope.activestackid = "";
+   $scope.activestack = {
+      'title':'Floating',
+      'id':''
+   };
 
    $scope.activeCard = null; //TODO: use Cards factory and store active Card there?
 
@@ -20,7 +22,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    };
 
    //Watch order change
-   $scope.$watch('[orderProp,activestackid]', function() {
+   $scope.$watch('[orderProp,activestack]', function() {
       $rootScope.sortLabels = [];
    }, true); //TODO: shouldn't the directive handle this? use emit broadcast?
    
@@ -31,7 +33,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
     ******************/
 
    $scope.inArchive = function() {
-      return $scope.activestackid === 'archive' ? true : false;
+      return $scope.activestack.id === 'archive' ? true : false;
    };
 
    //Stacktitle by stackid. In the card I only store id
@@ -63,6 +65,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
          $scope.stacks = allStacks;
          $scope.floatingStack = floatingStack;
          $scope.search = floatingStack.id; //show only cards of default stack
+         $scope.activestack = floatingStack;
       }
    );
 
