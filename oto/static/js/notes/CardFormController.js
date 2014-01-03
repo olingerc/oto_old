@@ -1,11 +1,11 @@
 app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', function($scope, $filter, $http, $upload) {
-   
+
    /*************
-    * 
+    *
     * Initial form status
-    * 
+    *
     ***********/
-   $scope.isCardFormVisible = true;
+   $scope.isCardFormVisible = false;
    resetCardForm();
 
    /*************
@@ -26,12 +26,12 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       urlAttachmentsRemoved = [];
 
       $scope.attachmentsChanged = false;
-   
+
       $scope.uploadProgress = {};
       $scope.uploadProgressValue = {};
       $scope.thumbnailProgress = {};
       $scope.urlThumbnailProgress = {};
-   
+
       $scope.isLinkInputVisible = false;
       $scope.linkInputValue = 'http://www.google.com';
 
@@ -60,7 +60,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          addCard();
       }
    };
-   
+
    //ADD CARD
    $scope.$on('startAddCard', function() {
       resetCardForm();
@@ -93,7 +93,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          console.log(error);
       });
    };
-   
+
    //EDIT
    $scope.$on('startCardEdit', function(event, card) {
       $scope.isCardFormVisible = true;
@@ -134,7 +134,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          });
       }
    });
-   
+
    var editCard = function() {
       if ($scope.cardForm.$invalid) {
          return; //safeguard
@@ -213,7 +213,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          console.log(error);
       });
    };
-   
+
    //CANCEL
    $scope.$on('cancelCardForm', function() {
       $scope.cancelCardForm();
@@ -413,7 +413,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          });
       }
    };
-   
+
    //Attachments handling
 
    $scope.removeAtt = function(position) {
