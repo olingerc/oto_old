@@ -12,7 +12,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       'id':''
    };
 
-   $scope.activeCard = null; //TODO: use Cards factory and store active Card there?
+   $rootScope.activeCard = null; //TODO: use Cards factory and store active Card there?
 
    $scope.orderProp = '-modifiedat';
    $scope.setOrder = function(orderProp) {
