@@ -4,7 +4,7 @@ continue developing resource like in delete user in admin controller
 https://github.com/witoldsz/angular-http-auth
 
 #Bugs
-on initial load, floating shows all
+xng-focus with ng-show
 uploading big files crashes server in save to mongo
 multiple file upload thumbs only visible after last has uploaded
 no primitive values for scope, use objects to prevent parent scope shadowing

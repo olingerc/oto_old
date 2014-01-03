@@ -7,20 +7,14 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
     *
     ******************/
 
-   var orderPropVerbose = {
-      '-modifiedat' : 'Last modified',
-      '-createdat' : 'Last created',
-      'title' : 'Title'
-   };
-
    $scope.activestacktitle = "Floating";
    $scope.activestackid = "";
 
+   $scope.activeCard = null; //TODO: use Cards factory and store active Card there?
+
    $scope.orderProp = '-modifiedat';
-   $scope.orderPropVerbose = 'Last modified';
    $scope.setOrder = function(orderProp) {
       $scope.orderProp = orderProp;
-      $scope.orderPropVerbose = orderPropVerbose[orderProp];
    };
 
    /********************
@@ -31,6 +25,21 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
 
    $scope.inArchive = function() {
       return $scope.activestackid === 'archive' ? true : false;
+   };
+
+   //Stacktitle by stackid. In the card I only store id
+   //TODO: put into stacks factory  and avoid stacks on parent scope?
+   $scope.getStacktitle = function(stackid) {
+      var stack = $scope.stacks.filter(function(stack) {
+         if (stack['id'] === stackid) {
+            return stack;
+         }
+      });
+      if (stack.length === 1) {
+         return stack[0].title;
+      } else {
+         return 'Floating';
+      }
    };
 
    /********************
@@ -61,8 +70,8 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
    );
 
    /******************
-    *
-    * Buttons not in any sub-controller
+    * TODO: card header controller?
+    * Buttons not in any sub-controller,
     *
     *************/
 
@@ -73,6 +82,49 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
       $scope.$broadcast('startAddCard');
    };
 
+   //Active Card actions
+   $scope.startEditCard = function(card) {
+      $scope.$broadcast('startCardEdit', card);
+   };
+
+   $scope.removeCard = function(card) {
+      if ($scope.inArchive()) {
+         Cards.remove(
+            card.id,
+            function() {
+               $scope.cards.splice($scope.cards.indexOf(card), 1);
+            },
+            function(error) {
+               console.log(error);
+            }
+         );
+      } else {
+         Cards.archive(
+            card.id,
+            $scope.getStacktitle(card.stackid),
+            function(updatedCard) {
+               $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
+            },
+            function(error) {
+               console.log(error);
+            }
+         );
+      }
+   };
+
+   $scope.moveCard = function(card, stackid) {
+      Cards.move(
+         card.id,
+         stackid,
+         function(updatedCard) {
+            $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
+         },
+         function(error) {
+            console.log(error);
+         }
+      );
+   };
+
    /*******************
     *
     * Utility Functions
@@ -81,6 +133,7 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
    $scope.isNotNull = function(value) {
       return value == null ? false : true;
    };
+
    $scope.dropdown = function(element) {
       $(element).dropdown('toggle');
    };

@@ -1,11 +1,10 @@
 'use strict';
 
 app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stacks', 'Cards', function ($scope, $rootScope, $filter, Stacks, Cards) {
-   $scope.hoveredStack = {};
    $scope.stackActionError = false;
    $scope.stackActionErrorMsg = '';
-   
-   //Stack size badges   
+
+   //Stack size badges
    $scope.stackSizes = {};
    $scope.$watch('cards', function() {
       jQuery.each($scope.stacks, function(i, stack) {
@@ -19,12 +18,25 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
          //TODO: optimize the counting?
       });
    }, true);
-   
+
    //css for active stack
    $scope.stackIsActive = function(stacktitle) {
       return stacktitle == $scope.activestacktitle ? true : false;
    };
-   
+
+
+   $scope.stackIsEditable = function() {
+      if (
+            $scope.$parent.activestacktitle == 'Floating' ||
+            $scope.$parent.activestacktitle == 'Archive' ||
+            $scope.$parent.activestacktitle == 'All'
+          ) {
+             return true;
+          } else {
+            return false;
+          }
+   };
+
    //stacks actions
    $scope.startAddStack = function() {
       $scope.addStackInput = '';
@@ -36,16 +48,12 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
       $scope.isVisibleStackRename = true;
       $scope.isVisibleStackDelete = false;
       $scope.stackToRename = stack;
-
-      $event.stopPropagation();
    };
    $scope.startDeleteStack = function(stack, $event) {
       $scope.isVisibleStackAdd = false;
       $scope.isVisibleStackRename = false;
       $scope.isVisibleStackDelete = true;
       $scope.stackToDelete = stack;
-
-      $event.stopPropagation();
    };
 
    $scope.addStack = function() {
@@ -72,6 +80,9 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
          function(renamedStack) {
             $scope.stacks[$scope.stacks.indexOf($scope.stackToRename)] = renamedStack;
             $scope.isVisibleStackRename = false;
+            if ($scope.$parent.activestackid == renamedStack.id) {
+               $scope.$parent.activestacktitle = renamedStack.title;
+            }
          },
          function(response) {
          if (response.error.search('not unique') > 0) {
@@ -97,39 +108,45 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
             }
          );
       });
-      
+
       Stacks.remove(
          $scope.stackToDelete.id,
          function() {
             $scope.stacks.splice($scope.stacks.indexOf($scope.stackToDelete), 1);
             $scope.isVisibleStackDelete = false;
+            if ($scope.$parent.activestackid == $scope.stackToDelete.id) {
+               $scope.listStackUser($scope.$parent.floatingStack);
+            }
          },
          function(error) {
             console.log(error);
          }
       );
    };
-   
+
    //Filter cardsview by active stack
    $scope.listStackUser = function(stack) {
       $rootScope.$broadcast('cancelCardForm');
+      $rootScope.$broadcast('unselectCard');
       $scope.$parent.search = stack.id;
       $scope.$parent.activestacktitle = stack.title;
       $scope.$parent.activestackid = stack.id;
    };
-   
+
    $scope.listStackAll = function(stack) {
       $rootScope.$broadcast('cancelCardForm');
+      $rootScope.$broadcast('unselectCard');
       $scope.$parent.search = "";
       $scope.$parent.activestacktitle = 'All';
       $scope.$parent.activestackid = '';
    };
    $scope.listStackArchive = function(stack) {
       $rootScope.$broadcast('cancelCardForm');
+      $rootScope.$broadcast('unselectCard');
       $scope.$parent.search = "archive";
       $scope.$parent.activestacktitle = 'Archive';
       $scope.$parent.activestackid = 'archive';
    };
-   
+
 }]);
 

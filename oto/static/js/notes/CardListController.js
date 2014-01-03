@@ -1,65 +1,31 @@
 'use strict';
 
 app.controller('CardListController', ['$scope', '$rootScope', 'Cards', function($scope, $rootScope, Cards) {
-   
-   //Card actions
-   $scope.removeCard = function(card) {
-      if ($scope.inArchive()) {
-         Cards.remove(
-            card.id,
-            function() {
-               $scope.cards.splice($scope.cards.indexOf(card), 1);
-            },
-            function(error) {
-               console.log(error);
-            }
-         );
+   $scope.selectCard = function(card) {
+      /*TODO: if edit form visible, load card*/
+      if ($scope.$parent.activeCard == card) {
+         $scope.$parent.activeCard = null;
       } else {
-         Cards.archive(
-            card.id,
-            $scope.getStacktitle(card.stackid),
-            function(updatedCard) {
-               $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
-            },
-            function(error) {
-               console.log(error);
-            }
-         );
+         $scope.$parent.activeCard = card;
       }
    };
 
-   $scope.moveCard = function(card, stackid) {
-      Cards.move(
-         card.id,
-         stackid,
-         function(updatedCard) {
-            $scope.cards[$scope.cards.indexOf(card)] = updatedCard;
-         },
-         function(error) {
-            console.log(error);
-         }
-      );
+   //css for active card
+   $scope.cardIsActive = function(card) {
+      return card == $scope.$parent.activeCard ? true : false;
    };
-   
+
+   $scope.$on('unselectCard', function() {
+      $scope.$parent.activeCard = null;
+   });
+
+
    $scope.startEditCard = function(card) {
       if ($scope.inArchive()) {
          return;
       }
+      $scope.$parent.activeCard = card;
       $rootScope.$broadcast('startCardEdit', card);
    };
 
-   //Stacktitle by stackid. In the card I only store id
-   //TODO: put into stacks factory  and avoid stacks on parent scope?
-   $scope.getStacktitle = function(stackid) {
-      var stack = $scope.stacks.filter(function(stack) {
-         if (stack['id'] === stackid) {
-            return stack;
-         }
-      });
-      if (stack.length === 1) {
-         return stack[0].title;
-      } else {
-         return 'Floating';
-      }
-   };
 }]);

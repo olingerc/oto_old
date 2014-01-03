@@ -96,6 +96,13 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
 
    //EDIT
    $scope.$on('startCardEdit', function(event, card) {
+      if (window.getSelection) { //Because of double click we select --> unselect
+          window.getSelection().removeAllRanges();
+      }
+      else if (document.selection) {
+          document.selection.empty();
+      }
+
       $scope.isCardFormVisible = true;
       $scope.cardFormAction = 'edit';
 
@@ -368,10 +375,12 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
                att : JSON.stringify(newAtt)
             },
             file : $file
-         }).progress(function(evt) {
+         })
+         .progress(function(evt) {
             var index = this.file.pos;
             $scope.uploadProgressValue[index] = parseInt(100.0 * evt.loaded / evt.total);
-         }).then(function(data, status, headers, config) {
+         })
+         .then(function(data, status, headers, config) {
             var index = data.config.file.pos;
             // file is uploaded successfully
             $scope.fileAttachmentsList[index] = {

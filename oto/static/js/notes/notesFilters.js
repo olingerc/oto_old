@@ -41,3 +41,16 @@ angular.module('oto.filters', [])
       }
     };
   });
+
+app.directive('xngFocus', function() { //TODO: put into directives file
+    return function(scope, element, attrs) {
+       scope.$watch(attrs.xngFocus,
+         function (newValue) {
+            if (newValue) {
+               newValue && element.focus();
+            } else {
+               //element.blur();
+            }
+         },true);
+      };
+});

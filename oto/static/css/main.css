@@ -1,33 +1,38 @@
-/*body {padding-top:71px /*for navbar fixed-top*/}*/
 /*---STACKS---*/
-#stackactions {display:inline;padding:2px, margin-top:-15px}
-#stackactions .btn-xs {margin: 5px 2px 0 0}
+#stackactions .btn {margin: 5px 2px 0 0}
+.stacklist {margin-top:10px;width:100%; padding-right:0} /*TODO: use bootstrap rows*/
 
-.stacklist {margin-top:10px;width:100%; padding-right:0}
-
-/*---CARD VIEW OPTIONS--*/
-.cards_order_options a.active{font-weight:bold}
-
+/*---CARD Header--*/
 #stackHeader {padding-top:8px}
 #stackHeader h3 {margin:0px;margin-bottom:5px}
 
-
-/*---CARDS---*/
-.card {
-  background: #f0f0f0;
+.cards_order_options .active {
+   font-weight:bold;
 }
 
+/*---CARDS---*/
+.card {background: #f0f0f0;padding:10px 15px;}
 .card:hover {background:#e5e5e5}
-.card.edit {border-color:#0044CC;}
-.card .card_actions_btn {margin-right:-10px}
+.label-list {margin-top:-4px}
+.status-list {margin:0px}
 
-
+/*Thumblists*/
 .att_thumb {height:80px}
 .att_thumb:hover {
   border-color: #66afe9;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.9);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.9);
+}
+
+.link-emblem {
+  padding:2px;
+  position:relative;
+  top:-25px;
+  left:-20px;
+  background:white;
+  opacity:0.7;
+  border-top-right-radius: 3px
 }
 
 .attprogress {
@@ -43,13 +48,8 @@
   top:0px;
   display:inline
 }
-.label-list {
-   margin:0
-}
 
-.thumblist {
-   margin:0
-}
+.thumblist {margin:0}
 
 .thumbnailProgress {
   left:-80px;
@@ -63,35 +63,31 @@
   top:-65px;
 }
 
-.attdelbutton:hover {
-  color:red
-}
-
-.card .form_action {margin:5px}
-
-.thumb-caption {
-  padding:2px;
-  position:relative;
-  top:-25px;
-  left:-20px;
-  background:white;
-  opacity:0.7;
-  border-top-right-radius: 3px
-}
+.attdelbutton:hover {color:red;cursor:pointer}
 
 /*--ADD CARD FORM--*/
-#cardFormContainer {background:#666;padding-top:10px;padding-bottom:10px}/*background ignores padding, thats whjy form looks larger than cardlist*/
+#cardFormContainer {padding-bottom:5px}/*background ignores padding, thats whjy form looks larger than cardlist*/
+
+/*Add file*/
 #addFileFormBtn {margin-left:35px;}
 
+/*Add link*/
 #addLinkFormContainer {display:inline-block;width:300px}
 #addLinkFormInput {display:inline-block;width:100px;}
 #addLinkFormBtnOk {display:inline-block;}
 #addLinkFormBtnCancel {display:inline-block}
+
+/*Thumbs*/
+a.att_thumb_link {text-decoration:none}
 
 
 
 @media (max-width: 1200px) { /*To prevent from being pulled right on small devices*/
     .view_options > .pull-right {
         float: none !important;
+        margin-bottom:15px; /*FIXME:HACK*/
+    }
+    .stack_actions.pull-right {
+        float: none !important; /*TODO: adjust margin for medium*/
     }
 }
