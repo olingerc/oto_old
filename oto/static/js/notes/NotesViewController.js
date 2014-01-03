@@ -20,10 +20,10 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    };
 
    //Watch order change
-   $scope.$watch('orderProp', function() {
+   $scope.$watch('[orderProp,activestackid]', function() {
       $rootScope.sortLabels = [];
-   }, true); //TODO: shouldn't the directive handle this?
-
+   }, true); //TODO: shouldn't the directive handle this? use emit broadcast?
+   
    /********************
     *
     * parent scope methods
