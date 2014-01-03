@@ -109,8 +109,8 @@
       <hr>
    </section>
    <section id="middlebar" class="col-lg-9 ">
-      <!--Card Form-->
 
+      <!--Card Form-->
       <div class='row'>
       	<div id='cardFormContainer' class='col-lg-12'
          ng-show="isCardFormVisible"
@@ -233,49 +233,52 @@
 
       <!--Cards list header-->
       <div class='row'>
-      	<ul class='col-lg-12 list-inline'>
-            <li><h3>{{activestacktitle}}</h3></li>
-            <li>
-               <input class="form-control" title="Includes attachment file names" type="text" placeholder="Search stack"
-                  ng-model="query">
-            </li>
-            <li>
-               <button ng-click="startAddCard()" class="btn btn-primary"
-                  ng-hide="inArchive()">
-                  Add Card
-               </button>
-            </li>
-            <li class='pull-right'>
-               <h3>
-                  <div class="btn-group ">
-                     <a class="active btn btn-sm btn-default" href=""><i class="glyphicon  glyphicon-tasks"></i></a>
-                     <a class="btn btn-sm btn-default" href=""><i class="glyphicon  glyphicon-calendar"></i></a>
-                  </div>
-                  <div class="btn-group cards_order_options">
-                     <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-                        Sort: {{orderPropVerbose}} <span class="caret"></span>
+            <div id='stackHeader' class='col-lg-3'>
+               <h3>{{activestacktitle}}</h3>
+            </div>
+            <div class='col-lg-5'>
+               <ul class='list-inline'>
+                  <li>
+                     <input class="form-control" title="Includes attachment file names" type="text" placeholder="Search stack"
+                        ng-model="query">
+                  </li>
+                  <li>
+                     <button ng-click="startAddCard()" class="btn btn-success"
+                        ng-hide="inArchive()">
+                        Add Card
                      </button>
-                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                           <a
-                           ng-click="setOrder('-modifiedat')"
-                           ng-class="{true: 'active', false: ''}[orderProp=='-modifiedat']">Last modified</a>
-                        </li>
-                        <li>
-                           <a
-                           ng-click="setOrder('-createdat')"
-                           ng-class="{true: 'active', false: ''}[orderProp=='-createdat']">Last created</a>
-                        </li>
-                        <li>
-                           <a
-                           ng-click="setOrder('title')"
-                           ng-class="{true: 'active', false: ''}[orderProp=='title']">Title</a>
-                        </li>
-                     </ul>
-                  </div>
-               </h3>
-            </li>
-         </ul>
+                  </li>
+               </ul>
+            </div>
+            <div class='col-lg-4 view_options'>
+
+               <div class="btn-group pull-right">
+                  <a class="active btn btn-default" href=""><i class="glyphicon  glyphicon-tasks"></i></a>
+                  <a class="btn btn-default" href=""><i class="glyphicon  glyphicon-calendar"></i></a>
+               </div>
+               <div class="btn-group cards_order_options  pull-right">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                     Sort: {{orderPropVerbose}} <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                     <li>
+                        <a
+                        ng-click="setOrder('-modifiedat')"
+                        ng-class="{true: 'active', false: ''}[orderProp=='-modifiedat']">Last modified</a>
+                     </li>
+                     <li>
+                        <a
+                        ng-click="setOrder('-createdat')"
+                        ng-class="{true: 'active', false: ''}[orderProp=='-createdat']">Last created</a>
+                     </li>
+                     <li>
+                        <a
+                        ng-click="setOrder('title')"
+                        ng-class="{true: 'active', false: ''}[orderProp=='title']">Title</a>
+                     </li>
+                  </ul>
+               </div>
+         </div>
       </div>
 
       <!--Cards list-->

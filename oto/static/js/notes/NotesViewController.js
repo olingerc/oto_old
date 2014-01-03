@@ -15,24 +15,24 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
 
    $scope.activestacktitle = "Floating";
    $scope.activestackid = "";
-   
+
    $scope.orderProp = '-modifiedat';
    $scope.orderPropVerbose = 'Last modified';
    $scope.setOrder = function(orderProp) {
       $scope.orderProp = orderProp;
       $scope.orderPropVerbose = orderPropVerbose[orderProp];
    };
-   
+
    /********************
     *
     * parent scope methods
     *
     ******************/
-   
+
    $scope.inArchive = function() {
       return $scope.activestackid === 'archive' ? true : false;
-   };   
-   
+   };
+
    /********************
     *
     * Retrieve data for models
@@ -40,12 +40,13 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
     ******************/
 
    $scope.stacks = [];
-   //TODO: put into factory initialization with watch on username? 
+   //TODO: put into factory initialization with watch on username?
    //what about stack add/remove/rename?, avoid stacks on parent scope?
    Stacks.getAll(
       function (allStacks, floatingStack) {
          $scope.stacks = allStacks;
          $scope.floatingStack = floatingStack;
+         $scope.search = floatingStack.id; //show only cards of default stack
       }
    );
 
@@ -73,9 +74,9 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
    };
 
    /*******************
-    * 
+    *
     * Utility Functions
-    * 
+    *
     ********************/
    $scope.isNotNull = function(value) {
       return value == null ? false : true;

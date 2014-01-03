@@ -8,6 +8,9 @@
 /*---CARD VIEW OPTIONS--*/
 .cards_order_options a.active{font-weight:bold}
 
+#stackHeader {padding-top:8px}
+#stackHeader h3 {margin:0px;margin-bottom:5px}
+
 
 /*---CARDS---*/
 .card {
@@ -84,3 +87,11 @@
 #addLinkFormInput {display:inline-block;width:100px;}
 #addLinkFormBtnOk {display:inline-block;}
 #addLinkFormBtnCancel {display:inline-block}
+
+
+
+@media (max-width: 1200px) { /*To prevent from being pulled right on small devices*/
+    .view_options > .pull-right {
+        float: none !important;
+    }
+}
