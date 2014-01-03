@@ -4,7 +4,7 @@
  * Helper functions
  *
  ********************************/
-
+/*
 function makeid() {
    //in python: os.urandom(16).encode('hex')
    var text = "";
@@ -24,6 +24,7 @@ function a2hex(str) {
    }
    return arr.join('');
 }
+*/
 
 function getdate(date) {
    if (!date) {

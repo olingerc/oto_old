@@ -63,9 +63,7 @@ app.directive('sortLabel', function () {
          var sortLabel,
              sortLabelShort;
              
-         //defineSortElement(scope.orderProp);
          function defineSortElement(orderProp) {
-            console.log(scope.sortLabels)
             if (orderProp == 'title') {
                sortLabel = scope.card.title;
                sortLabelShort = sortLabel.substring(0,1).toUpperCase();

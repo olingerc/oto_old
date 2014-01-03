@@ -14,14 +14,13 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
 
    $scope.activeCard = null; //TODO: use Cards factory and store active Card there?
 
-   //$scope.orderProp = '-modifiedat';
-   $rootScope.sortLabels = [];
-   $scope.orderProp = 'title';
+   $scope.orderProp = '-modifiedat';
    $scope.setOrder = function(orderProp) {
       $scope.orderProp = orderProp;
    };
 
    //Watch order change
+   $rootScope.sortLabels = [];
    $scope.$watch('[orderProp,activestack]', function() {
       $rootScope.sortLabels = [];
    }, true); //TODO: shouldn't the directive handle this? use emit broadcast?
@@ -65,7 +64,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
          $scope.stacks = allStacks;
          $scope.floatingStack = floatingStack;
          $scope.search = floatingStack.id; //show only cards of default stack
-         $scope.activestack = floatingStack;
+         //$scope.activestack = floatingStack;
       }
    );
 

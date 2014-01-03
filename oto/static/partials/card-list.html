@@ -322,8 +322,8 @@
                <div class='list-group' ng-controller="CardListController">
                   <div class="card list-group-item"
                      ng-class="{true: 'active', false: ''}[cardIsActive(card)]"
-                     ng-click='selectCard(card)'
-                     ng-dblclick="startEditCard(card)">
+                     ng-click='$parent.selectCard(card)'
+                     ng-dblclick="$parent.startEditCard(card)">
 
    <!--Start of card-->
                      <!-- Card title row -->
