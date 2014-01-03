@@ -25,8 +25,12 @@ function a2hex(str) {
    return arr.join('');
 }
 
-function getdate() {
-   var d = new Date();
+function getdate(date) {
+   if (!date) {
+      var d = new Date();
+   } else {
+      var d = date;
+   }
    var curr_date = d.getDate();
    var curr_month = d.getMonth() + 1;
    var curr_year = d.getFullYear();

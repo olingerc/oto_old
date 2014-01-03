@@ -54,3 +54,34 @@ app.directive('xngFocus', function() { //TODO: put into directives file
          },true);
       };
 });
+
+
+app.directive('sortLabel', function () {
+    return {
+      restrict: 'A',
+      link: function (scope, elem, attrs) {
+         var sortLabel,
+            sortLabelShort;
+
+         scope.$watch('orderProp', function(orderProp) {
+            if (orderProp == 'title') {
+               sortLabel = scope.card.title;
+               sortLabelShort = sortLabel.substring(0,1).toUpperCase();
+            } else {
+               var dateType = orderProp.replace('-','');
+               sortLabel = scope.card[dateType];
+               sortLabelShort = sortLabel;
+            }
+            elem.html(sortLabelShort);
+
+            //Show?
+            if (scope.sortLabels.indexOf(sortLabelShort) > -1) {
+               elem.hide();
+            } else {
+               scope.sortLabels.push(sortLabelShort);
+            }
+         });
+      }
+    };
+});
+

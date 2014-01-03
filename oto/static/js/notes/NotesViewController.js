@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($scope, Stacks, Cards) {
+app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', function($scope, $rootScope, Stacks, Cards) {
    /********************
     *
     * parent scope variables
@@ -12,10 +12,17 @@ app.controller('NotesViewController', ['$scope', 'Stacks', 'Cards', function($sc
 
    $scope.activeCard = null; //TODO: use Cards factory and store active Card there?
 
-   $scope.orderProp = '-modifiedat';
+   //$scope.orderProp = '-modifiedat';
+   $rootScope.sortLabels = [];
+   $scope.orderProp = 'title';
    $scope.setOrder = function(orderProp) {
       $scope.orderProp = orderProp;
    };
+
+   //Watch order change
+   $scope.$watch('orderProp', function() {
+      $rootScope.sortLabels = [];
+   }, true); //TODO: shouldn't the directive handle this?
 
    /********************
     *

@@ -317,69 +317,73 @@
 
       <div class='row'>
          <div class='col-lg-12'>
-            <!--<p class="text-muted sortlabel">
-               2013-05-05
-            </p>-->
-            <div class='list-group' ng-controller="CardListController">
-               <div class="card list-group-item"
-                  ng-class="{true: 'active', false: ''}[cardIsActive(card)]"
-                  ng-click='selectCard(card)'
-                  ng-dblclick="startEditCard(card)"
-                  ng-repeat="card in cards | orderBy:orderProp | handlearchive:inArchive() | bystackid:search:inArchive() | filter:query">
+            <div ng-controller="CardListController" ng-repeat="card in cards | orderBy:orderProp | handlearchive:inArchive() | bystackid:search:inArchive() | filter:query">
+               <p sort-label class="text-muted sortlabel"></p>
+               <div class='list-group' ng-controller="CardListController">
+                  <div class="card list-group-item"
+                     ng-class="{true: 'active', false: ''}[cardIsActive(card)]"
+                     ng-click='selectCard(card)'
+                     ng-dblclick="startEditCard(card)">
 
-                  <!-- Card title row -->
-                  <h4 class='pull-left list-group-item-heading'>{{card.title}}</h4>
-                  <ul class="clearfix list-inline label-list"><!--just add pull-right to align right-->
-                     <li></li>
-                     <li class="label label-default" ng-show='activestacktitle==="All"'>{{getStacktitle(card.stackid)}}</li>
-                     <li class="label label-default" ng-show="isNotNull(card.stacktitleafterarchived)">original: {{card.stacktitleafterarchived}}</li>
-                     <li title="due date" class="card_due_label label label-default" ng-show="isNotNull(card.duedate)">
-                        <small><i class="glyphicon  glyphicon-time"></i> {{card.duedate  | date:'yyyy-MM-dd'}}</small>
-                     </li>
-                  </ul>
-
-                  <!--Card Content-->
-                  <p>{{card.content}}</p>
-
-                  <!--Tumbnails-->
-                  <ul class='list-inline thumblist'>
-                     <!--file Attachments-->
-                     <li ng-repeat="att in card.fileattachments">
-                        <a class="att_thumb_link" title="{{att.filename}}"
-                           ng-href="/download/{{att.id}}">
-                           <img class="att_thumb img-rounded"
-                              ng-src="/thumbnail/{{att.id}}"> </a>
-                     </li>
-
-                     <!--url Attachments-->
-                     <li
-                     ng-repeat="att in card.urlattachments">
-                        <a class="link_thumb_link" title="{{att.url}}" target="_blank"
-                           ng-href="{{att.url}}">
-                              <img class="att_thumb img-rounded"
-                                 ng-src="/thumbnaillink/{{att.id}}">
-                                    <small class="link-emblem"><i class="glyphicon  glyphicon-share-alt"></i></small></a>
-                     </li>
-                  </ul>
-
-                  <!--Card status-->
-                  <small>
-                     <ul class="status-list list-inline">
-                        <li class="card_time_label">
-                           <small title="created at" class="text-muted"><i class="glyphicon  glyphicon-asterisk"></i>&nbsp;{{card.createdat |date:'yyyy-MM-dd HH:mm:ss'}}</small>
-                        </li>
-                        <li class="card_mod_label"
-                           ng-show="card.modifiedat != card.createdat">
-                           <small title="modified at" class="text-muted"><i class="glyphicon  glyphicon-pencil"></i>&nbsp;{{card.modifiedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
-                        </li>
-                        <li class="card_mod_label"
-                           ng-show="isNotNull(card.archivedat)">
-                           <small title="archived at" class="text-muted"><i class="glyphicon  glyphicon-trash"></i>&nbsp;{{card.archivedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
+   <!--Start of card-->
+                     <!-- Card title row -->
+                     <h4 class='pull-left list-group-item-heading'>{{card.title}}</h4>
+                     <ul class="clearfix list-inline label-list"><!--just add pull-right to align right-->
+                        <li></li>
+                        <li class="label label-default" ng-show='activestacktitle==="All"'>{{getStacktitle(card.stackid)}}</li>
+                        <li class="label label-default" ng-show="isNotNull(card.stacktitleafterarchived)">original: {{card.stacktitleafterarchived}}</li>
+                        <li title="due date" class="card_due_label label label-default" ng-show="isNotNull(card.duedate)">
+                           <small><i class="glyphicon  glyphicon-time"></i> {{card.duedate  | date:'yyyy-MM-dd'}}</small>
                         </li>
                      </ul>
-                  </small>
-               </div>
-            </div><!--End of card-->
+
+                     <!--Card Content-->
+                     <p>{{card.content}}</p>
+
+                     <!--Tumbnails-->
+                     <ul class='list-inline thumblist'>
+                        <!--file Attachments-->
+                        <li ng-repeat="att in card.fileattachments">
+                           <a class="att_thumb_link" title="{{att.filename}}"
+                              ng-href="/download/{{att.id}}">
+                              <img class="att_thumb img-rounded"
+                                 ng-src="/thumbnail/{{att.id}}"> </a>
+                        </li>
+
+                        <!--url Attachments-->
+                        <li
+                        ng-repeat="att in card.urlattachments">
+                           <a class="link_thumb_link" title="{{att.url}}" target="_blank"
+                              ng-href="{{att.url}}">
+                                 <img class="att_thumb img-rounded"
+                                    ng-src="/thumbnaillink/{{att.id}}">
+                                       <small class="link-emblem"><i class="glyphicon  glyphicon-share-alt"></i></small></a>
+                        </li>
+                     </ul>
+
+                     <!--Card status-->
+                     <small>
+                        <ul class="status-list list-inline">
+                           <li class="card_time_label">
+                              <small title="created at" class="text-muted"><i class="glyphicon  glyphicon-asterisk"></i>&nbsp;{{card.createdat |date:'yyyy-MM-dd HH:mm:ss'}}</small>
+                           </li>
+                           <li class="card_mod_label"
+                              ng-show="card.modifiedat != card.createdat">
+                              <small title="modified at" class="text-muted"><i class="glyphicon  glyphicon-pencil"></i>&nbsp;{{card.modifiedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
+                           </li>
+                           <li class="card_mod_label"
+                              ng-show="isNotNull(card.archivedat)">
+                              <small title="archived at" class="text-muted"><i class="glyphicon  glyphicon-trash"></i>&nbsp;{{card.archivedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
+                           </li>
+                        </ul>
+                     </small>
+                  </div><!--End of list group item-->
+
+               </div><!--End of list group-->
+<!--End of card-->
+            </div>
+
+
          </div>
       </div>
    </section>
