@@ -8,7 +8,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
     ******************/
 
    $scope.activestack = {
-      'title':'Floating',
+      'title':'',
       'id':''
    };
 
@@ -20,9 +20,21 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    };
 
    //Watch order change
-   $rootScope.sortLabels = [];
-   $scope.$watch('[orderProp,activestack]', function() {
-      $rootScope.sortLabels = [];
+   /*$rootScope.sortLabels = [];
+      $rootScope.lowestSortLabel = {};
+      $rootScope.showSortLabel = {};*/
+   $scope.$watch('orderProp', function(data) {
+      console.log(data)
+      $rootScope.sortLabels = {};
+      $rootScope.lowestSortLabel = {};
+      $rootScope.showSortLabel = {};
+   }, true); //TODO: shouldn't the directive handle this? use emit broadcast?
+   
+   $scope.$watch('activestack', function(data) {
+      console.log(data)
+      $rootScope.sortLabels = {};
+      $rootScope.lowestSortLabel = {};
+      $rootScope.showSortLabel = {};
    }, true); //TODO: shouldn't the directive handle this? use emit broadcast?
    
    /********************
@@ -64,7 +76,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
          $scope.stacks = allStacks;
          $scope.floatingStack = floatingStack;
          $scope.search = floatingStack.id; //show only cards of default stack
-         //$scope.activestack = floatingStack;
+         $scope.activestack = floatingStack;
       }
    );
 

@@ -26,11 +26,11 @@ function a2hex(str) {
 }
 */
 
-function getdate(date) {
+function getDateNoTime(date) {
    if (!date) {
       var d = new Date();
    } else {
-      var d = date;
+      var d = new Date(date);
    }
    var curr_date = d.getDate();
    var curr_month = d.getMonth() + 1;
@@ -47,8 +47,20 @@ function getdate(date) {
    if (curr_min < 10)
       curr_min = "0" + curr_min;
 
-   return curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":00";
+   return curr_year + "-" + curr_month + "-" + curr_date;// + " " + curr_hour + ":" + curr_min + ":00";
 }
+/*
+function dynamicSort(property) {
+    var sortOrder = 1;
+    if(property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+    }
+    return function (a,b) {
+        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+        return result * sortOrder;
+    };
+}*/
 
 /*Array.prototype.getUnique = function() {
    var u = {}, a = [];

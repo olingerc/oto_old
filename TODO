@@ -5,6 +5,7 @@ https://github.com/witoldsz/angular-http-auth
 
 #Bugs
 xng-focus with ng-show
+long thumblist margin errors in card and cardfomr
 uploading big files crashes server in save to mongo
 multiple file upload thumbs only visible after last has uploaded
 no primitive values for scope, use objects to prevent parent scope shadowing
@@ -18,7 +19,8 @@ do I need an archive stack like the floating stack?
 can I set required = False for stackid and set stackid = null in archive? Since that particular id no longer exists if corresponding stack is deleted
 
 #Last thing worked on:
-refactor notes
+date sortlabel -->Switch to All and back to any other: the sortlabels are strange. It has something to do wiht 'All'
+list-group
 
 
 

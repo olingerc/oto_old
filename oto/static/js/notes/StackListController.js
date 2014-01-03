@@ -135,10 +135,11 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
    $scope.listStackAll = function() {
       $rootScope.$broadcast('cancelCardForm');
       $rootScope.$broadcast('unselectCard');
-      $scope.$parent.search = "";
+      $scope.$parent.search = '';
       $scope.$parent.activestack = {
-         'title':'All',
-         'id':''
+      'owner':null,
+        'title':'All',
+        'id':''
       };
    };
    $scope.listStackArchive = function() {

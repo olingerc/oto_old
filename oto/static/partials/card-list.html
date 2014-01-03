@@ -318,7 +318,7 @@
       <div class='row'>
          <div class='col-lg-12'>
             <div ng-controller="CardListController" ng-repeat="card in cards | orderBy:orderProp | handlearchive:inArchive() | bystackid:search:inArchive() | filter:query">
-               <p sort-label class="text-muted sortlabel"></p>
+               <p sort-label class="text-muted sortlabel" ng-show='showSortLabel[$index]'></p>
                <div class='list-group' ng-controller="CardListController">
                   <div class="card list-group-item"
                      ng-class="{true: 'active', false: ''}[cardIsActive(card)]"
