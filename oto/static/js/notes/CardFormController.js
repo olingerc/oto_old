@@ -324,6 +324,8 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
     *
     ********************/
 
+   $scope.filethumbs = {};
+
    $scope.initFileUpload = function() {
       $('#fileInput').click();
    };
@@ -347,13 +349,16 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       for (var i = 0; i < $files.length; i++) {
          var index = Object.keys($scope.fileAttachmentsList).length,
              $file = $files[i];
+             
+            
+            
+         $scope.filethumbs[index] = '/static/img/att_default_thumb.png'; 
 
          //Start displaying thumb placeholder with progress
          var newAtt = {
             id : $file.name,
             filename : $file.name,
             fileLink : '',
-            thumbLink : '/static/img/att_default_thumb.png',
             delVisible : false,
             position : index
          };
@@ -386,8 +391,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
             $scope.fileAttachmentsList[index] = {
                id : data.id,
                filename : data.filename,
-               fileLink : '',
-               thumbLink : '/static/img/att_default_thumb.png'
+               fileLink : ''
             };
             // create thumbnail on server
             $scope.uploadProgress[index] = false;
@@ -404,14 +408,8 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
             .success(function(data, status, header) {
                var index = data.positionInUi;
                fileAttachmentsAdded.push(data.id);
-               $scope.fileAttachmentsList[index] = {
-                  id : data.id,
-                  filename : data.filename,
-                  fileLink : '/download/' + data.id,
-                  thumbLink : '/thumbnail/' + data.id,
-                  delVisible : true,
-                  position: index
-               };
+
+               $scope.filethumbs[index] = '/thumbnail/' + data.id;
                $scope.attachmentsChanged = true;
                $scope.uploadProgress[index] = false;
                $scope.thumbnailProgress[index] = false;
@@ -439,7 +437,8 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       $scope.isLinkInputVisible = false;
       $scope.linkInputValue = '';
    };
-
+   
+   $scope.thumbs = {};
    $scope.addLink = function() {
       $scope.isLinkInputVisible = false;
 
@@ -460,7 +459,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       //Start displaying thumb placeholder with progress
       var newAtt = {
          url : $scope.linkInputValue,
-         thumbLink : '/static/img/att_default_thumb.png',
          delVisible : false,
          position : index,
          cardid:cardId
@@ -470,6 +468,8 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
 
       //Start thumbnail creation
       $scope.urlThumbnailProgress[index] = true;
+      
+      $scope.thumbs[index] = '/static/img/att_default_thumb.png';
 
       $http({
          method:'POST',
@@ -483,10 +483,10 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       .success(function(data) {
          var index = data.positionInUi;
          urlAttachmentsAdded.push(data.id);
+         $scope.thumbs[index] = '/thumbnaillink/' + data.id;
          $scope.urlAttachmentsList[index] = {
             id : data.id,
             url : data.url,
-            thumbLink : '/thumbnaillink/' + data.id,
             delVisible : true,
             position: index
          };

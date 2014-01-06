@@ -128,7 +128,7 @@ def create_thumbnail():
          att.thumb = False
             
    att.save()
-   obj = {'id': attid, 'filename': att.filename, 'positionInUi': request.form['positionInUi']}
+   obj = {'id': attid, 'filename': att.filename, 'positionInUi':request.form['positionInUi']}
    return json.dumps(obj)
    #TODO: error on multiple image upload
             

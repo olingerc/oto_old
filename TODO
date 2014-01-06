@@ -2,10 +2,11 @@
 add sort label, i.e. new month, new first letter, ...
 continue developing resource like in delete user in admin controller
 https://github.com/witoldsz/angular-http-auth
+put title attribute of current sort on sort button, maybve change icon
 
 #Bugs
 xng-focus with ng-show
-long thumblist margin errors in card and cardfomr
+long thumblist margin errors in card and cardfom
 uploading big files crashes server in save to mongo
 multiple file upload thumbs only visible after last has uploaded
 no primitive values for scope, use objects to prevent parent scope shadowing

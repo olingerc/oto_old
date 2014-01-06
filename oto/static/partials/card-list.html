@@ -271,12 +271,12 @@
                   <div class='row'>
                      <div  class='col-lg-12'>
                         <div class="thumblist">
-                           <div class="pull-left" ng-repeat="att in fileAttachmentsList | orderBy:'position'"
+                           <div class="pull-left" ng-repeat="att in fileAttachmentsList"
                               ng-click="$event.stopPropagation()">
                               <a class="inline att_thumb_link" title="{{att.filename}}"
                                  ng-href="{{att.fileLink}}">
                                  <img class="att_thumb img-rounded"
-                                    ng-src="{{att.thumbLink}}">
+                                    ng-src="{{filethumbs[$index]}}">
                               </a>
                               <span class="uploadProgress"
                                  ng-show='uploadProgress[$index]'>
@@ -291,12 +291,12 @@
                            </div>
                         </div>
                         <div class="thumblist">
-                     <div class="pull-left" ng-repeat="att in urlAttachmentsList | orderBy:'position'"
+                     <div class="pull-left" ng-repeat="att in urlAttachmentsList"
                         ng-click="$event.stopPropagation()">
                         <a class="inline att_thumb_link" title="{{att.url}}"
                            ng-href="{{att.url}}">
                            <img class="att_thumb img-rounded"
-                              ng-src="{{att.thumbLink}}">
+                              ng-src="{{thumbs[$index]}}">
                            <small class="link-emblem"><i class="glyphicon  glyphicon-share-alt"></i></small>
                         </a>
                         <img src="/static/img/knob.gif" class="thumbnailProgress"
