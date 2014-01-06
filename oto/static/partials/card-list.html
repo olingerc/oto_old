@@ -317,10 +317,12 @@
 
       <div class='row'>
          <div class='col-lg-12'>
-            <div ng-controller="CardListController" ng-repeat="(key,card) in (filteredCards = (cards | orderBy:orderProp | handlearchive:inArchive() | bystackid:search:inArchive() | filter:query))">
-               <sort-label></sort-label>
-               <div class='list-group' ng-controller="CardListController">
+            <div ng-controller="CardListController">
+               <div ng-repeat="cardGroup in cardGroups">
+               <div class='list-group'>
+                  <p class="text-muted" >{{cardGroup.label}}</p>
                   <div class="card list-group-item"
+                     ng-repeat="card in cardGroup.cards"
                      ng-class="{true: 'active', false: ''}[cardIsActive(card)]"
                      ng-click='$parent.selectCard(card)'
                      ng-dblclick="$parent.startEditCard(card)">
@@ -382,7 +384,7 @@
                </div><!--End of list group-->
 <!--End of card-->
             </div>
-
+</div>
 
          </div>
       </div>

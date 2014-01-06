@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', 'sortLabelsService', function($scope, $rootScope, Stacks, Cards, sortLabelsService) {
+app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', function($scope, $rootScope, Stacks, Cards) {
    /********************
     *
     * parent scope variables
@@ -19,18 +19,6 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       $scope.orderProp = orderProp;
    };
 
-
-   /*
-    *
-    * SORT LABELS
-    *
-    *
-    */
-
-   //Sort Labels
-   $scope.$watch('filteredCards', function(data) {
-      sortLabelsService.refreshLabels(data, $scope.orderProp);
-   }, true);
 
    /********************
     *
@@ -79,6 +67,11 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    Cards.getAll(
       function(cards) {
          $scope.cards = cards;
+         //Keep as array of objects. The controller will regroup by sorting when parameters change change
+         $scope.cardGroups = [{
+            'label': 'unsorted',
+            'cards': $scope.cards
+         }];
       },
       function(error) {
          console.log(error);
