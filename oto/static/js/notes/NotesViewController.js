@@ -19,7 +19,6 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       $scope.orderProp = orderProp;
    };
 
-
    /********************
     *
     * parent scope methods
@@ -81,7 +80,6 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    /******************
     * TODO: card header controller?
     * Buttons not in any sub-controller,
-    *
     *************/
 
    $scope.startAddCard = function() {

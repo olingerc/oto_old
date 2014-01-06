@@ -2,7 +2,7 @@
 
 app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards', function($scope, $rootScope, $filter, Cards) {
    $scope.selectCard = function(card) {
-      /*TODO: if edit form visible, load card*/
+      /*TODO: if edit form visible, load card on select*/
      //TODO store active card in factory to avoid all this parenting shit
       if ($rootScope.activeCard == card) {
          $rootScope.activeCard = null;
@@ -42,36 +42,41 @@ app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards'
    });
 
    function getCardGroups() {
-       var  groupsObj = {},
-            label;
+      var  groupsObj = {},
+           label;
 
-       //Handle filtering
-       var visibleCards = $scope.cards;
-       visibleCards = $filter('handlearchive')(visibleCards, $scope.inArchive());
-       visibleCards = $filter('bystackid')(visibleCards, $scope.search, $scope.inArchive());
-       visibleCards = $filter('filter')(visibleCards, $scope.query); //The are the ones we watch
+      //Handle filtering
+      var visibleCards = $scope.cards;
+      visibleCards = $filter('handlearchive')(visibleCards, $scope.inArchive());
+      visibleCards = $filter('bystackid')(visibleCards, $scope.search, $scope.inArchive());
+      visibleCards = $filter('filter')(visibleCards, $scope.query); //The are the ones we watch
 
-       angular.forEach(visibleCards, function(card) {
-          if ($scope.orderProp === 'title') {
-             label = card.title.substring(0,1).toUpperCase();
-          } else {
-             label = getDateNoTime(card[$scope.orderProp.replace('-','')]);
-          }
+      angular.forEach(visibleCards, function(card) {
+         if ($scope.orderProp === 'title') {
+            label = card.title.substring(0,1).toUpperCase();
+         } else {
+            label = getDateNoTime(card[$scope.orderProp.replace('-','')]);
+         }
 
-          if (!groupsObj[label]) {
-             groupsObj[label] = [card];
-          } else {
-             groupsObj[label].push(card);
-          }
-       });
+         if (!groupsObj[label]) {
+            groupsObj[label] = [card];
+         } else {
+            groupsObj[label].push(card);
+         }
+      });
 
-       $scope.cardGroups = [];
-       angular.forEach(groupsObj, function(cards, label) {//TODO: sort labels here or in html
-          $scope.cardGroups.push({
-             'label':label,
-             'cards':cards
-          });
-       });
+      $scope.cardGroups = [];
+      angular.forEach(groupsObj, function(cards, label) {
+         $scope.cardGroups.push({
+            'label':label,
+            'cards':cards
+         });
+      });
+      if ($scope.orderProp === 'title') {
+         $scope.cardGroups  = $filter('orderBy')($scope.cardGroups, 'label');
+      } else {
+         $scope.cardGroups  = $filter('orderBy')($scope.cardGroups, '-label'); 
+      }
    }
 
 }]);

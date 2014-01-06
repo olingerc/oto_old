@@ -319,8 +319,8 @@
          <div class='col-lg-12'>
             <div ng-controller="CardListController">
                <div ng-repeat="cardGroup in cardGroups">
+               <small class="text-muted" >{{cardGroup.label}}</small>
                <div class='list-group'>
-                  <p class="text-muted" >{{cardGroup.label}}</p>
                   <div class="card list-group-item"
                      ng-repeat="card in cardGroup.cards"
                      ng-class="{true: 'active', false: ''}[cardIsActive(card)]"

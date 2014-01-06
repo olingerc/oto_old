@@ -15,7 +15,7 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
             }
          });
          $scope.stackSizes[stack.id] = count;
-         //TODO: optimize the counting?
+         //TODO: it works, but perfomrance? optimize the counting?, put broadcast on actions that could change this?
       });
    }, true);
 
@@ -23,7 +23,6 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
    $scope.stackIsActive = function(stacktitle) {
       return stacktitle == $scope.activestack.title ? true : false;
    };
-
 
    $scope.stackIsEditable = function() {
       if (
