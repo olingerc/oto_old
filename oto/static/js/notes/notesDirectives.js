@@ -49,7 +49,7 @@ app.factory('sortLabelsService', function(){
       },
       onPage:onPage,
       showHide: function() {
-         console.log(onPage)
+         console.log('showHide')
          var min;
          angular.forEach(onPage, function(group, key) {
             var minLi = 9999;
@@ -69,16 +69,17 @@ app.factory('sortLabelsService', function(){
          });
       },
       refreshLabels: function(cards, orderProp) {
-         //sortLabels = {};
+         sortLabels = {};
          placed = 0;
          onPage = {};
          console.log('refresh'); //TODO: 2 refreshes on stack change
          angular.forEach(cards, function(card, key) {
             sortLabels[card.id] = {
-               'label': getSortLabelShort(card, orderProp),
-               'show':true
+               'label': getSortLabelShort(card, orderProp)
             };
          });
+         console.log(cards)
+         console.log(Object.keys(sortLabels).length)
       }
    };
 });
@@ -90,7 +91,7 @@ app.directive('sortLabel', ['sortLabelsService' , function (sortLabelsService) {
       template: '<p class="text-muted" >{{sortLabelShort}}</p>',//ng-show="showSortLabel[$index]"
       replace:true,
       link: function (scope, elem, attrs) {
-         scope.$watch('orderProp',
+         /*scope.$watch('orderProp',
             function() {
                if (sortLabelsService.sortLabels[scope.card.id]) {
                   scope.sortLabelShort = sortLabelsService.sortLabels[scope.card.id].label;
@@ -101,7 +102,19 @@ app.directive('sortLabel', ['sortLabelsService' , function (sortLabelsService) {
                   sortLabelsService.showHide();
                }
             }
-         );
+         );*/
+         /*scope.$watch('activestack.title',
+            function() {
+               if (sortLabelsService.sortLabels[scope.card.id]) {
+                  scope.sortLabelShort = sortLabelsService.sortLabels[scope.card.id].label;
+                  sortLabelsService.addLabel(scope.sortLabelShort, scope.key, elem);
+               }
+
+               if(scope.filteredCards.length == sortLabelsService.placed()) {
+                  sortLabelsService.showHide();
+               }
+            }
+         );*/
       }
     };
 }]);

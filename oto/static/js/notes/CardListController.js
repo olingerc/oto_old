@@ -28,10 +28,4 @@ app.controller('CardListController', ['$scope', '$rootScope', 'Cards', 'sortLabe
       $rootScope.$broadcast('startCardEdit', card);
    };
 
-
-   //Sort labels
-   if ($scope.$first) {
-     //sortLabelsService.refreshLabels($scope.filteredCards, $scope.orderProp);//FIXME: define page load
-   }
-
 }]);

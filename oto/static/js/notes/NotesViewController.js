@@ -28,21 +28,9 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
     */
 
    //Sort Labels
-   //sortLabelsService.refreshLabels($scope.filteredCards, $scope.orderProp);
-
-
-   $scope.$watch('orderProp', function(data) {
-      sortLabelsService.refreshLabels($scope.filteredCards, data);
-   });
-
-   $scope.$watch('activestack.title', function(newVal, oldVal) {
-     sortLabelsService.refreshLabels($scope.filteredCards, $scope.orderProp);
-   });
-
-   $scope.$watch('cards.length', function(newVal, oldVal) {
-     sortLabelsService.refreshLabels($scope.filteredCards, $scope.orderProp);
-   });
-
+   $scope.$watch('filteredCards', function(data) {
+      sortLabelsService.refreshLabels(data, $scope.orderProp);
+   }, true);
 
    /********************
     *
