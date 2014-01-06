@@ -91,6 +91,9 @@ app.directive('sortLabel', ['sortLabelsService' , function (sortLabelsService) {
       template: '<p class="text-muted" >{{sortLabelShort}}</p>',//ng-show="showSortLabel[$index]"
       replace:true,
       link: function (scope, elem, attrs) {
+
+
+
          /*scope.$watch('orderProp',
             function() {
                if (sortLabelsService.sortLabels[scope.card.id]) {
