@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('CardListController', ['$scope', '$rootScope', 'Cards', function($scope, $rootScope, Cards) {
+app.controller('CardListController', ['$scope', '$rootScope', 'Cards', 'sortLabelsService', function($scope, $rootScope, Cards, sortLabelsService) {
    $scope.selectCard = function(card) {
       /*TODO: if edit form visible, load card*/
      //TODO store active card in factory to avoid all this parenting shit
@@ -27,5 +27,11 @@ app.controller('CardListController', ['$scope', '$rootScope', 'Cards', function(
       $rootScope.activeCard = card;
       $rootScope.$broadcast('startCardEdit', card);
    };
+
+
+   //Sort labels
+   if ($scope.$first) {
+     //sortLabelsService.refreshLabels($scope.filteredCards, $scope.orderProp);//FIXME: define page load
+   }
 
 }]);

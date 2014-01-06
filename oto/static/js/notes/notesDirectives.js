@@ -11,51 +11,97 @@ app.directive('xngFocus', function() {
       };
 });
 
+app.factory('sortLabelsService', function(){
+   var sortLabels = [],
+      sortLabel,
+      sortLabelShort,
+      onPage = {},
+      placed = 0;
 
-app.directive('sortLabel', function () {
-    return {
-      restrict: 'A',
-      link: function (scope, elem, attrs) {
-         var sortLabel,
-            sortLabelShort;
-
-         defineSortElement(scope.orderProp);
-         function defineSortElement(orderProp) {
-            if (orderProp == 'title') {
-               sortLabel = scope.card.title;
-               sortLabelShort = sortLabel.substring(0,1).toUpperCase();
-            } else {
-               var dateType = orderProp.replace('-','');
-               sortLabel = scope.card[dateType];
-               sortLabelShort = getDateNoTime(sortLabel);
-            }
-            //Show? It seems that the visible order is not the same than the array order. this causes
-            // The 3rd of 3 elemnts to be visible but the 'previous' 2 have not been evaluated yet
-            //Thats why I use $index and lowest
-            if (scope.sortLabels[sortLabelShort]) {
-               if (scope.$index < scope.lowestSortLabel[sortLabelShort]) {
-                  //hide previous, show this
-                  scope.showSortLabel[scope.lowestSortLabel[sortLabelShort]] = false;
-                  scope.showSortLabel[scope.$index] = true;
-                  
-                  //store lowest
-                  scope.lowestSortLabel[sortLabelShort] = scope.$index;
-               }
-               elem.html(sortLabelShort);
-            } else {
-               elem.html(sortLabelShort);
-               scope.sortLabels[sortLabelShort] = scope.$index;
-               scope.lowestSortLabel[sortLabelShort] = scope.$index;
-               scope.showSortLabel[scope.$index] = true;
-            }
+   var getSortLabelShort = function (card, orderProp) {
+         if (orderProp == 'title') {
+            sortLabel = card.title;
+            sortLabelShort = sortLabel.substring(0,1).toUpperCase();
+         } else {
+            var dateType = orderProp.replace('-','');
+            sortLabel = card[dateType];
+            sortLabelShort = getDateNoTime(sortLabel);
          }
+         return sortLabelShort;
+      };
 
-         scope.$watch('orderProp', function(orderProp) {
-            defineSortElement(orderProp);
+   return {
+      sortLabels : sortLabels,
+      placed: function() {return placed;},
+      addLabel: function(label,$index, elem) {
+         if (!onPage[label]) {
+            onPage[label] = [{
+               'index':$index,
+               'elem':elem
+            }];
+         } else {
+            onPage[label].push({
+               'index':$index,
+               'elem':elem
+            });
+         }
+         placed++;
+      },
+      onPage:onPage,
+      showHide: function() {
+         console.log(onPage)
+         var min;
+         angular.forEach(onPage, function(group, key) {
+            var minLi = 9999;
+            var minp = 9999;
+            angular.forEach(group, function(label, pos) {
+               label.elem.css({
+                  'color':'black'
+               });
+               if (label.index < minLi) {
+                  minLi = label.index;
+                  minp = pos;
+               }
+            });
+            group[minp].elem.css({
+               'color':'red'
+            });
          });
-         scope.$watch('activestack', function() {
-            defineSortElement(scope.orderProp);
+      },
+      refreshLabels: function(cards, orderProp) {
+         //sortLabels = {};
+         placed = 0;
+         onPage = {};
+         console.log('refresh'); //TODO: 2 refreshes on stack change
+         angular.forEach(cards, function(card, key) {
+            sortLabels[card.id] = {
+               'label': getSortLabelShort(card, orderProp),
+               'show':true
+            };
          });
       }
-    };
+   };
 });
+
+
+app.directive('sortLabel', ['sortLabelsService' , function (sortLabelsService) {
+    return {
+      restrict: 'E',
+      template: '<p class="text-muted" >{{sortLabelShort}}</p>',//ng-show="showSortLabel[$index]"
+      replace:true,
+      link: function (scope, elem, attrs) {
+         scope.$watch('orderProp',
+            function() {
+               if (sortLabelsService.sortLabels[scope.card.id]) {
+                  scope.sortLabelShort = sortLabelsService.sortLabels[scope.card.id].label;
+                  sortLabelsService.addLabel(scope.sortLabelShort, scope.key, elem);
+               }
+
+               if(scope.filteredCards.length == sortLabelsService.placed()) {
+                  sortLabelsService.showHide();
+               }
+            }
+         );
+      }
+    };
+}]);

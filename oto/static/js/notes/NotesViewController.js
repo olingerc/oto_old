@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', function($scope, $rootScope, Stacks, Cards) {
+app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', 'sortLabelsService', function($scope, $rootScope, Stacks, Cards, sortLabelsService) {
    /********************
     *
     * parent scope variables
@@ -19,24 +19,31 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       $scope.orderProp = orderProp;
    };
 
-   //Watch order change
-   /*$rootScope.sortLabels = [];
-      $rootScope.lowestSortLabel = {};
-      $rootScope.showSortLabel = {};*/
+
+   /*
+    *
+    * SORT LABELS
+    *
+    *
+    */
+
+   //Sort Labels
+   //sortLabelsService.refreshLabels($scope.filteredCards, $scope.orderProp);
+
+
    $scope.$watch('orderProp', function(data) {
-      console.log(data)
-      $rootScope.sortLabels = {};
-      $rootScope.lowestSortLabel = {};
-      $rootScope.showSortLabel = {};
-   }, true); //TODO: shouldn't the directive handle this? use emit broadcast?
-   
-   $scope.$watch('activestack', function(data) {
-      console.log(data)
-      $rootScope.sortLabels = {};
-      $rootScope.lowestSortLabel = {};
-      $rootScope.showSortLabel = {};
-   }, true); //TODO: shouldn't the directive handle this? use emit broadcast?
-   
+      sortLabelsService.refreshLabels($scope.filteredCards, data);
+   });
+
+   $scope.$watch('activestack.title', function(newVal, oldVal) {
+     sortLabelsService.refreshLabels($scope.filteredCards, $scope.orderProp);
+   });
+
+   $scope.$watch('cards.length', function(newVal, oldVal) {
+     sortLabelsService.refreshLabels($scope.filteredCards, $scope.orderProp);
+   });
+
+
    /********************
     *
     * parent scope methods
