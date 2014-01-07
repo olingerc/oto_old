@@ -58,6 +58,8 @@ def uploadFiles():
 def saveToMongo(filename, cardid, positionInUi):
    #Put into gridfs
    att = FileAttachment(filename=filename, mimetype = mimetypes.guess_type(filename)[0])
+   att.cardid = cardid
+   att.position = positionInUi
    with open('/tmp/' + filename, 'r') as fileobject:
       att.file.put(fileobject, content_type = mimetypes.guess_type(filename)[0])
     
@@ -83,7 +85,7 @@ def saveToMongo(filename, cardid, positionInUi):
    return json.dumps(tosend)
 
 def create_thumbnail():
-   attid = request.form['id']
+   attid = request.json['id']
    att = FileAttachment.objects.get_or_404(id=attid)  # @UndefinedVariable
    att.thumb = False #Default
    '''
@@ -128,7 +130,7 @@ def create_thumbnail():
          att.thumb = False
             
    att.save()
-   obj = {'id': attid, 'filename': att.filename, 'positionInUi':request.form['positionInUi']}
+   obj = {'id': attid, 'filename': att.filename, 'positionInUi':request.json['positionInUi']}
    return json.dumps(obj)
    #TODO: error on multiple image upload
             

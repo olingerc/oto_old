@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', function($scope, $rootScope, Stacks, Cards) {
+app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards','uploadService', function($scope, $rootScope, Stacks, Cards, uploadService) {
    /********************
     *
     * parent scope variables
@@ -76,6 +76,12 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
          console.log(error);
       }
    );
+
+
+   /*
+    * Upload service
+    */
+   $scope.uploadService = uploadService;
 
    /******************
     * TODO: card header controller?

@@ -25,6 +25,10 @@ class FileAttachment(db.Document):
    file = db.FileField(required=True)
    thumb = db.BooleanField(default=False, required=True)
    thumbfile = db.FileField(required=False)
+   cardid = db.StringField(required=False) 
+   #i know its not great that the att knows about the card, 
+   #but I use this to create thumbs in the background and assign to correct car don finish
+   position = db.IntField(required=False)
     
    meta = {
       'indexes': ['_id']

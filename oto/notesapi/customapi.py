@@ -12,6 +12,8 @@ from json import dumps
 from oto.adminapi.api import requires_auth
 from oto.adminapi.models import User  # @UnusedWildImport
 
+from oto.notesapi.models import FileAttachment
+
 '''
 This api is only for looged in users
 This is checked via method_decorators = [requires_auth] in the api classes
@@ -41,6 +43,14 @@ def init_notesapp(function):
             return dumps({'error':'could not create floating stack'}), 500
          stack.createdat = datetime.now().strftime('%Y%m%d%H%M%S')
          stack.save()
+         
+         
+      #Remove floating 'new' atts #TODO: do I stick with 'new' to define floating?
+      attinstorage = FileAttachment.objects.filter(cardid='new')
+      for att in attinstorage:
+         att.file.delete()
+         att.delete()
+         
       return function(*args, **kwargs)   
    return decorated_function 
 

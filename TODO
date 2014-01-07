@@ -5,6 +5,7 @@ https://github.com/witoldsz/angular-http-auth
 put title attribute of current sort on sort button, maybve change icon
 
 #Bugs
+acrchiving a note keeps action button active
 xng-focus with ng-show
 long thumblist margin errors in card and cardfom
 uploading big files crashes server in save to mongo

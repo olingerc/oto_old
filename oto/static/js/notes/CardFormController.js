@@ -1,4 +1,4 @@
-app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', function($scope, $filter, $http, $upload) {
+app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload','uploadService', function($scope, $filter, $http, $upload, uploadService) {
 
    /*************
     *
@@ -167,7 +167,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
                'Content-Type' : 'application/x-www-form-urlencoded'
             },
             data : $.param({
-               cardid : $scope.cardFormCard.id,
+               cardid : $scope.cardFormCard.id,//TODO: handle 'new'
                array : JSON.stringify(_.uniq(filesToDelete))
             })
          });
@@ -333,92 +333,45 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
    $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
 
-      //Define cardId
-      var cardId;
+      //Define cardid
+      var cardid;
       if (!$scope.cardFormCard) {
-         cardId = 'new';
+         cardid = 'new';
       } else {
          if ($scope.cardFormCard === '') {
-            cardId = 'new';
+            cardid = 'new';
          } else {
-            cardId = $scope.cardFormCard.id;
+            cardid = $scope.cardFormCard.id;
          }
       }
 
       //Handle each file
       for (var i = 0; i < $files.length; i++) {
-         var index = Object.keys($scope.fileAttachmentsList).length,
+         var position = Object.keys($scope.fileAttachmentsList).length,
              $file = $files[i];
-             
-            
-            
-         $scope.filethumbs[index] = '/static/img/att_default_thumb.png'; 
 
-         //Start displaying thumb placeholder with progress
+
+         //Display empty humb, will be filled later
          var newAtt = {
             id : $file.name,
             filename : $file.name,
             fileLink : '',
             delVisible : false,
-            position : index
+            position : position,
+            cardid: cardid
          };
 
-         $scope.fileAttachmentsList[index] = newAtt;
+         $scope.fileAttachmentsList[position] = newAtt;
 
-
-         //Start upload
-         $scope.uploadProgress[index] = true;
-         $scope.thumbnailProgress[index] = false;
-
-         $file.pos = index;
-
-         $scope.$apply(); //Important
-         $scope.upload = $upload.upload({
-            url : '/upload',
-            data : {
-               cardid : cardId,
-               att : JSON.stringify(newAtt)
-            },
-            file : $file
-         })
-         .progress(function(evt) {
-            var index = this.file.pos;
-            $scope.uploadProgressValue[index] = parseInt(100.0 * evt.loaded / evt.total);
-         })
-         .then(function(data, status, headers, config) {
-            var index = data.config.file.pos;
-            // file is uploaded successfully
-            $scope.fileAttachmentsList[index] = {
-               id : data.id,
-               filename : data.filename,
-               fileLink : ''
-            };
-            // create thumbnail on server
-            $scope.uploadProgress[index] = false;
-            $scope.thumbnailProgress[index] = true;
-            $http({
-               method : 'POST',
-               url : '/createthumb',
-               data : $.param(data.data),
-               headers : {
-                  'Content-Type' : 'application/x-www-form-urlencoded'
-               }
-            })
-            // display thumbnail in client
-            .success(function(data, status, header) {
-               var index = data.positionInUi;
-               fileAttachmentsAdded.push(data.id);
-
-               $scope.filethumbs[index] = '/thumbnail/' + data.id;
-               $scope.attachmentsChanged = true;
-               $scope.uploadProgress[index] = false;
-               $scope.thumbnailProgress[index] = false;
-            })
-            .error(function(error) {
-               console.log(error);
-            });
+         //Call service
+         $scope.$apply(function() {
+            uploadService.startUpload($file, cardid, position, newAtt);
          });
+
+         fileAttachmentsAdded.push(cardid + "_" + position);
+
       }
+      $scope.attachmentsChanged = true;
    };
 
    //Attachments handling
@@ -437,20 +390,20 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
       $scope.isLinkInputVisible = false;
       $scope.linkInputValue = '';
    };
-   
+
    $scope.thumbs = {};
    $scope.addLink = function() {
       $scope.isLinkInputVisible = false;
 
-      //Define cardId
-      var cardId;
+      //Define cardid
+      var cardid;
       if (!$scope.cardFormCard) {
-         cardId = 'new';
+         cardid = 'new';
       } else {
          if ($scope.cardFormCard === '') {
-            cardId = 'new';
+            cardid = 'new';
          } else {
-            cardId = $scope.cardFormCard.id;
+            cardid = $scope.cardFormCard.id;
          }
       }
 
@@ -461,14 +414,14 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          url : $scope.linkInputValue,
          delVisible : false,
          position : index,
-         cardid:cardId
+         cardid:cardid
       };
 
       $scope.urlAttachmentsList[index] = newAtt;
 
       //Start thumbnail creation
       $scope.urlThumbnailProgress[index] = true;
-      
+
       $scope.thumbs[index] = '/static/img/att_default_thumb.png';
 
       $http({
@@ -476,7 +429,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload', f
          url: '/addlink/',
          type:'JSON',
          data: {
-            cardid : cardId,
+            cardid : cardid,
             att : JSON.stringify(newAtt)
          }
       })

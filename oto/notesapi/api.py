@@ -202,7 +202,11 @@ class CardListResource(ListMongoResource):
       if 'fileattachments' in request.form:
          atts = loads(request.form['fileattachments'])
          for key, att in atts.iteritems():  # @UnusedVariable
-            doc.fileattachments.append(FileAttachment.objects.get(id=att['id']))
+            #tell atts with 'new' about cardid TODO: rethink about 'new' maybe keep id in client?
+            attinstorage = FileAttachment.objects.get(cardid=att['cardid'], position=att['position'])
+            attinstorage.cardid = str(doc.id)
+            attinstorage.save()
+            doc.fileattachments.append(attinstorage)#.get(id=att['id']))
             
       if 'urlattachments' in request.form:
          atts = loads(request.form['urlattachments'])
@@ -239,7 +243,9 @@ class CardListResource(ListMongoResource):
       #treat attachments and hide owner
       toReturn = []
       for doc in docs:
+         print doc
          temp = Marshaller(doc, fileattachments=doc.fileattachments, urlattachments=doc.urlattachments).dumps()
+         print temp
          temp['owner'] = None
          toReturn.append(temp)
       return toReturn, 200
