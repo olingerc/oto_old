@@ -1,4 +1,4 @@
-app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload','uploadService', function($scope, $filter, $http, $upload, uploadService) {
+app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUploader', 'uploadService', function($scope, $filter, $http, $fileUploader, uploadService) {
 
    /*************
     *
@@ -324,8 +324,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload','u
     *
     ********************/
 
-   $scope.filethumbs = {};
-
    $scope.initFileUpload = function() {
       $('#fileInput').click();
    };
@@ -333,42 +331,9 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload','u
    $scope.onFileSelect = function($files) {
       //$files: an array of files selected, each file has name, size, and type.
 
-      //Define cardid
-      var cardid;
-      if (!$scope.cardFormCard) {
-         cardid = 'new';
-      } else {
-         if ($scope.cardFormCard === '') {
-            cardid = 'new';
-         } else {
-            cardid = $scope.cardFormCard.id;
-         }
-      }
-
       //Handle each file
       for (var i = 0; i < $files.length; i++) {
-         var position = Object.keys($scope.fileAttachmentsList).length,
-             $file = $files[i];
 
-
-         //Display empty humb, will be filled later
-         var newAtt = {
-            id : $file.name,
-            filename : $file.name,
-            fileLink : '',
-            delVisible : false,
-            position : position,
-            cardid: cardid
-         };
-
-         $scope.fileAttachmentsList[position] = newAtt;
-
-         //Call service
-         $scope.$apply(function() {
-            uploadService.startUpload($file, cardid, position, newAtt);
-         });
-
-         fileAttachmentsAdded.push(cardid + "_" + position);
 
       }
       $scope.attachmentsChanged = true;
@@ -464,5 +429,152 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$upload','u
       delete $scope.urlAttachmentsList[position];
       $scope.attachmentsChanged = true;
    };
+
+
+   /*************
+    *
+    * uploader
+    *
+    * **********/
+
+
+    // create a uploader with options
+    var uploader = $scope.uploader = $fileUploader.create({
+         scope: $scope,                          // to automatically update the html. Default: $rootScope
+         url: '/upload',
+         autoUpload: true
+         /*filters: [
+             function (item) {                    // first user filter
+                 console.info('filter1');
+                 return true;
+             }
+         ]*/
+     });
+
+     $scope.filethumbs = uploadService.thumbs;
+
+     // ADDING FILTERS
+   /*
+           uploader.filters.push(function (item) { // second user filter
+               console.info('filter2');
+               return true;
+           });
+   */
+     // REGISTER HANDLERS
+
+     uploader.bind('afteraddingfile', function (event, item) {
+         console.info('After adding a file', item);
+         //Define cardid
+         var cardid;
+         if (!$scope.cardFormCard) {
+            cardid = 'new';
+         } else {
+            if ($scope.cardFormCard === '') {
+               cardid = 'new';
+            } else {
+               cardid = $scope.cardFormCard.id;
+            }
+         }
+
+         var position = Object.keys($scope.fileAttachmentsList).length;
+
+         //Display empty humb, will be filled later
+         var newAtt = {
+            id : item.file.name,
+            filename : item.file.name,
+            fileLink : '',
+            delVisible : false,
+            position : position,
+            cardid: cardid
+         };
+
+         item.formData = [
+            {
+               cardid:cardid
+            },
+            {
+               att:JSON.stringify(newAtt)
+            },
+            {
+               position: position
+            }
+         ];
+
+         $scope.fileAttachmentsList[position] = newAtt;
+         //uploadService.startUpload($file, cardid, position, newAtt);
+
+         fileAttachmentsAdded.push(cardid + "_" + position);
+
+         //Update UI
+         if (!$scope.filethumbs[cardid]) $scope.filethumbs[cardid] = [];
+         $scope.filethumbs['new'][position] = {
+            'url': '/static/img/att_default_thumb.png',
+            'progress':0
+         };
+     });
+
+     uploader.bind('afteraddingall', function (event, items) {
+         console.info('After adding all files', items);
+     });
+
+     uploader.bind('beforeupload', function (event, item) {
+         console.info('Before upload', item);
+     });
+
+     uploader.bind('progress', function (event, item, progress) {
+         console.info('Progress: ' + progress, item);
+     });
+
+     uploader.bind('success', function (event, xhr, item, response) {
+         console.info('Success', xhr, item, response);
+     });
+
+     uploader.bind('cancel', function (event, xhr, item) {
+         console.info('Cancel', xhr, item);
+     });
+
+     uploader.bind('error', function (event, xhr, item, response) {
+         console.info('Error', xhr, item, response);
+     });
+
+     uploader.bind('complete', function (event, xhr, item, response) {
+         console.info('Complete', xhr, item, response);
+         //var response = JSON.parse(response)
+
+$http({
+            method : 'POST',
+            url : '/createthumb',
+            data : {
+               positionInUi: item.formData[2].position,
+               filename: item.file.name,
+               id: response.id
+            }
+         })
+         // display thumbnail in client
+         .success(function(data, status, header, config) {
+            var position = data.positionInUi;
+            $scope.filethumbs['new'][position].url = '/thumbnail/' + data.id;
+            $scope.filethumbs['new'][position].progress = 'done';
+            /*_us.pending--;
+            if (_us.pending==0) {
+               _us.status = 'idle';
+            }*/
+         })
+         .error(function(error) {
+            $scope.filethumbs['new'][position].url = '/static/img/error.jpg';
+            $scope.filethumbs['new'][position].progress = 'error';
+            /*_us.pending--;
+            console.log(error);*/
+         });
+     });
+
+     uploader.bind('progressall', function (event, progress) {
+         console.info('Total progress: ' + progress);
+     });
+
+     uploader.bind('completeall', function (event, items) {
+         console.info('Complete all', items);
+     });
+
 
 }]);

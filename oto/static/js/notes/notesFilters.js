@@ -42,7 +42,7 @@ angular.module('oto.filters', [])
     };
   });
 
-app.service('uploadService', ['$http', '$upload','$rootScope', function($http, $upload, $rootScope) {
+app.service('uploadService', ['$http', function($http) {
    var _us = this;
    _us.status = 'idle';
    _us.thumbs = {};
@@ -52,15 +52,11 @@ app.service('uploadService', ['$http', '$upload','$rootScope', function($http, $
       _us.status = 'working';
       _us.pending++;
 
-      if (!_us.thumbs[cardid]) _us.thumbs[cardid] = [];
-      _us.thumbs['new'][position] = {
-         'url': '/static/img/att_default_thumb.png',
-         'progress':0
-      };
+
 
       file.pos = position;
 
-      _us.upload = $upload.upload({
+      _us.upload = upload({
          url : '/upload',
          data : {
             cardid : cardid,
@@ -79,7 +75,6 @@ app.service('uploadService', ['$http', '$upload','$rootScope', function($http, $
 
          // create thumbnail on server
          _us.thumbs['new'][position].progress = 'creating thumb';
-         console.log(data);
          //TODO: too much passing around of position, it's already in the data.config of initial call. realy?
 
          //TODO: the below works nicvely, but I still need to resolve why multiple $https bloch each other
