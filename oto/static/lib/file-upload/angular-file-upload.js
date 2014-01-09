@@ -434,8 +434,9 @@ app.factory('$fileUploader', [ '$compile', '$rootScope', '$http', '$window', fun
             angular.forEach(item.headers, function (value, name) {
                 xhr.setRequestHeader(name, value);
             });
-
+            
             xhr.send(form);
+
         },
 
         /**

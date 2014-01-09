@@ -69,9 +69,12 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    });
 
    var addCard = function() {
+      //TODO: block ability to add new card unitl finished. I could also not use 'new' but generate a random token that server gives back 
+      //and I can use to find card again on client in success
+      //so first add card, than http, then update card with server info
       var newCard = $scope.cardFormCard;
       newCard.stackid = $scope.activestack.id;
-
+      console.info('Before', newCard)
       $http({
          method : 'POST',
          url : '/cards/',
@@ -83,8 +86,10 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
             fileattachments : JSON.stringify($scope.fileAttachmentsList),
             urlattachments : JSON.stringify($scope.urlAttachmentsList)
          })
-      }).success(function(card) {
-         card.fileattachments = angular.copy($scope.fileAttachmentsList);
+      }).success(function(card, status, headers, config) {
+         console.info(config)
+         console.info('After', card)
+         //card.fileattachments = angular.copy($scope.fileAttachmentsList);
          card.urlattachments = angular.copy($scope.urlAttachmentsList);
          $scope.cards.push(card);
          $scope.isCardFormVisible = false;
@@ -92,6 +97,9 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       }).error(function(error) {
          console.log(error);
       });
+      
+
+
    };
 
    //EDIT
@@ -345,7 +353,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.linkInputValue = '';
    };
 
-   $scope.thumbs = {};
+   //$scope.thumbs = {};
    $scope.addLink = function() {
       $scope.isLinkInputVisible = false;
 
@@ -469,7 +477,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
       //Display empty thumb, will be filled later
       var newAtt = {
-         id: item.file.name,
          filename : item.file.name,
          fileLink : '',
          delVisible : false,
@@ -491,11 +498,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
       //Update UI
       $rootScope.uploadService.pending++;
-      if (!$scope.uploadService.thumbs[cardid]) $scope.uploadService.thumbs[cardid] = [];
-      $rootScope.uploadService.thumbs[cardid][position] = {
-         'url': '/static/img/att_default_thumb.png',
-         'progress':0
-      };
+      $rootScope.uploadService.changeStatus(cardid, 'init', position);
 
       $scope.attachmentsChanged = true;
 
@@ -504,6 +507,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('afteraddingall', function (event, items) {
       //console.info('After adding all files', items);
+            $scope.$apply(function() {})
    });
 
    uploader.bind('beforeupload', function (event, item) {
@@ -515,7 +519,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       //console.info('Progress: ' + progress, item);
       var position = item.formData[0].position;
       var cardid = item.formData[0].cardid;
-      $rootScope.uploadService.thumbs[cardid][position].progress = progress;
+      $rootScope.uploadService.changeStatus(cardid, progress, position);
       $scope.$apply();
    });
 
@@ -523,7 +527,10 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       //console.info('Success', xhr, item, response);
       var position = item.formData[0].position;
       var cardid = item.formData[0].cardid;
-      $rootScope.uploadService.thumbs[cardid][position].progress = 'creating thumb';
+      $rootScope.uploadService.changeStatus(cardid, 'thumb', position);
+      //Infom client about id of attachment
+      //$scope.fileAttachmentsList[position].id = response.id;
+      $scope.$apply(function() {
 
       $http({
          method : 'POST',
@@ -538,9 +545,12 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       .success(function(data, status, header, config) {
          var position = data.positionInUi;
          var cardid = item.formData[0].cardid;
-         $rootScope.uploadService.thumbs[cardid][position].url = '/thumbnail/' + data.id;
-         $rootScope.uploadService.thumbs[cardid][position].progress = 'done';
-         $rootScope.uploadService.thumbs[cardid][position].id = response.id;
+         console.log(data)
+         $rootScope.uploadService.storeThumbnail(cardid, data.id, position);
+         
+         
+         
+         $rootScope.uploadService.changeStatus(cardid, 'done', position);
          $rootScope.uploadService.pending--;
          if ($rootScope.uploadService.pending==0) {
             $rootScope.uploadService.pending = 'idle';
@@ -548,13 +558,13 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       })
       .error(function(error) {
          //TODO: get position and cardid form response
-         $rootScope.uploadService.thumbs['new'][position].url = '/static/img/error.jpg';
-         $rootScope.uploadService.thumbs['new'][position].progress = 'error';
+         //$rootScope.uploadService.changeStatus(cardid, 'error', position);
          $rootScope.uploadService.pending--;
          console.log(error);
       });
+      });
 
-      $scope.$apply();
+
    });
 
    uploader.bind('cancel', function (event, xhr, item) {

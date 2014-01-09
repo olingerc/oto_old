@@ -340,9 +340,9 @@
                            <div class="pull-left" ng-repeat="att in fileAttachmentsList"
                               ng-click="$event.stopPropagation()">
                               <a class="inline att_thumb_link" title="{{att.filename}}"
-                                 ng-href="{{uploadService.getUrl(cardFormCard.id, att.id, att.position)}}">
+                                 ng-href="{{uploadService.getUrl(cardFormCard.id, att.position, true)}}">
                                  <img class="att_thumb img-rounded"
-                                    ng-src="{{uploadService.getUrl(cardFormCard.id, att.id, att.position)}}">
+                                    ng-src="{{uploadService.getUrl(cardFormCard.id, att.position)}}">
                               </a>
                               <i class="inline attdelbutton glyphicon glyphicon-trash"
                                  ng-click="$event.stopPropagation();removeAtt(att.position)"
@@ -356,7 +356,7 @@
                         <a class="inline att_thumb_link" title="{{att.url}}"
                            ng-href="{{uploadService.thumbs[cardFormCard.id].url}}">
                            <img class="att_thumb img-rounded"
-                              ng-src="{{uploadService.getUrl(card.id, att.id, $index)}}">
+                              ng-src="{{uploadService.getUrl(card.id, $index)}}">
                            <small class="link-emblem"><i class="glyphicon  glyphicon-share-alt"></i></small>
                         </a>
                         <img src="/static/img/knob.gif" class="thumbnailProgress"
@@ -407,11 +407,11 @@
                         <!--file Attachments-->
                         <li ng-repeat="att in card.fileattachments">
                            <a class="att_thumb_link" title="{{att.filename}}"
-                              ng-href="/download/{{att.id}}"
+                              ng-href="{{uploadService.getUrl(card.id, $index, true)}}"
                               ng-init="uploadService.storeThumbnail(card.id, att.id, $index)"
                               >
                               <img class="att_thumb img-rounded"
-                                 ng-src="{{uploadService.getUrl(card.id, att.id, $index)}}"> </a>
+                                 ng-src="{{uploadService.getUrl(card.id, $index)}}"> </a>
                         </li>
 
                         <!--url Attachments-->

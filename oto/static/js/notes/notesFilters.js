@@ -50,25 +50,45 @@ app.service('uploadService', [function() {//TODO: rename to thumbnail service
 
    _us.storeThumbnail = function(cardid, attid, position) {
       if (!_us.thumbs[cardid]) _us.thumbs[cardid] = [];
+      if (!_us.thumbs[cardid][position]) _us.thumbs[cardid][position] = {};
       _us.thumbs[cardid][position] = {
-         'url': '/thumbnail/' + attid,
          'progress':'done',
          'id':attid
       };
-      //console.log(_us.thumbs)
+   };
+   
+   _us.changeStatus = function(cardid, progress, position) {
+      if (!_us.thumbs[cardid]) _us.thumbs[cardid] = [];
+      if (!_us.thumbs[cardid][position]) _us.thumbs[cardid][position] = {};
+      _us.thumbs[cardid][position].progress = progress;
    };
 
-   _us.getUrl = function(cardid, attid, position) {
+   _us.getUrl = function(cardid, position, forDownload) {
       if (!_us.thumbs[cardid]) {
          //TODO: luach thumbnail creation here if not existst?
-          return "/static/images/error.jpg";
+          return "/static/img/error.jpg";
       } else {
-         if (attid != _us.thumbs[cardid][position].id && _us.thumbs[cardid][position].progress ==='done') { //In the case the thumb was just created and not yet rececied in the cards array from the server
-            //We are probably uploading and server has not yet returned an id
-            console.log(attid)
-            _us.thumbs[cardid][position].url = "/thumbnail/" + _us.thumbs[cardid][position].id;
+         if (_us.thumbs[cardid][position].progress ==='init') {
+            //Before upload has started
+            return '/static/img/att_default_thumb.png';
+         } 
+         else if (_us.thumbs[cardid][position].progress ==='thumb') {
+            //creating thumb
+            return '/static/img/indicator.gif';
          }
-         return _us.thumbs[cardid][position].url;
+         else if (_us.thumbs[cardid][position].progress ==='done') {
+            //OK
+            if (forDownload) return '/download/' + _us.thumbs[cardid][position].id; 
+            else return '/thumbnail/' + _us.thumbs[cardid][position].id;
+         }
+         else if (_us.thumbs[cardid][position].progress ==='error') {
+            //upload and thumb finished
+            return '/static/img/error.jpg';
+         }
+         else {
+            //uploading
+            return '/static/img/indicator.gif';
+         }
       }
    };
 }]);
