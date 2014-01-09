@@ -144,7 +144,10 @@ def deleteatts():
       changeMofidiedat = True
     
    for attid in attids:
-      att = FileAttachment.objects.get_or_404(id=attid)  # @UndefinedVariable
+      obj = attid.split('_')
+      attcard = obj[0]
+      attpos = obj[1]
+      att = FileAttachment.objects.get_or_404(cardid=attcard, position = attpos)  # @UndefinedVariable
       #TODO: chek if exists
       att.file.delete()
       att.delete()

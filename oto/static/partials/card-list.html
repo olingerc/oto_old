@@ -340,9 +340,9 @@
                            <div class="pull-left" ng-repeat="att in fileAttachmentsList"
                               ng-click="$event.stopPropagation()">
                               <a class="inline att_thumb_link" title="{{att.filename}}"
-                                 ng-href="{{att.fileLink}}">
+                                 ng-href="{{uploadService.getUrl(cardFormCard.id, att.id, att.position)}}">
                                  <img class="att_thumb img-rounded"
-                                    ng-src="{{uploadService.thumbs['new'][$index].url}}">
+                                    ng-src="{{uploadService.getUrl(cardFormCard.id, att.id, att.position)}}">
                               </a>
                               <i class="inline attdelbutton glyphicon glyphicon-trash"
                                  ng-click="$event.stopPropagation();removeAtt(att.position)"
@@ -354,9 +354,9 @@
                      <div class="pull-left" ng-repeat="att in urlAttachmentsList"
                         ng-click="$event.stopPropagation()">
                         <a class="inline att_thumb_link" title="{{att.url}}"
-                           ng-href="{{att.url}}">
+                           ng-href="{{uploadService.thumbs[cardFormCard.id].url}}">
                            <img class="att_thumb img-rounded"
-                              ng-src="{{thumbs[$index]}}">
+                              ng-src="{{uploadService.getUrl(card.id, att.id, $index)}}">
                            <small class="link-emblem"><i class="glyphicon  glyphicon-share-alt"></i></small>
                         </a>
                         <img src="/static/img/knob.gif" class="thumbnailProgress"
@@ -407,9 +407,11 @@
                         <!--file Attachments-->
                         <li ng-repeat="att in card.fileattachments">
                            <a class="att_thumb_link" title="{{att.filename}}"
-                              ng-href="/download/{{att.id}}">
+                              ng-href="/download/{{att.id}}"
+                              ng-init="uploadService.storeThumbnail(card.id, att.id, $index)"
+                              >
                               <img class="att_thumb img-rounded"
-                                 ng-src="/thumbnail/{{att.id}}"> </a>
+                                 ng-src="{{uploadService.getUrl(card.id, att.id, $index)}}"> </a>
                         </li>
 
                         <!--url Attachments-->
