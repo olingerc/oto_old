@@ -42,7 +42,7 @@ angular.module('oto.filters', [])
     };
   });
 
-app.service('uploadService', [function() {//TODO: rename to thumbnail service
+app.service('thumbService', [function() {//TODO: rename to thumbnail service
    var _us = this;
    _us.status = 'idle';
    _us.thumbs = {};

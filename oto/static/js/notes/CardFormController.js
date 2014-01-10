@@ -1,4 +1,4 @@
-app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http', '$fileUploader', 'uploadService', function($scope, $rootScope, $filter, $http, $fileUploader, uploadService) {
+app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http', '$fileUploader', 'thumbService', function($scope, $rootScope, $filter, $http, $fileUploader, thumbService) {
 
    /*************
     *
@@ -350,7 +350,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    //Attachments handling
    $scope.removeAtt = function(att) {
-      var serverid = $rootScope.uploadService.getUrl(att.clientid, att.id, 'id');
+      var serverid = $rootScope.thumbService.getUrl(att.clientid, att.id, 'id');
       fileAttachmentsRemoved.push(serverid);
       $scope.fileAttachmentsList.splice($scope.fileAttachmentsList.indexOf(att), 1);
       $scope.attachmentsChanged = true;
@@ -431,7 +431,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
     * File Uploader
     *
     * **********/
-   $rootScope.uploadService = uploadService;
+   $rootScope.thumbService = thumbService;
    var uploader = $scope.uploader = $fileUploader.create({
       scope: $scope,                          // to automatically update the html. Default: $rootScope
       url: '/upload',
@@ -463,9 +463,9 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.fileAttachmentsList[position] = newAtt;
 
       //Update UI
-      $rootScope.uploadService.pending++;
-      $rootScope.uploadService.storeThumbnail(clientid);
-      $rootScope.uploadService.changeStatus(clientid, 'init');
+      $rootScope.thumbService.pending++;
+      $rootScope.thumbService.storeThumbnail(clientid);
+      $rootScope.thumbService.changeStatus(clientid, 'init');
 
       $scope.attachmentsChanged = true;
    });
@@ -476,19 +476,19 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('beforeupload', function (event, item) {
       //console.info('Before upload', item);
-      $rootScope.uploadService.status='working';
+      $rootScope.thumbService.status='working';
    });
 
    uploader.bind('progress', function (event, item, progress) {
       //console.info('Progress: ' + progress, item);
       var clientid = item.formData[0].clientid;
-      $rootScope.uploadService.changeStatus(clientid, progress);
+      $rootScope.thumbService.changeStatus(clientid, progress);
    });
 
    uploader.bind('success', function (event, xhr, item, response) {
       //console.info('Success', xhr, item, response);
       var clientid = item.formData[0].clientid;
-      $rootScope.uploadService.changeStatus(clientid, 'thumb');
+      $rootScope.thumbService.changeStatus(clientid, 'thumb');
       fileAttachmentsAdded.push(response.id);
 
       $http({
@@ -504,18 +504,18 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       .success(function(data, status, header, config) {
          var clientid = data.clientid;
          var serverid = data.id;
-         $rootScope.uploadService.storeThumbnail(clientid, serverid);
+         $rootScope.thumbService.storeThumbnail(clientid, serverid);
 
-         $rootScope.uploadService.changeStatus(clientid, 'done');
-         $rootScope.uploadService.pending--;
-         if ($rootScope.uploadService.pending==0) {
-            $rootScope.uploadService.pending = 'idle';
+         $rootScope.thumbService.changeStatus(clientid, 'done');
+         $rootScope.thumbService.pending--;
+         if ($rootScope.thumbService.pending==0) {
+            $rootScope.thumbService.pending = 'idle';
          }
       })
       .error(function(error) {
          //TODO: get clientid form response or oroginal config to dispaly eror in card
-         //$rootScope.uploadService.changeStatus(cardid, 'error', position);
-         $rootScope.uploadService.pending--;
+         //$rootScope.thumbService.changeStatus(cardid, 'error', position);
+         $rootScope.thumbService.pending--;
          console.log(error);
       });
 
@@ -540,8 +540,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('completeall', function (event, items) {
       //console.info('Complete all', items);
-      $rootScope.uploadService.pending = 0;
-      $rootScope.uploadService.status='idle';
+      $rootScope.thumbService.pending = 0;
+      $rootScope.thumbService.status='idle';
    });
 
 }]);

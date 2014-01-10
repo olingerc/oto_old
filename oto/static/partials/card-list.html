@@ -111,9 +111,9 @@
       <!--Cards list header-->
       <div class='row'>
             <div>
-               Status: {{uploadService.status}}
+               Status: {{thumbSrvice.status}}
             </div>
-            <ul class='list-inline'><li ng-repeat='thumb in uploadService.thumbs.new'>{{thumb.progress}}</li></ul>
+            <ul class='list-inline'><li ng-repeat='thumb in thumbService.thumbs.new'>{{thumb.progress}}</li></ul>
             <div id='stackHeader' class='col-lg-3'>
                <h3>{{activestack.title}}</h3>
             </div>
@@ -340,13 +340,13 @@
                            <div class="pull-left" ng-repeat="att in fileAttachmentsList"
                               ng-click="$event.stopPropagation()">
                               <a class="inline att_thumb_link" title="{{att.filename}}"
-                                 ng-href="{{uploadService.getUrl(att.clientid, att.id, 'download')}}">
+                                 ng-href="{{thumbService.getUrl(att.clientid, att.id, 'download')}}">
                                  <img class="att_thumb img-rounded"
-                                    ng-src="{{uploadService.getUrl(att.clientid, att.id)}}">
+                                    ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
                               </a>
                               <i class="inline attdelbutton glyphicon glyphicon-trash"
                                  ng-click="$event.stopPropagation();removeAtt(att)"
-                                 ng-show="uploadService.allowDelete(att.clientid, att.id)">
+                                 ng-show="thumbService.allowDelete(att.clientid, att.id)">
                               </i>
                            </div>
                         </div>
@@ -354,9 +354,9 @@
                      <div class="pull-left" ng-repeat="att in urlAttachmentsList"
                         ng-click="$event.stopPropagation()">
                         <a class="inline att_thumb_link" title="{{att.url}}"
-                           ng-href="{{uploadService.thumbs[cardFormCard.id].url}}">
+                           ng-href="{{thumbService.thumbs[cardFormCard.id].url}}">
                            <img class="att_thumb img-rounded"
-                              ng-src="{{uploadService.getUrl(card.id, $index)}}">
+                              ng-src="{{thumbService.getUrl(card.id, $index)}}">
                            <small class="link-emblem"><i class="glyphicon  glyphicon-share-alt"></i></small>
                         </a>
                         <img src="/static/img/knob.gif" class="thumbnailProgress"
@@ -407,11 +407,11 @@
                         <!--file Attachments-->
                         <li ng-repeat="att in card.fileattachments">
                            <a class="att_thumb_link" title="{{att.filename}}"
-                              ng-href="{{uploadService.getUrl(att.clientid, att.id, 'download')}}"
-                              ng-init="uploadService.storeThumbnail(att.clientid, att.id, att)"
+                              ng-href="{{thumbService.getUrl(att.clientid, att.id, 'download')}}"
+                              ng-init="thumbService.storeThumbnail(att.clientid, att.id, att)"
                               >
                               <img class="att_thumb img-rounded"
-                                 ng-src="{{uploadService.getUrl(att.clientid, att.id)}}"> </a>
+                                 ng-src="{{thumbService.getUrl(att.clientid, att.id)}}"> </a>
                         </li>
 
                         <!--url Attachments-->
