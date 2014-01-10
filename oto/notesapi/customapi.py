@@ -12,7 +12,7 @@ from json import dumps
 from oto.adminapi.api import requires_auth
 from oto.adminapi.models import User  # @UnusedWildImport
 
-from oto.notesapi.models import FileAttachment
+from oto.notesapi.models import FileAttachment, UrlAttachment
 
 '''
 This api is only for looged in users
@@ -49,6 +49,10 @@ def init_notesapp(function):
       attinstorage = FileAttachment.objects.filter(cardid__startswith='new')
       for att in attinstorage:
          att.file.delete()
+         att.delete()
+         
+      linksinstorage = UrlAttachment.objects.filter(cardid__startswith='new')
+      for att in linksinstorage:
          att.delete()
          
       return function(*args, **kwargs)   

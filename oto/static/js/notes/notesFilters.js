@@ -106,6 +106,7 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
             //OK
             if (!what) return '/thumbnail/' + _us.thumbs[id].id;
             else if (what === 'download') return '/download/' + _us.thumbs[id].id;
+            else if (what === 'linkthumb') return '/thumbnaillink/' + _us.thumbs[id].id;
             else if (what === 'id') return _us.thumbs[id].id;
             else return '/thumbnail/' + _us.thumbs[id].id;
          }

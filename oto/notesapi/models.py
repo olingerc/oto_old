@@ -39,6 +39,8 @@ class UrlAttachment(db.Document):
    url = db.StringField(required=True)
    thumb = db.BooleanField(default=False, required=True)
    thumbfile = db.FileField(required=False)
+   cardid = db.StringField(required=False)
+   position = db.IntField(required=False)
     
    meta = {
       'indexes': ['_id']

@@ -21,7 +21,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       fileAttachmentsAdded = [];
       fileAttachmentsRemoved = [];
 
-      $scope.urlAttachmentsList = {};
+      $scope.urlAttachmentsList = [];
       urlAttachmentsAdded = [];
       urlAttachmentsRemoved = [];
 
@@ -244,6 +244,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    //CANCEL
    $scope.$on('cancelCardForm', function() {
       $scope.cancelCardForm();
+      //TODO: cancel uploads
    });
 
    $scope.cancelCardForm = function() {
@@ -335,103 +336,19 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       }
    };
 
-   /*******************
-    *
-    * FILE MANAGER CARDFORM
-    *
-    * http://angular-file-upload.appspot.com/
-    * https://github.com/danialfarid/angular-file-upload
-    *
-    ********************/
-
-   $scope.initFileUpload = function() {
-      $('#fileInput').click();
-   };
-
-   //Attachments handling
-   $scope.removeAtt = function(att) {
-      var serverid = $rootScope.thumbService.getUrl(att.clientid, att.id, 'id');
-      fileAttachmentsRemoved.push(serverid);
-      $scope.fileAttachmentsList.splice($scope.fileAttachmentsList.indexOf(att), 1);
-      $scope.attachmentsChanged = true;
-   };
-
-   $scope.initAddLink = function() {
-      $scope.isLinkInputVisible = true;
-   };
-
-   $scope.cancelAddLink = function() {
-      $scope.isLinkInputVisible = false;
-      $scope.linkInputValue = '';
-   };
-
-   //$scope.thumbs = {};
-   $scope.addLink = function() {
-      $scope.isLinkInputVisible = false;
-
-      //Define cardid
-      var cardid = $scope.cardFormCard.id;
-      var index = Object.keys($scope.urlAttachmentsList).length;
-
-      //Start displaying thumb placeholder with progress
-      var newAtt = {
-         position : index,
-         cardid:cardid
-      };
-
-      $scope.urlAttachmentsList[index] = newAtt;
-
-      //Start thumbnail creation
-      $scope.urlThumbnailProgress[index] = true;
-
-      $scope.thumbs[index] = '/static/img/att_default_thumb.png';
-
-      $http({
-         method:'POST',
-         url: '/addlink/',
-         type:'JSON',
-         data: {
-            cardid : cardid,
-            att : JSON.stringify(newAtt)
-         }
-      })
-      .success(function(data) {
-         var index = data.positionInUi;
-         urlAttachmentsAdded.push(data.id);
-         $scope.thumbs[index] = '/thumbnaillink/' + data.id;
-         $scope.urlAttachmentsList[index] = {
-            id : data.id,
-            position: index
-         };
-         $scope.attachmentsChanged = true;
-         $scope.urlThumbnailProgress[index] = false;
-      })
-      .error(function(error) {
-         console.log(error);
-      });
-   };
-
-   $scope.isLinkInputValueInvalid = function() {
-      if ($scope.linkInputValue) {
-         return false;
-      } else {
-         return true;
-      }
-   };
-
-   $scope.removeLink = function(position) {
-      urlAttachmentsRemoved.push($scope.urlAttachmentsList[position].id);
-      delete $scope.urlAttachmentsList[position];
-      $scope.attachmentsChanged = true;
-   };
-
 
    /*************
     *
     * File Uploader
     *
     * **********/
+
    $rootScope.thumbService = thumbService;
+
+   $scope.initFileUpload = function() {
+      $('#fileInput').click();
+   };
+
    var uploader = $scope.uploader = $fileUploader.create({
       scope: $scope,                          // to automatically update the html. Default: $rootScope
       url: '/upload',
@@ -518,8 +435,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          $rootScope.thumbService.pending--;
          console.log(error);
       });
-
-
    });
 
    uploader.bind('cancel', function (event, xhr, item) {
@@ -543,5 +458,119 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $rootScope.thumbService.pending = 0;
       $rootScope.thumbService.status='idle';
    });
+   
+   $scope.removeAtt = function(att) {
+      var serverid = $rootScope.thumbService.getUrl(att.clientid, att.id, 'id');
+      fileAttachmentsRemoved.push(serverid);
+      $scope.fileAttachmentsList.splice($scope.fileAttachmentsList.indexOf(att), 1);
+      $scope.attachmentsChanged = true;
+   };
+
+   
+   /*******************
+    *
+    * Links
+    *
+    ********************/
+
+   $scope.initAddLink = function() {
+      $scope.isLinkInputVisible = true;
+   };
+
+   $scope.cancelAddLink = function() {
+      $scope.isLinkInputVisible = false;
+      $scope.linkInputValue = '';
+   };
+
+   $scope.addLink = function() {
+      $scope.isLinkInputVisible = false;
+
+     /* //Define cardid
+      var cardid = $scope.cardFormCard.id;
+      var index = $scope.urlAttachmentsList.length;
+
+      //Start displaying thumb placeholder with progress
+      var newAtt = {
+         position : index,
+         cardid:cardid
+      };
+
+      $scope.urlAttachmentsList.push(newAtt);
+
+      //Start thumbnail creation
+
+      $scope.thumbs[index] = '/static/img/att_default_thumb.png';*/
+      
+      
+      var cardid = $scope.cardFormCard.id;
+      var clientid = makeid();
+      var position = $scope.urlAttachmentsList.length;
+
+      //Display empty thumb, will be filled later
+      var newLink = {
+         url : $scope.linkInputValue,
+         clientid:clientid,
+         cardid:cardid,
+         position:position
+      };
+
+      $scope.urlAttachmentsList[position] = newLink;
+
+      //Update UI
+      $rootScope.thumbService.pending++;
+      $rootScope.thumbService.storeThumbnail(clientid);
+      $rootScope.thumbService.changeStatus(clientid, 'thumb');
+
+      $scope.attachmentsChanged = true;
+      
+      $http({
+         method:'POST',
+         url: '/addlink/',
+         type:'JSON',
+         data: {
+            cardid : cardid,
+            att : JSON.stringify(newLink),
+            clientid: clientid
+         }
+      })
+      .success(function(data) {
+         urlAttachmentsAdded.push(data.id);
+         
+         /*var position = data.positionInUi;
+         
+         $scope.thumbs[index] = '/thumbnaillink/' + data.id;
+         $scope.urlAttachmentsList[index] = {
+            id : data.id,
+            position: index
+         };*/
+         var clientid = data.clientid;
+         var serverid = data.id;
+         $rootScope.thumbService.storeThumbnail(clientid, serverid);
+
+         $rootScope.thumbService.changeStatus(clientid, 'done');
+         $rootScope.thumbService.pending--;
+         if ($rootScope.thumbService.pending==0) {
+            $rootScope.thumbService.pending = 'idle';
+         }
+        
+      })
+      .error(function(error) {
+         console.log(error);
+      });
+   };
+
+   $scope.isLinkInputValueInvalid = function() {
+      if ($scope.linkInputValue) {
+         return false;
+      } else {
+         return true;
+      }
+   };
+
+   $scope.removeLink = function(position) {
+      urlAttachmentsRemoved.push($scope.urlAttachmentsList[position].id);
+      delete $scope.urlAttachmentsList[position];
+      $scope.attachmentsChanged = true;
+   };
 
 }]);

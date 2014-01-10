@@ -13,12 +13,13 @@ def saveLinkToMongo():
    data = request.json
    att = json.loads(data['att'])
    url = att['url']
-   positionInUi = att['position']
+   position = att['position']
    cwd = os.path.dirname(os.path.realpath(__file__))
    
    cardid = data['cardid']
+   clientid = data['clientid']
     
-   urlAttachment = UrlAttachment(url=url)
+   urlAttachment = UrlAttachment(url=url, cardid=cardid, position=position)
 
    try:
       #Create thumbnail
@@ -44,7 +45,7 @@ def saveLinkToMongo():
    urlAttachment.save()
     
    #add to card
-   if cardid != 'new':
+   if not cardid.startswith('new'):
       #TODO: check if card exists. No multiple users per card yet
       card = Card.objects.get_or_404(id=cardid)  # @UndefinedVariable
       card.urlattachments.append(urlAttachment)
@@ -55,12 +56,14 @@ def saveLinkToMongo():
    tosend = {}
    tosend['id'] = str(urlAttachment.id)
    tosend['url'] = urlAttachment.url
-   tosend['positionInUi'] = positionInUi
+   tosend['position'] = position
+   tosend['clientid'] = clientid
    
    return json.dumps(tosend)
     
 def serve_urlattachment_thumbnail(urlattachmentid):
    urlAttachment = UrlAttachment.objects.get_or_404(id=urlattachmentid)  # @UndefinedVariable
+   print urlattachmentid
     
    strIO = StringIO.StringIO()
    strIO.write(urlAttachment.thumbfile.read())

@@ -220,7 +220,10 @@ class CardListResource(ListMongoResource):
       if 'urlattachments' in request.form:
          atts = loads(request.form['urlattachments'])
          for att in atts:  # @UnusedVariable
-            doc.urlattachments.append(UrlAttachment.objects.get(id=att['id']))
+            attinstorage = UrlAttachment.objects.get(cardid=att['cardid'], position=att['position'])
+            attinstorage.cardid = str(doc.id)
+            attinstorage.save()
+            doc.urlattachments.append(attinstorage)#.get(id=att['id']))
 
       doc.save()
       

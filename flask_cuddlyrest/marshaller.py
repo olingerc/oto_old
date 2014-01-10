@@ -75,7 +75,7 @@ class Marshaller(object):
                     for att in self.urlattachments:
                         newAtt = {}
                         for field in att._fields:
-                            if field in ['id', 'url']:
+                            if field in ['id', 'url', 'position', 'cardid']:
                                 newAtt[field] = self.convertor(att[field])
                         toReturn.append(newAtt)
                     return toReturn
