@@ -69,12 +69,31 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    });
 
    var addCard = function() {
-      //TODO: block ability to add new card unitl finished. I could also not use 'new' but generate a random token that server gives back 
+      //TODO: block ability to add new card unitl finished. I could also not use 'new' but generate a random token that server gives back
+      //will be solved if I add unique id after 'new' and check for 'new' in string to differentiate add ing and editing card
       //and I can use to find card again on client in success
       //so first add card, than http, then update card with server info
       var newCard = $scope.cardFormCard;
+      var clientid = 'new';
       newCard.stackid = $scope.activestack.id;
-      console.info('Before', newCard)
+      newCard.clientid = clientid;
+      newCard.fileattachments = angular.copy($scope.fileAttachmentsList);
+      newCard.urlattachments = angular.copy($scope.urlAttachmentsList);
+      //TODO: set modifiedat and createdat for correct sorting until real dates come back from server
+      newCard.saving = true;
+
+      if (newCard.duedate == '') {
+         newCard.duedate = null;
+      }
+
+      //Display card in UI
+      $scope.cards.push(newCard);
+
+      //Prepapre UI for next card add
+      $scope.isCardFormVisible = false;
+      resetCardForm();
+
+      //Save card on server
       $http({
          method : 'POST',
          url : '/cards/',
@@ -83,22 +102,26 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          },
          data : $.param({
             card : JSON.stringify(newCard),
-            fileattachments : JSON.stringify($scope.fileAttachmentsList),
-            urlattachments : JSON.stringify($scope.urlAttachmentsList)
+            fileattachments : JSON.stringify(newCard.fileattachments),
+            urlattachments : JSON.stringify(newCard.urlattachments),
+            clientid: clientid
          })
-      }).success(function(card, status, headers, config) {
-         console.info(config)
-         console.info('After', card)
-         //card.fileattachments = angular.copy($scope.fileAttachmentsList);
-         card.urlattachments = angular.copy($scope.urlAttachmentsList);
-         $scope.cards.push(card);
-         $scope.isCardFormVisible = false;
-         resetCardForm();
+      }).success(function(card) {
+         var found = $filter('filter')($scope.cards, {clientid:card.clientid});
+         if (found.length === 1) {
+            //Update paramters calculated on server
+            found[0].id = card.id;
+            found[0].createdat = card.createdat;
+            found[0].modifiedat = card.modifiedat;
+            found[0].saving = false;
+            //found[0] = card; not good because of $$hash?
+         } else {
+            console.log(found)
+            alert('Error saving card:' +  card.id);
+         }
       }).error(function(error) {
          console.log(error);
       });
-      
-
 
    };
 
@@ -130,9 +153,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
             $scope.fileAttachmentsList[i] = {
                id : att.id,
                filename : att.filename,
-               fileLink : "/download/" + att.id,
-               thumbLink : "/thumbnail/" + att.id,
-               delVisible : true,
                position : i
             };
          });
@@ -141,9 +161,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          jQuery.each(card.urlattachments, function(i, att) {//TODO: after att delete and reopen for edit . error here
             $scope.urlAttachmentsList[i] = {
                id : att.id,
-               url : att.url,
-               thumbLink : "/thumbnaillink/" + att.id,
-               delVisible : true,
                position : i
             };
          });
@@ -373,8 +390,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
       //Start displaying thumb placeholder with progress
       var newAtt = {
-         url : $scope.linkInputValue,
-         delVisible : false,
          position : index,
          cardid:cardid
       };
@@ -401,8 +416,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          $scope.thumbs[index] = '/thumbnaillink/' + data.id;
          $scope.urlAttachmentsList[index] = {
             id : data.id,
-            url : data.url,
-            delVisible : true,
             position: index
          };
          $scope.attachmentsChanged = true;
@@ -430,38 +443,18 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    /*************
     *
-    * uploader
+    * File Uploader
     *
     * **********/
-
-
-    // create a uploader with options
+   $rootScope.uploadService = uploadService;
    var uploader = $scope.uploader = $fileUploader.create({
       scope: $scope,                          // to automatically update the html. Default: $rootScope
       url: '/upload',
       autoUpload: true
-      /*filters: [
-         function (item) {                    // first user filter
-            console.info('filter1');
-               return true;
-            }
-        ]*/
    });
-
-   $rootScope.uploadService = uploadService;
-
-   // ADDING FILTERS
-   /*
-           uploader.filters.push(function (item) { // second user filter
-               console.info('filter2');
-               return true;
-           });
-   */
-     // REGISTER HANDLERS
 
    uploader.bind('afteraddingfile', function (event, item) {
       //console.info('After adding a file', item);
-      //Define cardid
       var cardid;
       if (!$scope.cardFormCard) {
          cardid = 'new';
@@ -473,41 +466,39 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          }
       }
 
+      var clientid = makeid();
       var position = Object.keys($scope.fileAttachmentsList).length;
 
       //Display empty thumb, will be filled later
       var newAtt = {
          filename : item.file.name,
-         fileLink : '',
-         delVisible : false,
-         position : position,
-         cardid: cardid
+         clientid:clientid,
+         cardid:cardid,
+         position:position
       };
 
       item.formData = [
          {
             cardid:cardid,
-            test:'test',
             att:JSON.stringify(newAtt),
-            position: position
+            clientid: clientid
          }
       ];
 
       $scope.fileAttachmentsList[position] = newAtt;
-      fileAttachmentsAdded.push(cardid + "_" + position);
 
       //Update UI
       $rootScope.uploadService.pending++;
-      $rootScope.uploadService.changeStatus(cardid, 'init', position);
+      $rootScope.uploadService.storeThumbnail(clientid);
+      $rootScope.uploadService.changeStatus(clientid, 'init');
+
+      fileAttachmentsAdded.push(cardid + "_" + position);
 
       $scope.attachmentsChanged = true;
-
-      $scope.$apply();
    });
 
    uploader.bind('afteraddingall', function (event, items) {
       //console.info('After adding all files', items);
-            $scope.$apply(function() {})
    });
 
    uploader.bind('beforeupload', function (event, item) {
@@ -517,51 +508,41 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('progress', function (event, item, progress) {
       //console.info('Progress: ' + progress, item);
-      var position = item.formData[0].position;
-      var cardid = item.formData[0].cardid;
-      $rootScope.uploadService.changeStatus(cardid, progress, position);
-      $scope.$apply();
+      var clientid = item.formData[0].clientid;
+      $rootScope.uploadService.changeStatus(clientid, progress);
    });
 
    uploader.bind('success', function (event, xhr, item, response) {
       //console.info('Success', xhr, item, response);
-      var position = item.formData[0].position;
-      var cardid = item.formData[0].cardid;
-      $rootScope.uploadService.changeStatus(cardid, 'thumb', position);
-      //Infom client about id of attachment
-      //$scope.fileAttachmentsList[position].id = response.id;
-      $scope.$apply(function() {
+      var clientid = item.formData[0].clientid;
+      $rootScope.uploadService.changeStatus(clientid, 'thumb');
 
       $http({
          method : 'POST',
          url : '/createthumb',
          data : {
-            positionInUi: position,
             filename: item.file.name,
-            id: response.id
+            id: response.id,
+            clientid: clientid
          }
       })
       // display thumbnail in client
       .success(function(data, status, header, config) {
-         var position = data.positionInUi;
-         var cardid = item.formData[0].cardid;
-         console.log(data)
-         $rootScope.uploadService.storeThumbnail(cardid, data.id, position);
-         
-         
-         
-         $rootScope.uploadService.changeStatus(cardid, 'done', position);
+         var clientid = data.clientid;
+         var serverid = data.id;
+         $rootScope.uploadService.storeThumbnail(clientid, serverid);
+
+         $rootScope.uploadService.changeStatus(clientid, 'done');
          $rootScope.uploadService.pending--;
          if ($rootScope.uploadService.pending==0) {
             $rootScope.uploadService.pending = 'idle';
          }
       })
       .error(function(error) {
-         //TODO: get position and cardid form response
+         //TODO: get clientid form response
          //$rootScope.uploadService.changeStatus(cardid, 'error', position);
          $rootScope.uploadService.pending--;
          console.log(error);
-      });
       });
 
 

@@ -340,13 +340,13 @@
                            <div class="pull-left" ng-repeat="att in fileAttachmentsList"
                               ng-click="$event.stopPropagation()">
                               <a class="inline att_thumb_link" title="{{att.filename}}"
-                                 ng-href="{{uploadService.getUrl(cardFormCard.id, att.position, true)}}">
+                                 ng-href="{{uploadService.getUrl(att.clientid, att.id, true)}}">
                                  <img class="att_thumb img-rounded"
-                                    ng-src="{{uploadService.getUrl(cardFormCard.id, att.position)}}">
+                                    ng-src="{{uploadService.getUrl(att.clientid, att.id)}}">
                               </a>
                               <i class="inline attdelbutton glyphicon glyphicon-trash"
                                  ng-click="$event.stopPropagation();removeAtt(att.position)"
-                                 ng-show="att.delVisible">
+                                 ng-show="uploadService.allowDelete(att.clientid, att.id)">
                               </i>
                            </div>
                         </div>
@@ -407,11 +407,11 @@
                         <!--file Attachments-->
                         <li ng-repeat="att in card.fileattachments">
                            <a class="att_thumb_link" title="{{att.filename}}"
-                              ng-href="{{uploadService.getUrl(card.id, $index, true)}}"
-                              ng-init="uploadService.storeThumbnail(card.id, att.id, $index)"
+                              ng-href="{{uploadService.getUrl(att.clientid, att.id, true)}}"
+                              ng-init="uploadService.storeThumbnail(att.clientid, att.id, att)"
                               >
                               <img class="att_thumb img-rounded"
-                                 ng-src="{{uploadService.getUrl(card.id, $index)}}"> </a>
+                                 ng-src="{{uploadService.getUrl(att.clientid, att.id)}}"> </a>
                         </li>
 
                         <!--url Attachments-->
@@ -438,6 +438,10 @@
                            <li class="card_mod_label"
                               ng-show="isNotNull(card.archivedat)">
                               <small title="archived at" class="text-muted"><i class="glyphicon  glyphicon-trash"></i>&nbsp;{{card.archivedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
+                           </li>
+                           <li class="card_mod_label"
+                              ng-show="{{card.saving}}">
+                              <small class="text-emphasis">saving...</small>
                            </li>
                         </ul>
                      </small>

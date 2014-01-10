@@ -2,7 +2,7 @@ from flask import request, session
 from flask_cuddlyrest.views import ListMongoResource, SingleMongoResource, catch_all
 from flask_cuddlyrest.marshaller import Marshaller
 from flask_cuddlyrest import CuddlyRest
-from json import loads
+from json import loads, dumps
 from bson.objectid import ObjectId  # @UnresolvedImport
 
 from mongoengine.queryset import DoesNotExist
@@ -82,7 +82,7 @@ class StackListResource(ListMongoResource):
       #hide owner from client
       toReturn = Marshaller(doc).dumps()
       toReturn['owner'] = None
-      return toReturn, 201
+      return json.dumps(toReturn), 201
    
    @catch_all
    def get(self):
@@ -190,9 +190,13 @@ class CardListResource(ListMongoResource):
          stack = Stack.objects.get(title='Floating', owner=user)  # @UndefinedVariable
          card['stackid'] = stack.id
         
-      if card['duedate'] == '': #ajax removed null propterties so I have to leave it as empty string
+      if card['duedate'] == '': #make sure empty duedates are removed. should not happen but keep as safeguard
          card['duedate'] = None
         
+      #atts are readded later
+      del card['fileattachments']
+      del card['urlattachments']
+      
       doc = Card()
       Marshaller(doc).loads(card)
       doc.owner = user
@@ -202,8 +206,8 @@ class CardListResource(ListMongoResource):
       if 'fileattachments' in request.form:
          atts = loads(request.form['fileattachments'])
          for key, att in atts.iteritems():  # @UnusedVariable
-            #tell atts with 'new' about cardid TODO: rethink about 'new' maybe keep id in client?
-            attinstorage = FileAttachment.objects.get(cardid=att['cardid'], position=att['position'])
+            #tell atts with 'new' about cardid. WHY? TODO: rethink about 'new' maybe keep id in client?
+            attinstorage = FileAttachment.objects.get(cardid=att['cardid'], position=att['position']) #TODO: really necessary?
             attinstorage.cardid = str(doc.id)
             attinstorage.save()
             doc.fileattachments.append(attinstorage)#.get(id=att['id']))
@@ -218,6 +222,7 @@ class CardListResource(ListMongoResource):
       #hide owner from client and treat attachments
       toReturn = Marshaller(doc, fileattachments=doc.fileattachments, urlattachments=doc.urlattachments).dumps()
       toReturn['owner'] = None
+      toReturn['clientid'] = request.form['clientid']
       
       return toReturn, 201
 

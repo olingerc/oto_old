@@ -37,7 +37,7 @@ def upload_simple(request, dst, chunk=0):
 def uploadFiles():
    '''PLUPLUOAD'''
    att = json.loads(request.form['att'])
-   positionInUi = att['position']
+   position = att['position']
    filename = clean_filename(att['filename'])
    dst = path.join('/tmp', filename)
    cardid = request.form['cardid']
@@ -47,19 +47,19 @@ def uploadFiles():
       chunks = int(request.form['chunks'])
       upload_simple(request, dst, chunk)
       if chunk == chunks -1: #chunk number is 0 based
-         return saveToMongo(filename, cardid,positionInUi)
+         return saveToMongo(filename, cardid,position)
    else:
       chunk = 0
       upload_simple(request, dst, chunk)
-      return saveToMongo(filename, cardid,positionInUi)
+      return saveToMongo(filename, cardid,position)
     
    return 'error'
 
-def saveToMongo(filename, cardid, positionInUi):
+def saveToMongo(filename, cardid, position):
    #Put into gridfs
    att = FileAttachment(filename=filename, mimetype = mimetypes.guess_type(filename)[0])
    att.cardid = cardid
-   att.position = positionInUi
+   att.position = position
    with open('/tmp/' + filename, 'r') as fileobject:
       att.file.put(fileobject, content_type = mimetypes.guess_type(filename)[0])
     
@@ -80,9 +80,8 @@ def saveToMongo(filename, cardid, positionInUi):
    tosend = {}
    tosend['id'] = str(att.id)
    tosend['filename'] = att.filename
-   tosend['positionInUi'] = positionInUi
    
-   return json.dumps(tosend)
+   return json.dumps(tosend),201
 
 def create_thumbnail():
    attid = request.json['id']
@@ -130,9 +129,7 @@ def create_thumbnail():
          att.thumb = False
             
    att.save()
-   obj = {'id': attid, 'filename': att.filename, 'positionInUi':request.json['positionInUi']}
-   return json.dumps(obj)
-   #TODO: error on multiple image upload
+   return json.dumps({'id': attid, 'filename': att.filename, 'clientid':request.json['clientid']}), 201
             
 def deleteatts():
    attids = json.loads(request.form['array'])
@@ -148,7 +145,7 @@ def deleteatts():
       attcard = obj[0]
       attpos = obj[1]
       att = FileAttachment.objects.get_or_404(cardid=attcard, position = attpos)  # @UndefinedVariable
-      #TODO: chek if exists
+      #TODO: check if exists
       att.file.delete()
       att.delete()
       

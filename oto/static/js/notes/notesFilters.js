@@ -48,46 +48,100 @@ app.service('uploadService', [function() {//TODO: rename to thumbnail service
    _us.thumbs = {};
    _us.pending = 0;
 
-   _us.storeThumbnail = function(cardid, attid, position) {
-      if (!_us.thumbs[cardid]) _us.thumbs[cardid] = [];
-      if (!_us.thumbs[cardid][position]) _us.thumbs[cardid][position] = {};
-      _us.thumbs[cardid][position] = {
-         'progress':'done',
-         'id':attid
-      };
-   };
-   
-   _us.changeStatus = function(cardid, progress, position) {
-      if (!_us.thumbs[cardid]) _us.thumbs[cardid] = [];
-      if (!_us.thumbs[cardid][position]) _us.thumbs[cardid][position] = {};
-      _us.thumbs[cardid][position].progress = progress;
+   _us.storeThumbnail = function(clientid, serverid, att) {
+      if (att) { //differentiate between ng-init on page load (att has serverid) or new att added by client (att has no serverid)
+         if (!att.id) return;
+      }
+      if (clientid && !serverid) {
+         //server starts upload
+         _us.thumbs[clientid] = {
+            'progress':'init'
+         };
+      }
+      else if (clientid && serverid) {
+         //server has finished upload
+         _us.thumbs[clientid] = {
+            'progress':'done',
+            'id':serverid
+         };
+         _us.thumbs[serverid] = {
+            'progress':'done',
+            'id':serverid
+         };
+      }
+      else {
+         //pageload?
+         _us.thumbs[serverid] = {
+            'progress':'done',
+            'id':serverid
+         };
+      }
    };
 
-   _us.getUrl = function(cardid, position, forDownload) {
-      if (!_us.thumbs[cardid]) {
-         //TODO: luach thumbnail creation here if not existst?
+   _us.changeStatus = function(clientid, progress) {
+      if (!_us.thumbs[clientid]) _us.thumbs[clientid] = {};
+      _us.thumbs[clientid].progress = progress;
+   };
+
+   _us.getUrl = function(clientid, serverid, forDownload) {
+      if (serverid) {
+         var id = serverid; //initial pageload
+      } else {
+         var id = clientid;
+      }
+
+      if (!_us.thumbs[id]) {
+         //TODO: launch thumbnail creation here if not existst?
           return "/static/img/error.jpg";
       } else {
-         if (_us.thumbs[cardid][position].progress ==='init') {
+         if (_us.thumbs[id].progress ==='init') {
             //Before upload has started
             return '/static/img/att_default_thumb.png';
-         } 
-         else if (_us.thumbs[cardid][position].progress ==='thumb') {
+         }
+         else if (_us.thumbs[id].progress ==='thumb') {
             //creating thumb
             return '/static/img/indicator.gif';
          }
-         else if (_us.thumbs[cardid][position].progress ==='done') {
+         else if (_us.thumbs[id].progress ==='done') {
             //OK
-            if (forDownload) return '/download/' + _us.thumbs[cardid][position].id; 
-            else return '/thumbnail/' + _us.thumbs[cardid][position].id;
+            if (forDownload) return '/download/' + _us.thumbs[id].id;
+            else return '/thumbnail/' + _us.thumbs[id].id;
          }
-         else if (_us.thumbs[cardid][position].progress ==='error') {
+         else if (_us.thumbs[id].progress ==='error') {
             //upload and thumb finished
             return '/static/img/error.jpg';
          }
          else {
             //uploading
             return '/static/img/indicator.gif';
+         }
+      }
+   };
+
+   _us.allowDelete = function(clientid, serverid) {
+      if (serverid) {
+         var id = serverid; //initial pageload
+      } else {
+         var id = clientid;
+      }
+
+      if (!_us.thumbs[id]) {
+          return false;
+      } else {
+         if (_us.thumbs[id].progress ==='init') {
+            return false;
+         }
+         else if (_us.thumbs[id].progress ==='thumb') {
+            return false;
+         }
+         else if (_us.thumbs[id].progress ==='done') {
+            return true;
+         }
+         else if (_us.thumbs[id].progress ==='error') {
+            return false;
+         }
+         else {
+            return false;
          }
       }
    };
