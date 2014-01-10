@@ -128,34 +128,17 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.isCardFormVisible = true;
       $scope.cardFormAction = 'edit';
 
-      $scope.cardFormCard = card;
-      if (card.duedate) {
-         card.duedate = $card.duedate.substring(0, 10);
+      $scope.cardFormCard = angular.copy(card); //I do not want the UI to update here, thats why I copy.
+      if ($scope.cardFormCard.duedate) {
+         $scope.cardFormCard.duedate = $scope.cardFormCard.duedate.substring(0, 10);
       }
       //otherwise not recognized
 
-      $scope.originalCard = angular.copy(card);
+      $scope.originalCard = card;
       //we keep original card in order to detect whethter the save button should be enabled
 
-      $scope.fileAttachmentsList = [];
-      $scope.urlAttachmentsList = [];
-      if (card.fileattachments != null) {
-         jQuery.each(card.fileattachments, function(i, att) {//TODO: after att delete and reopen for edit . error here
-            $scope.fileAttachmentsList[i] = {
-               id : att.id,
-               filename : att.filename,
-               position : i
-            };
-         });
-      }
-      if (card.urlattachments != null) {
-         jQuery.each(card.urlattachments, function(i, att) {//TODO: after att delete and reopen for edit . error here
-            $scope.urlAttachmentsList[i] = {
-               id : att.id,
-               position : i
-            };
-         });
-      }
+      $scope.fileAttachmentsList = $scope.cardFormCard.fileattachments;
+      $scope.urlAttachmentsList = $scope.cardFormCard.urlattachments;
    });
 
    var editCard = function() {
@@ -214,24 +197,40 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       if (angular.equals($scope.originalCard, $scope.cardFormCard) && $scope.attachmentsChanged === false) {
          $scope.isCardFormVisible = false;
          return;
-         //Nothing was changed
+         //Nothing was changed (safeguard)
       }
       var updatedCardToSend = $scope.cardFormCard;
-      delete updatedCardToSend.fileattachments;//attachemnts update already done while adding/removing attachment
-      delete updatedCardToSend.urlattachments;//attachemnts update already done while adding/removing attachment
+      updatedCardToSend.clientid = $scope.cardFormCard.id;
+      updatedCardToSend.fileattachments = angular.copy($scope.fileAttachmentsList);
+      updatedCardToSend.urlattachments = angular.copy($scope.urlAttachmentsList);
+      //TODO: set modifiedat and createdat for correct sorting until real dates come back from server
+      updatedCardToSend.saving = true;
 
-      $http.put('/cards/' + $scope.cardFormCard.id, updatedCardToSend)
+      if (updatedCardToSend.duedate == '') {
+         updatedCardToSend.duedate = null;
+      }
+
+      //Display card in UI
+      //$scope.originalCard = angular.copy(updatedCardToSend);
+      _.extend($scope.originalCard,updatedCardToSend);
+
+      //Prepapre UI for next card add
+      $scope.isCardFormVisible = false;
+      resetCardForm();
+
+
+
+
+      $http.put('/cards/' + updatedCardToSend.id, updatedCardToSend)
       .success(function(updatedCard) {
          //Update attachments in model (server already ok)
          var filtered = $filter('filter')($scope.cards, {id : updatedCard.id});
+         updatedCard.saving = false;
 
          $scope.cards[$scope.cards.indexOf(filtered[0])] = angular.copy(updatedCard);
 
-         $scope.isCardFormVisible = false;
-
-         $scope.cardFormCard.fileattachments = angular.copy($scope.fileAttachmentsList);
-         $scope.cardFormCard.urlattachments = angular.copy($scope.urlAttachmentsList);
-         resetCardForm();
+         //$scope.cardFormCard.fileattachments = angular.copy($scope.fileAttachmentsList);
+         //$scope.cardFormCard.urlattachments = angular.copy($scope.urlAttachmentsList);
       }).error(function(error) {
          console.log(error);
       });

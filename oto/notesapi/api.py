@@ -196,6 +196,11 @@ class CardListResource(ListMongoResource):
       #atts are readded later
       del card['fileattachments']
       del card['urlattachments']
+      if 'fileattachments' in card: 
+         del card['fileattachments']
+      if 'urlattachments' in card: 
+         del card['urlattachments']
+      
       
       doc = Card()
       Marshaller(doc).loads(card)
@@ -281,12 +286,20 @@ class CardSingleResource(SingleMongoResource):
       #get card and update it
       cardid = doc_id
       card = self.document.objects.get(pk=cardid, owner=user)
-      Marshaller(card).loads(request.json)
+      
+      #the atts were updated during the add addition itself
+      updatedcard = request.json
+      if 'fileattachments' in updatedcard: 
+         del updatedcard['fileattachments']
+      if 'urlattachments' in updatedcard: 
+         del updatedcard['urlattachments']
+      
+      Marshaller(card).loads(updatedcard)
       
       #Individual parameters
       if card.duedate == '':
          card.duedate = None
-      
+         
       card.owner = user #the client sent None as owner since it did not have the info
       card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
       card.save()
