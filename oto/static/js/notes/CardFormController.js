@@ -437,7 +437,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       //console.info('After adding a file', item);
       var cardid = $scope.cardFormCard.id;
       var clientid = makeid();
-      var position = Object.keys($scope.fileAttachmentsList).length;
+      var position = $scope.fileAttachmentsList.length;
 
       //Display empty thumb, will be filled later
       var newAtt = {
@@ -462,8 +462,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $rootScope.uploadService.storeThumbnail(clientid);
       $rootScope.uploadService.changeStatus(clientid, 'init');
 
-      fileAttachmentsAdded.push(cardid + "_" + position);
-
       $scope.attachmentsChanged = true;
    });
 
@@ -486,6 +484,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       //console.info('Success', xhr, item, response);
       var clientid = item.formData[0].clientid;
       $rootScope.uploadService.changeStatus(clientid, 'thumb');
+      fileAttachmentsAdded.push(response.id);
 
       $http({
          method : 'POST',
