@@ -132,6 +132,12 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       if ($scope.cardFormCard.duedate) {
          $scope.cardFormCard.duedate = $scope.cardFormCard.duedate.substring(0, 10);
       }
+      if (!$scope.cardFormCard.fileattachments) {
+         $scope.cardFormCard.fileattachments = [];
+      }
+      if (!$scope.cardFormCard.urlattachments) {
+         $scope.cardFormCard.urlattachments = [];
+      }
       //otherwise not recognized
 
       $scope.originalCard = card;
