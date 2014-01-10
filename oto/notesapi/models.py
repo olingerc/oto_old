@@ -29,6 +29,7 @@ class FileAttachment(db.Document):
    position = db.IntField(required=False)
    #i know its not great that the att knows about the card, 
    #but I use this to create thumbs in the background and assign to correct card on finish
+   #also when saving a new card I retrive dangling atts and add them to the card
     
    meta = {
       'indexes': ['_id']

@@ -345,7 +345,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    //Attachments handling
    $scope.removeAtt = function(att) {
       var serverid = $rootScope.uploadService.getUrl(att.clientid, att.id, 'id');
-      console.log(serverid);
       fileAttachmentsRemoved.push(serverid);
       $scope.fileAttachmentsList.splice($scope.fileAttachmentsList.indexOf(att), 1);
       $scope.attachmentsChanged = true;
@@ -508,7 +507,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          }
       })
       .error(function(error) {
-         //TODO: get clientid form response
+         //TODO: get clientid form response or oroginal config to dispaly eror in card
          //$rootScope.uploadService.changeStatus(cardid, 'error', position);
          $rootScope.uploadService.pending--;
          console.log(error);
