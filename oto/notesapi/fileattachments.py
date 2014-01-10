@@ -136,24 +136,23 @@ def deleteatts():
    cardid = request.form['cardid']
    if 'changeMofidiedat' in request.form:
       changeMofidiedat = request.form['changeMofidiedat']
-      #we do not change it for example whan canceling an card edit
+      #we do not change it for example whan canceling a card edit
    else:
       changeMofidiedat = True
-    
+   
+   print attids
+
    for attid in attids:
-      obj = attid.split('_')
-      attcard = obj[0]
-      attpos = obj[1]
-      att = FileAttachment.objects.get_or_404(cardid=attcard, position = attpos)  # @UndefinedVariable
+      att = FileAttachment.objects.get_or_404(id=attid)  # @UndefinedVariable
       #TODO: check if exists
       att.file.delete()
       att.delete()
-      
-      if not cardid.startswith('new'):
-         card = Card.objects.get_or_404(id=cardid)  # @UndefinedVariable
-         if changeMofidiedat == True:
-            card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
-         card.save()
+   
+   if not cardid.startswith('new'):
+      card = Card.objects.get_or_404(id=cardid)  # @UndefinedVariable
+      if changeMofidiedat == True:
+         card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
+      card.save()
     
    return 'ok'
 

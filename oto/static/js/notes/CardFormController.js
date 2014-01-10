@@ -343,11 +343,11 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    };
 
    //Attachments handling
-
    $scope.removeAtt = function(att) {
-      console.log(att)
-      fileAttachmentsRemoved.push(att.cardid + "_" + att.position);
-      $scope.fileAttachmentsList.splice(att.position, 1);
+      var serverid = $rootScope.uploadService.getUrl(att.clientid, att.id, 'id');
+      console.log(serverid);
+      fileAttachmentsRemoved.push(serverid);
+      $scope.fileAttachmentsList.splice($scope.fileAttachmentsList.indexOf(att), 1);
       $scope.attachmentsChanged = true;
    };
 

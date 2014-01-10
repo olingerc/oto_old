@@ -253,9 +253,7 @@ class CardListResource(ListMongoResource):
       #treat attachments and hide owner
       toReturn = []
       for doc in docs:
-         print doc
          temp = Marshaller(doc, fileattachments=doc.fileattachments, urlattachments=doc.urlattachments).dumps()
-         print temp
          temp['owner'] = None
          toReturn.append(temp)
       return toReturn, 200

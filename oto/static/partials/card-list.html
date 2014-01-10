@@ -340,7 +340,7 @@
                            <div class="pull-left" ng-repeat="att in fileAttachmentsList"
                               ng-click="$event.stopPropagation()">
                               <a class="inline att_thumb_link" title="{{att.filename}}"
-                                 ng-href="{{uploadService.getUrl(att.clientid, att.id, true)}}">
+                                 ng-href="{{uploadService.getUrl(att.clientid, att.id, 'download')}}">
                                  <img class="att_thumb img-rounded"
                                     ng-src="{{uploadService.getUrl(att.clientid, att.id)}}">
                               </a>
@@ -407,7 +407,7 @@
                         <!--file Attachments-->
                         <li ng-repeat="att in card.fileattachments">
                            <a class="att_thumb_link" title="{{att.filename}}"
-                              ng-href="{{uploadService.getUrl(att.clientid, att.id, true)}}"
+                              ng-href="{{uploadService.getUrl(att.clientid, att.id, 'download')}}"
                               ng-init="uploadService.storeThumbnail(att.clientid, att.id, att)"
                               >
                               <img class="att_thumb img-rounded"

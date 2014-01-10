@@ -83,7 +83,7 @@ app.service('uploadService', [function() {//TODO: rename to thumbnail service
       _us.thumbs[clientid].progress = progress;
    };
 
-   _us.getUrl = function(clientid, serverid, forDownload) {
+   _us.getUrl = function(clientid, serverid, what) {
       if (serverid) {
          var id = serverid; //initial pageload
       } else {
@@ -104,7 +104,9 @@ app.service('uploadService', [function() {//TODO: rename to thumbnail service
          }
          else if (_us.thumbs[id].progress ==='done') {
             //OK
-            if (forDownload) return '/download/' + _us.thumbs[id].id;
+            if (!what) return '/thumbnail/' + _us.thumbs[id].id;
+            else if (what === 'download') return '/download/' + _us.thumbs[id].id;
+            else if (what === 'id') return _us.thumbs[id].id;
             else return '/thumbnail/' + _us.thumbs[id].id;
          }
          else if (_us.thumbs[id].progress ==='error') {
