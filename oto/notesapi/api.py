@@ -82,7 +82,7 @@ class StackListResource(ListMongoResource):
       #hide owner from client
       toReturn = Marshaller(doc).dumps()
       toReturn['owner'] = None
-      return json.dumps(toReturn), 201
+      return dumps(toReturn), 201
    
    @catch_all
    def get(self):

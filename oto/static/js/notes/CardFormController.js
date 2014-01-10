@@ -27,11 +27,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
       $scope.attachmentsChanged = false;
 
-      $scope.uploadProgress = {};
-      $scope.uploadProgressValue = {};
-      $scope.thumbnailProgress = {};
-      $scope.urlThumbnailProgress = {};
-
       $scope.isLinkInputVisible = false;
       $scope.linkInputValue = 'http://www.google.com';
 
@@ -65,16 +60,12 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    $scope.$on('startAddCard', function() {
       resetCardForm();
       $scope.isCardFormVisible = true;
-      $scope.cardFormCard.id = 'new';
+      $scope.cardFormCard.id = 'new' + makeid();
    });
 
    var addCard = function() {
-      //TODO: block ability to add new card unitl finished. I could also not use 'new' but generate a random token that server gives back
-      //will be solved if I add unique id after 'new' and check for 'new' in string to differentiate add ing and editing card
-      //and I can use to find card again on client in success
-      //so first add card, than http, then update card with server info
       var newCard = $scope.cardFormCard;
-      var clientid = 'new';
+      var clientid = $scope.cardFormCard.id;
       newCard.stackid = $scope.activestack.id;
       newCard.clientid = clientid;
       newCard.fileattachments = angular.copy($scope.fileAttachmentsList);
@@ -116,7 +107,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
             found[0].saving = false;
             //found[0] = card; not good because of $$hash?
          } else {
-            console.log(found)
+            console.log(found);
             alert('Error saving card:' +  card.id);
          }
       }).error(function(error) {
@@ -192,7 +183,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
                'Content-Type' : 'application/x-www-form-urlencoded'
             },
             data : $.param({
-               cardid : $scope.cardFormCard.id,//TODO: handle 'new'
+               cardid : $scope.cardFormCard.id,
                array : JSON.stringify(_.uniq(filesToDelete))
             })
          });
@@ -375,17 +366,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.isLinkInputVisible = false;
 
       //Define cardid
-      var cardid;
-      if (!$scope.cardFormCard) {
-         cardid = 'new';
-      } else {
-         if ($scope.cardFormCard === '') {
-            cardid = 'new';
-         } else {
-            cardid = $scope.cardFormCard.id;
-         }
-      }
-
+      var cardid = $scope.cardFormCard.id;
       var index = Object.keys($scope.urlAttachmentsList).length;
 
       //Start displaying thumb placeholder with progress
@@ -455,17 +436,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('afteraddingfile', function (event, item) {
       //console.info('After adding a file', item);
-      var cardid;
-      if (!$scope.cardFormCard) {
-         cardid = 'new';
-      } else {
-         if ($scope.cardFormCard === '') {
-            cardid = 'new';
-         } else {
-            cardid = $scope.cardFormCard.id;
-         }
-      }
-
+      var cardid = $scope.cardFormCard.id;
       var clientid = makeid();
       var position = Object.keys($scope.fileAttachmentsList).length;
 

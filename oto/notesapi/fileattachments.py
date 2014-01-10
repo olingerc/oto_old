@@ -69,7 +69,7 @@ def saveToMongo(filename, cardid, position):
    att.save()
     
    #add to card
-   if cardid != 'new':
+   if not cardid.startswith('new'):
       #TODO: check if card exists. No multiple users per card yet
       card = Card.objects.get_or_404(id=cardid)  # @UndefinedVariable
       card.fileattachments.append(att)
@@ -149,7 +149,7 @@ def deleteatts():
       att.file.delete()
       att.delete()
       
-      if cardid != 'new':
+      if not cardid.startswith('new'):
          card = Card.objects.get_or_404(id=cardid)  # @UndefinedVariable
          if changeMofidiedat == True:
             card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')

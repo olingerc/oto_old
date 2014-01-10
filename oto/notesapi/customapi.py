@@ -45,8 +45,8 @@ def init_notesapp(function):
          stack.save()
          
          
-      #Remove floating 'new' atts #TODO: do I stick with 'new' to define floating?
-      attinstorage = FileAttachment.objects.filter(cardid='new')
+      #Remove floating 'new' atts
+      attinstorage = FileAttachment.objects.filter(cardid__startswith='new')
       for att in attinstorage:
          att.file.delete()
          att.delete()

@@ -81,7 +81,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    /*
     * Upload service
     */
-   $scope.uploadService = uploadService;
+   $scope.uploadService = uploadService; //because cards list header shows active uploads
 
    /******************
     * TODO: card header controller?
