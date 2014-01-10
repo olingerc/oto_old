@@ -6,7 +6,7 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
 
    //Stack size badges
    $scope.stackSizes = {};
-   $scope.$watch('cards', function() {
+   $scope.$watch('[cards, stacks]', function() {
       jQuery.each($scope.stacks, function(i, stack) {
          var count = 0;
          jQuery.each($scope.cards, function(i, card) {

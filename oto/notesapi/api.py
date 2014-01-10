@@ -2,7 +2,7 @@ from flask import request, session
 from flask_cuddlyrest.views import ListMongoResource, SingleMongoResource, catch_all
 from flask_cuddlyrest.marshaller import Marshaller
 from flask_cuddlyrest import CuddlyRest
-from json import loads, dumps
+from json import loads
 from bson.objectid import ObjectId  # @UnresolvedImport
 
 from mongoengine.queryset import DoesNotExist

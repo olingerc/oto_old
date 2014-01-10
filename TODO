@@ -14,7 +14,6 @@ multiple file upload thumbs only visible after last has uploaded
 no primitive values for scope, use objects to prevent parent scope shadowing
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
-if all stacfks are empty, size badges not visible
 
 #Framework questions
 do I need an archive stack like the floating stack?
