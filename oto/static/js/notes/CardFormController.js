@@ -17,7 +17,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       //Set to initial state
       $scope.cardFormAction = 'new';
 
-      $scope.fileAttachmentsList = {};
+      $scope.fileAttachmentsList = [];
       fileAttachmentsAdded = [];
       fileAttachmentsRemoved = [];
 
@@ -211,26 +211,25 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       }
 
       //Display card in UI
-      //$scope.originalCard = angular.copy(updatedCardToSend);
       _.extend($scope.originalCard,updatedCardToSend);
 
       //Prepapre UI for next card add
       $scope.isCardFormVisible = false;
       resetCardForm();
 
-
-
-
       $http.put('/cards/' + updatedCardToSend.id, updatedCardToSend)
       .success(function(updatedCard) {
          //Update attachments in model (server already ok)
-         var filtered = $filter('filter')($scope.cards, {id : updatedCard.id});
          updatedCard.saving = false;
 
-         $scope.cards[$scope.cards.indexOf(filtered[0])] = angular.copy(updatedCard);
-
-         //$scope.cardFormCard.fileattachments = angular.copy($scope.fileAttachmentsList);
-         //$scope.cardFormCard.urlattachments = angular.copy($scope.urlAttachmentsList);
+         var filtered = $filter('filter')($scope.cards, {id : updatedCard.id});
+         if (filtered.length === 1) {
+            //Update paramters calculated on server
+            $scope.cards[$scope.cards.indexOf(filtered[0])] = updatedCard;
+         } else {
+            console.log(found);
+            alert('Error saving card:' +  card.id);
+         }
       }).error(function(error) {
          console.log(error);
       });
@@ -345,9 +344,10 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    //Attachments handling
 
-   $scope.removeAtt = function(position) {
-      fileAttachmentsRemoved.push($scope.fileAttachmentsList[position].id);
-      delete $scope.fileAttachmentsList[position];
+   $scope.removeAtt = function(att) {
+      console.log(att)
+      fileAttachmentsRemoved.push(att.cardid + "_" + att.position);
+      $scope.fileAttachmentsList.splice(att.position, 1);
       $scope.attachmentsChanged = true;
    };
 

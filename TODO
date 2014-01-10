@@ -5,6 +5,7 @@ https://github.com/witoldsz/angular-http-auth
 put title attribute of current sort on sort button, maybve change icon
 
 #Bugs
+empty cardformcard scope on cancel
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
 acrchiving a note keeps action button active
 xng-focus with ng-show

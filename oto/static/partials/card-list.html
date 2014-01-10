@@ -345,7 +345,7 @@
                                     ng-src="{{uploadService.getUrl(att.clientid, att.id)}}">
                               </a>
                               <i class="inline attdelbutton glyphicon glyphicon-trash"
-                                 ng-click="$event.stopPropagation();removeAtt(att.position)"
+                                 ng-click="$event.stopPropagation();removeAtt(att)"
                                  ng-show="uploadService.allowDelete(att.clientid, att.id)">
                               </i>
                            </div>

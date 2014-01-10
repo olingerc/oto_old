@@ -63,7 +63,7 @@ class Marshaller(object):
                     for att in self.fileattachments:
                         newAtt = {}
                         for field in att._fields:
-                            if field in ['id', 'filename']:
+                            if field in ['id', 'filename', 'position', 'cardid']:
                                 newAtt[field] = self.convertor(att[field])
                         toReturn.append(newAtt)
                     return toReturn

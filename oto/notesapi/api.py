@@ -210,7 +210,7 @@ class CardListResource(ListMongoResource):
       doc.id = ObjectId()
       if 'fileattachments' in request.form:
          atts = loads(request.form['fileattachments'])
-         for key, att in atts.iteritems():  # @UnusedVariable
+         for att in atts:  # @UnusedVariable
             #tell atts with 'new' about cardid. WHY? TODO: rethink about 'new' maybe keep id in client?
             attinstorage = FileAttachment.objects.get(cardid=att['cardid'], position=att['position']) #TODO: really necessary?
             attinstorage.cardid = str(doc.id)
@@ -219,7 +219,7 @@ class CardListResource(ListMongoResource):
             
       if 'urlattachments' in request.form:
          atts = loads(request.form['urlattachments'])
-         for key, att in atts.iteritems():  # @UnusedVariable
+         for att in atts:  # @UnusedVariable
             doc.urlattachments.append(UrlAttachment.objects.get(id=att['id']))
 
       doc.save()
