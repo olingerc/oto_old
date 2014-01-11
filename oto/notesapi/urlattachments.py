@@ -49,7 +49,7 @@ def saveLinkToMongo():
       #TODO: check if card exists. No multiple users per card yet
       card = Card.objects.get_or_404(id=cardid)  # @UndefinedVariable
       card.urlattachments.append(urlAttachment)
-      card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
+      card.modifiedat = datetime.now()
       card.save()
     
    #prepare response
@@ -93,7 +93,7 @@ def deleteurlattachment():
       if cardid != 'new':
          card = Card.objects.get_or_404(id=cardid)  # @UndefinedVariable
          if changeMofidiedat == True:
-            card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
+            card.modifiedat = datetime.now()
          card.save()
     
    return 'ok'

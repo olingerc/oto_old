@@ -41,7 +41,7 @@ def init_notesapp(function):
                     )
          except:
             return dumps({'error':'could not create floating stack'}), 500
-         stack.createdat = datetime.now().strftime('%Y%m%d%H%M%S')
+         stack.createdat = datetime.now()
          stack.save()
          
          

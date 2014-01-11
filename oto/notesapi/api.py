@@ -73,7 +73,7 @@ class StackListResource(ListMongoResource):
       doc = self.document()
       Marshaller(doc).loads(request.json)
       doc.owner = user
-      doc.createdat = datetime.now().strftime('%Y%m%d%H%M%S')
+      doc.createdat = datetime.now()
       try:
          doc.save()
       except NotUniqueError:
@@ -302,7 +302,7 @@ class CardSingleResource(SingleMongoResource):
          card.duedate = None
          
       card.owner = user #the client sent None as owner since it did not have the info
-      card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
+      card.modifiedat = datetime.now()
       card.save()
       
       #hide owner from client
