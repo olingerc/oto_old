@@ -205,8 +205,8 @@ class CardListResource(ListMongoResource):
       doc = Card()
       Marshaller(doc).loads(card)
       doc.owner = user
-      doc.createdat = datetime.now().strftime('%Y%m%d%H%M%S')
-      doc.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
+      doc.createdat = datetime.now()
+      doc.modifiedat = datetime.now()
       doc.id = ObjectId()
       if 'fileattachments' in request.form:
          atts = loads(request.form['fileattachments'])

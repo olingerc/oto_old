@@ -52,8 +52,8 @@ class Card(db.Document):
    title = db.StringField(verbose_name="Title", max_length=255, required=True)
    content = db.StringField(verbose_name="Content", required=False)
     
-   createdat = db.DateTimeField(default=datetime.now().strftime('%Y%m%d%H%M%S'), required=True)
-   modifiedat = db.DateTimeField(default=datetime.now().strftime('%Y%m%d%H%M%S'), required=False) #we need a default date for correct sorting on sortby modified_at
+   createdat = db.DateTimeField(default=datetime.now(), required=True)
+   modifiedat = db.DateTimeField(default=datetime.now(), required=False) #we need a default date for correct sorting on sortby modified_at
    archivedat = db.DateTimeField(default=None,required=False)
    stacktitleafterarchived = db.StringField(max_length=255, required=False)
    duedate = db.DateTimeField(default=None, required=False)
