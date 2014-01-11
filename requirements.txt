@@ -6,6 +6,7 @@ libmagickwand-dev
 mongodb
 
 pip
+python-dateutil (very important to avoid parse errors from mongoengine)
 Flask (Werkzeug, jinja, itsdangerous, markupsafe)
 flask-mongoengine(mongoengine, flask-wtf, pymongo, WTForms)
 flask-restful (aniso8601, six, pytz)
