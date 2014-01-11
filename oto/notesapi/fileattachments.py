@@ -8,6 +8,7 @@ from flask import request, send_file
 import mimetypes
 import json
 from wand.image import Image
+from wand.color import Color
 import StringIO
 from datetime import datetime
 
@@ -111,13 +112,19 @@ def create_thumbnail():
          att.thumb = False
         
    if 'pdf' in str(att.mimetype):
+      #TODO:
+      #http://www.binarytides.com/convert-pdf-image-imagemagick-commandline/
       try:
          strIO = StringIO.StringIO()
          strIO.write(att.file.read())
          strIO.seek(0)
-            
-         with Image(file=strIO) as img:
+         
+         #convert pdf to jpeg
+         RESOLUTION    = 300      
+         with Image(file=strIO, resolution=(RESOLUTION,RESOLUTION)) as img:
             thumbStrIO = StringIO.StringIO()
+            img.background_color = Color('white')
+            img.alpha_channel=False
             img.compression_quality = 50
             img.format = 'jpeg'
             img.save(file=thumbStrIO)
