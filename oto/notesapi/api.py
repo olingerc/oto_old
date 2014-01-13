@@ -212,7 +212,7 @@ class CardListResource(ListMongoResource):
          atts = loads(request.form['fileattachments'])
          for att in atts:  # @UnusedVariable
             #Retrieve dangling atts and add them to the card
-            attinstorage = FileAttachment.objects.get(cardid=att['cardid'], position=att['position'])
+            attinstorage = Attachment.objects.get(cardid=att['cardid'], position=att['position'])
             attinstorage.cardid = str(doc.id)
             attinstorage.save()
             doc.fileattachments.append(attinstorage)#.get(id=att['id']))

@@ -410,7 +410,11 @@
                               ng-init="thumbService.storeThumbnail(att.clientid, att.id, att)"
                               >
                               <img class="att_thumb img-rounded"
-                                 ng-src="{{thumbService.getUrl(att.clientid, att.id)}}"> </a>
+                                 ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
+                            </a>
+                           <p class="text-muted text-center">
+                              {{thumbService.getProgress(att.clientid, att.id)}}
+                           </p>
                         </li>
 
                         <!--url Attachments-->

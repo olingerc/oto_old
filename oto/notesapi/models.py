@@ -19,18 +19,31 @@ class Stack(db.Document):
       'ordering': ['-createdat']
    }
 
-class FileAttachment(db.Document):
+class Attachment(db.Document):
    filename = db.StringField(required=True)
    mimetype = db.DynamicField(required=False)
-   file = db.FileField(required=True)
    thumb = db.BooleanField(default=False, required=True)
-   thumbfile = db.FileField(required=False)
    cardid = db.StringField(required=False)
    position = db.IntField(required=False)
    #i know its not great that the att knows about the card, 
    #but I use this to create thumbs in the background and assign to correct card on finish
    #also when saving a new card I retrive dangling atts and add them to the card
     
+   meta = {
+      'allow_inheritance': True
+   }
+   
+class ImageAttachment(Attachment):
+   image = db.ImageField(thumbnail_size=(200,200, False))
+   
+   meta = {
+      'indexes': ['_id']
+   }
+   
+class FileAttachment(Attachment):
+   file = db.FileField(required=True)
+   thumbfile = db.FileField(required=False)
+   
    meta = {
       'indexes': ['_id']
    }
@@ -48,7 +61,7 @@ class UrlAttachment(db.Document):
 
 class Card(db.Document):
    stackid = db.ObjectIdField(required=True)
-        
+   
    title = db.StringField(verbose_name="Title", max_length=255, required=True)
    content = db.StringField(verbose_name="Content", required=False)
     
@@ -59,7 +72,7 @@ class Card(db.Document):
    duedate = db.DateTimeField(default=None, required=False)
     
    owner = db.ReferenceField(User, required=True)
-   fileattachments = db.ListField(db.ReferenceField(FileAttachment, reverse_delete_rule=4))
+   fileattachments = db.ListField(db.ReferenceField(Attachment, reverse_delete_rule=4))
    urlattachments = db.ListField(db.ReferenceField(UrlAttachment, reverse_delete_rule=4))
     
    meta = {

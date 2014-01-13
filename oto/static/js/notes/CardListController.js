@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards', function($scope, $rootScope, $filter, Cards) {
+app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards', 'thumbService', function($scope, $rootScope, $filter, Cards, thumbService) {
    $scope.selectCard = function(card) {
       /*TODO: if edit form visible, load card on select*/
      //TODO store active card in factory to avoid all this parenting shit
@@ -75,8 +75,10 @@ app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards'
       if ($scope.orderProp === 'title') {
          $scope.cardGroups  = $filter('orderBy')($scope.cardGroups, 'label');
       } else {
-         $scope.cardGroups  = $filter('orderBy')($scope.cardGroups, '-label'); 
+         $scope.cardGroups  = $filter('orderBy')($scope.cardGroups, '-label');
       }
    }
+
+   //$scope.thumbService = $rootScope.thumbService;
 
 }]);

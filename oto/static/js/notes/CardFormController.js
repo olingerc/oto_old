@@ -1,5 +1,8 @@
 app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http', '$fileUploader', 'thumbService', function($scope, $rootScope, $filter, $http, $fileUploader, thumbService) {
 
+   var resolvePost = [],
+      resolveUpdate = [];
+
    /*************
     *
     * Initial form status
@@ -85,34 +88,43 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       resetCardForm();
 
       //Save card on server
-      $http({
-         method : 'POST',
-         url : '/cards/',
-         headers : {
-            'Content-Type' : 'application/x-www-form-urlencoded'
-         },
-         data : $.param({
-            card : JSON.stringify(newCard),
-            fileattachments : JSON.stringify(newCard.fileattachments),
-            urlattachments : JSON.stringify(newCard.urlattachments),
-            clientid: clientid
-         })
-      }).success(function(card) {
-         var found = $filter('filter')($scope.cards, {clientid:card.clientid});
-         if (found.length === 1) {
-            //Update paramters calculated on server
-            found[0].id = card.id;
-            found[0].createdat = card.createdat;
-            found[0].modifiedat = card.modifiedat;
-            found[0].saving = false;
-            //found[0] = card; not good because of $$hash?
-         } else {
-            console.log(found);
-            alert('Error saving card:' +  card.id);
-         }
-      }).error(function(error) {
-         console.log(error);
+      resolvePost.push(function() {
+         $http({
+            method : 'POST',
+            url : '/cards/',
+            headers : {
+               'Content-Type' : 'application/x-www-form-urlencoded'
+            },
+            data : $.param({
+               card : JSON.stringify(newCard),
+               fileattachments : JSON.stringify(newCard.fileattachments),
+               urlattachments : JSON.stringify(newCard.urlattachments),
+               clientid: clientid
+            })
+         }).success(function(card) {
+            var found = $filter('filter')($scope.cards, {clientid:card.clientid});
+            if (found.length === 1) {
+               //Update paramters calculated on server
+               found[0].id = card.id;
+               found[0].createdat = card.createdat;
+               found[0].modifiedat = card.modifiedat;
+               found[0].saving = false;
+               //found[0] = card; not good because of $$hash?
+            } else {
+               console.log(found);
+               alert('Error saving card:' +  card.id);
+            }
+         }).error(function(error) {
+            console.log(error);
+         });
       });
+
+      console.log(uploader)
+      if (uploader.queue.length === 0) {
+         angular.forEach(resolvePost, function(func) {
+            func.apply();
+         });
+      }
 
    };
 
@@ -223,22 +235,31 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.isCardFormVisible = false;
       resetCardForm();
 
-      $http.put('/cards/' + updatedCardToSend.id, updatedCardToSend)
-      .success(function(updatedCard) {
-         //Update attachments in model (server already ok)
-         updatedCard.saving = false;
+      resolveUpdate.push(function() {
+         $http.put('/cards/' + updatedCardToSend.id, updatedCardToSend)
+            .success(function(updatedCard) {
+               //Update attachments in model (server already ok)
+               updatedCard.saving = false;
 
-         var filtered = $filter('filter')($scope.cards, {id : updatedCard.id});
-         if (filtered.length === 1) {
-            //Update paramters calculated on server
-            $scope.cards[$scope.cards.indexOf(filtered[0])] = updatedCard;
-         } else {
-            console.log(found);
-            alert('Error saving card:' +  card.id);
-         }
-      }).error(function(error) {
-         console.log(error);
+               var filtered = $filter('filter')($scope.cards, {id : updatedCard.id});
+               if (filtered.length === 1) {
+                  //Update paramters calculated on server
+                  $scope.cards[$scope.cards.indexOf(filtered[0])] = updatedCard;
+               } else {
+                  console.log(found);
+                  alert('Error saving card:' +  card.id);
+               }
+            })
+            .error(function(error) {
+               console.log(error);
+            });
       });
+
+      if (uploader.queue.length === 0) {
+         angular.forEach(resolveUpdate, function(func) {
+            func.apply();
+         });
+      }
    };
 
    //CANCEL
@@ -352,7 +373,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    var uploader = $scope.uploader = $fileUploader.create({
       scope: $scope,                          // to automatically update the html. Default: $rootScope
       url: '/upload',
-      autoUpload: true
+      autoUpload: true,
+      removeAfterUpload: true
    });
 
    uploader.bind('afteraddingfile', function (event, item) {
@@ -398,38 +420,19 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       //console.info('Progress: ' + progress, item);
       var clientid = item.formData[0].clientid;
       $rootScope.thumbService.changeStatus(clientid, progress);
+      $scope.$apply() //important to update cardlist
    });
 
    uploader.bind('success', function (event, xhr, item, response) {
       //console.info('Success', xhr, item, response);
-      var clientid = item.formData[0].clientid;
-      $rootScope.thumbService.changeStatus(clientid, 'thumb');
-      fileAttachmentsAdded.push(response.id);
+      var clientid = item.formData[0].clientid,
+         serverid = response.id;
 
-      $scope.$apply(function () { //Needed to get image loaded when multiple files are being upploaded at the same time
-         $http({
-            method : 'POST',
-            url : '/createthumb',
-            data : {
-               filename: item.file.name,
-               id: response.id,
-               clientid: clientid
-            }
-         })
-         // display thumbnail in client
-         .success(function(data, status, header, config) {
-            var clientid = data.clientid;
-            var serverid = data.id;
-            $rootScope.thumbService.storeThumbnail(clientid, serverid);
+      $rootScope.thumbService.storeThumbnail(clientid, serverid);
+      $rootScope.thumbService.changeStatus(serverid, 'done');
+      fileAttachmentsAdded.push(serverid);
 
-            $rootScope.thumbService.changeStatus(clientid, 'done');
-         })
-         .error(function(error) {
-            //TODO: get clientid form response or oroginal config to dispaly eror in card
-            //$rootScope.thumbService.changeStatus(cardid, 'error', position);
-            console.log(error);
-         });
-      });
+      $scope.$apply(); //If multiple files, this forces to get thumnail of previously finished ones
    });
 
    uploader.bind('cancel', function (event, xhr, item) {
@@ -450,6 +453,14 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('completeall', function (event, items) {
       //console.info('Complete all', items);
+      //TODO: check if all atts of one card are done and send that request
+      angular.forEach(resolvePost, function(func) {
+         func.apply();
+      });
+      angular.forEach(resolveUpdate, function(func) {
+         func.apply();
+      });
+      $scope.$apply();
    });
 
    $scope.removeAtt = function(att) {
@@ -477,27 +488,9 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    $scope.addLink = function() {
       $scope.isLinkInputVisible = false;
-
-     /* //Define cardid
-      var cardid = $scope.cardFormCard.id;
-      var index = $scope.urlAttachmentsList.length;
-
-      //Start displaying thumb placeholder with progress
-      var newAtt = {
-         position : index,
-         cardid:cardid
-      };
-
-      $scope.urlAttachmentsList.push(newAtt);
-
-      //Start thumbnail creation
-
-      $scope.thumbs[index] = '/static/img/att_default_thumb.png';*/
-
-
-      var cardid = $scope.cardFormCard.id;
-      var clientid = makeid();
-      var position = $scope.urlAttachmentsList.length;
+      var cardid = $scope.cardFormCard.id,
+         clientid = makeid(),
+         position = $scope.urlAttachmentsList.length;
 
       //Display empty thumb, will be filled later
       var newLink = {
@@ -507,12 +500,10 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          position:position
       };
 
-      $scope.urlAttachmentsList[position] = newLink;
-
       //Update UI
-      $rootScope.thumbService.pending++;
+      $scope.urlAttachmentsList[position] = newLink;
       $rootScope.thumbService.storeThumbnail(clientid);
-      $rootScope.thumbService.changeStatus(clientid, 'thumb');
+      $rootScope.thumbService.changeStatus(clientid, 'progress');
 
       $scope.attachmentsChanged = true;
 
@@ -528,24 +519,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       })
       .success(function(data) {
          urlAttachmentsAdded.push(data.id);
-
-         /*var position = data.positionInUi;
-
-         $scope.thumbs[index] = '/thumbnaillink/' + data.id;
-         $scope.urlAttachmentsList[index] = {
-            id : data.id,
-            position: index
-         };*/
-         var clientid = data.clientid;
-         var serverid = data.id;
-         $rootScope.thumbService.storeThumbnail(clientid, serverid);
-
-         $rootScope.thumbService.changeStatus(clientid, 'done');
-         $rootScope.thumbService.pending--;
-         if ($rootScope.thumbService.pending==0) {
-            $rootScope.thumbService.pending = 'idle';
-         }
-
+         $rootScope.thumbService.storeThumbnail(data.clientid, data.id);
+         $rootScope.thumbService.changeStatus(data.id, 'done');
       })
       .error(function(error) {
          console.log(error);

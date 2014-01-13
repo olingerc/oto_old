@@ -12,7 +12,7 @@ from wand.color import Color
 import StringIO
 from datetime import datetime
 
-from models import FileAttachment, Card
+from models import FileAttachment, Card, ImageAttachment, Attachment
 
 def clean_filename(filename):
    i = filename.rfind(".")
@@ -48,25 +48,35 @@ def uploadFiles():
       chunks = int(request.form['chunks'])
       upload_simple(request, dst, chunk)
       if chunk == chunks -1: #chunk number is 0 based
-         return saveToMongo(filename, cardid,position)
+         return saveToMongo(filename, cardid, position)
    else:
       chunk = 0
       upload_simple(request, dst, chunk)
-      return saveToMongo(filename, cardid,position)
+      return saveToMongo(filename, cardid, position)
     
    return 'error'
 
 def saveToMongo(filename, cardid, position):
    #Put into gridfs
-   att = FileAttachment(filename=filename, mimetype = mimetypes.guess_type(filename)[0])
+   mimetype = mimetypes.guess_type(filename)[0]
+   
+   if 'image' in str(mimetype):
+      att = ImageAttachment(filename=filename, mimetype = mimetypes.guess_type(filename)[0])
+      att.thumb = True
+      with open('/tmp/' + filename, 'r') as fileobject:
+         att.image.put(fileobject, content_type = mimetypes.guess_type(filename)[0])
+   
+   else:
+      att = FileAttachment(filename=filename, mimetype = mimetypes.guess_type(filename)[0])
+      with open('/tmp/' + filename, 'r') as fileobject:
+         att.file.put(fileobject, content_type = mimetypes.guess_type(filename)[0])
+       
+      #remove from filesystem
+      remove('/tmp/' + filename)
+       
+   #Common for all atts   
    att.cardid = cardid
    att.position = position
-   with open('/tmp/' + filename, 'r') as fileobject:
-      att.file.put(fileobject, content_type = mimetypes.guess_type(filename)[0])
-    
-   #remove from filesystem
-   remove('/tmp/' + filename)
-    
    att.save()
     
    #add to card
@@ -76,22 +86,28 @@ def saveToMongo(filename, cardid, position):
       card.fileattachments.append(att)
       card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
       card.save()
-    
-   #prepare response
-   tosend = {}
-   tosend['id'] = str(att.id)
-   tosend['filename'] = att.filename
+      
+      
+   #Send response or create thumb
+   if 'image' in str(mimetype):
+      #prepare response
+      tosend = {}
+      tosend['id'] = str(att.id)
+      tosend['filename'] = att.filename
+      
+      return json.dumps(tosend),201
    
-   return json.dumps(tosend),201
+   else:
+      return create_thumbnail(att)
 
-def create_thumbnail():
-   attid = request.json['id']
-   att = FileAttachment.objects.get_or_404(id=attid)  # @UndefinedVariable
+def create_thumbnail(att):
    att.thumb = False #Default
    '''
    If no thumbnail created or error, set att.thumb to False, else True
+   IMAGE thumbnails handled by mongoengine
    '''
     
+   '''
    if 'image' in str(att.mimetype):
       try:
          strIO = StringIO.StringIO()
@@ -110,6 +126,7 @@ def create_thumbnail():
             att.thumb = True
       except:
          att.thumb = False
+   '''
         
    if 'pdf' in str(att.mimetype):
       #TODO:
@@ -119,8 +136,8 @@ def create_thumbnail():
          strIO.write(att.file.read())
          strIO.seek(0)
          
-         with open('/var/tmp/' + attid, 'a') as myFile:
-            myFile.write(att.file.read())
+         #with open('/var/tmp/' + att.id, 'a') as myFile:
+         #   myFile.write(att.file.read())
          
          #convert pdf to jpeg
          RESOLUTION    = 300      
@@ -140,7 +157,7 @@ def create_thumbnail():
          att.thumb = False
             
    att.save()
-   return json.dumps({'id': attid, 'filename': att.filename, 'clientid':request.json['clientid']}), 201
+   return json.dumps({'id': str(att.id), 'filename': att.filename, 'clientid':str(att.id)}), 201
             
 def deleteatts():
    attids = json.loads(request.form['array'])
@@ -154,9 +171,12 @@ def deleteatts():
    print attids
 
    for attid in attids:
-      att = FileAttachment.objects.get_or_404(id=attid)  # @UndefinedVariable
+      att = Attachment.objects.get_or_404(id=attid)  # @UndefinedVariable
       #TODO: check if exists
-      att.file.delete()
+      if 'file' in att:
+         att.file.delete()
+      else:
+         att.image.delete()
       att.delete()
    
    if not cardid.startswith('new'):
@@ -168,20 +188,32 @@ def deleteatts():
    return 'ok'
 
 def serve_file(fileid):
-   att = FileAttachment.objects.get_or_404(id=fileid)  # @UndefinedVariable
+   att = Attachment.objects.get_or_404(id=fileid)  # @UndefinedVariable
     
-   strIO = StringIO.StringIO()
-   strIO.write(att.file.read())
-   strIO.seek(0)
+   if 'image' in att.mimetype:
+      strIO = StringIO.StringIO()
+      strIO.write(att.image.read())
+      strIO.seek(0)
+   else:
+      strIO = StringIO.StringIO()
+      strIO.write(att.file.read())
+      strIO.seek(0)
     
    return send_file(strIO, attachment_filename=att.filename, as_attachment=True)
 
 def serve_thumbnail(fileid):
-   att = FileAttachment.objects.get_or_404(id=fileid)  # @UndefinedVariable
-    
-   strIO = StringIO.StringIO()
-   strIO.write(att.thumbfile.read())
-   strIO.seek(0)
+   att = Attachment.objects.get_or_404(id=fileid)  # @UndefinedVariable
+   
+   if 'mimetype' in att  and 'image' in att.mimetype:
+      thumb = att.image.thumbnail
+      strIO = StringIO.StringIO()
+      strIO.write(thumb.read())
+      strIO.seek(0)
+      
+   else:
+      strIO = StringIO.StringIO()
+      strIO.write(att.thumbfile.read())
+      strIO.seek(0)
     
    if att.thumb == True:
       return send_file(strIO, mimetype='image/jpeg')

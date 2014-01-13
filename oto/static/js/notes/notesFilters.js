@@ -96,10 +96,6 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
             //Before upload has started
             return '/static/img/att_default_thumb.png';
          }
-         else if (_us.thumbs[id].progress ==='thumb') {
-            //creating thumb
-            return '/static/img/indicator.gif';
-         }
          else if (_us.thumbs[id].progress ==='done') {
             //OK
             if (!what) return '/thumbnail/' + _us.thumbs[id].id;
@@ -134,10 +130,6 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
             //Before upload has started
             return 'init';
          }
-         else if (_us.thumbs[id].progress ==='thumb') {
-            //creating thumb
-            return 'thumb';
-         }
          else if (_us.thumbs[id].progress ==='done') {
             //OK
             return '';
@@ -165,9 +157,6 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
           return false;
       } else {
          if (_us.thumbs[id].progress ==='init') {
-            return false;
-         }
-         else if (_us.thumbs[id].progress ==='thumb') {
             return false;
          }
          else if (_us.thumbs[id].progress ==='done') {

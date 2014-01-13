@@ -12,7 +12,7 @@ from json import dumps
 from oto.adminapi.api import requires_auth
 from oto.adminapi.models import User  # @UnusedWildImport
 
-from oto.notesapi.models import FileAttachment, UrlAttachment
+from oto.notesapi.models import UrlAttachment, Attachment
 
 from oto.utils import set_user_cookie
 
@@ -51,9 +51,12 @@ def init_notesapp(function):
          
          
       #Remove floating 'new' atts
-      attinstorage = FileAttachment.objects.filter(cardid__startswith='new')
+      attinstorage = Attachment.objects.filter(cardid__startswith='new')
       for att in attinstorage:
-         att.file.delete()
+         if 'file' in att:
+            att.file.delete()
+         else:
+            att.image.delete
          att.delete()
          
       linksinstorage = UrlAttachment.objects.filter(cardid__startswith='new')
