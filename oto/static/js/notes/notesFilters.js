@@ -44,9 +44,7 @@ angular.module('oto.filters', [])
 
 app.service('thumbService', [function() {//TODO: rename to thumbnail service
    var _us = this;
-   _us.status = 'idle';
    _us.thumbs = {};
-   _us.pending = 0;
 
    _us.storeThumbnail = function(clientid, serverid, att) {
       if (att) { //differentiate between ng-init on page load (att has serverid) or new att added by client (att has no serverid)
@@ -117,6 +115,41 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
          else {
             //uploading
             return '/static/img/indicator.gif';
+         }
+      }
+   };
+
+   _us.getProgress = function(clientid, serverid) {
+      if (serverid) {
+         var id = serverid; //initial pageload
+      } else {
+         var id = clientid;
+      }
+
+      if (!_us.thumbs[id]) {
+         //TODO: launch thumbnail creation here if not existst?
+          return "error";
+      } else {
+         if (_us.thumbs[id].progress ==='init') {
+            //Before upload has started
+            return 'init';
+         }
+         else if (_us.thumbs[id].progress ==='thumb') {
+            //creating thumb
+            return 'thumb';
+         }
+         else if (_us.thumbs[id].progress ==='done') {
+            //OK
+            return '';
+         }
+         else if (_us.thumbs[id].progress ==='error') {
+            //upload and thumb finished
+            return 'error';
+         }
+         else {
+            //uploading
+            if (_us.thumbs[id].progress === 100) return 'storing';
+            return _us.thumbs[id].progress;
          }
       }
    };

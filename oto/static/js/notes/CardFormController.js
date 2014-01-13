@@ -380,7 +380,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.fileAttachmentsList[position] = newAtt;
 
       //Update UI
-      $rootScope.thumbService.pending++;
       $rootScope.thumbService.storeThumbnail(clientid);
       $rootScope.thumbService.changeStatus(clientid, 'init');
 
@@ -393,7 +392,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('beforeupload', function (event, item) {
       //console.info('Before upload', item);
-      $rootScope.thumbService.status='working';
    });
 
    uploader.bind('progress', function (event, item, progress) {
@@ -408,32 +406,29 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $rootScope.thumbService.changeStatus(clientid, 'thumb');
       fileAttachmentsAdded.push(response.id);
 
-      $http({
-         method : 'POST',
-         url : '/createthumb',
-         data : {
-            filename: item.file.name,
-            id: response.id,
-            clientid: clientid
-         }
-      })
-      // display thumbnail in client
-      .success(function(data, status, header, config) {
-         var clientid = data.clientid;
-         var serverid = data.id;
-         $rootScope.thumbService.storeThumbnail(clientid, serverid);
+      $scope.$apply(function () { //Needed to get image loaded when multiple files are being upploaded at the same time
+         $http({
+            method : 'POST',
+            url : '/createthumb',
+            data : {
+               filename: item.file.name,
+               id: response.id,
+               clientid: clientid
+            }
+         })
+         // display thumbnail in client
+         .success(function(data, status, header, config) {
+            var clientid = data.clientid;
+            var serverid = data.id;
+            $rootScope.thumbService.storeThumbnail(clientid, serverid);
 
-         $rootScope.thumbService.changeStatus(clientid, 'done');
-         $rootScope.thumbService.pending--;
-         if ($rootScope.thumbService.pending==0) {
-            $rootScope.thumbService.pending = 'idle';
-         }
-      })
-      .error(function(error) {
-         //TODO: get clientid form response or oroginal config to dispaly eror in card
-         //$rootScope.thumbService.changeStatus(cardid, 'error', position);
-         $rootScope.thumbService.pending--;
-         console.log(error);
+            $rootScope.thumbService.changeStatus(clientid, 'done');
+         })
+         .error(function(error) {
+            //TODO: get clientid form response or oroginal config to dispaly eror in card
+            //$rootScope.thumbService.changeStatus(cardid, 'error', position);
+            console.log(error);
+         });
       });
    });
 
@@ -455,10 +450,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('completeall', function (event, items) {
       //console.info('Complete all', items);
-      $rootScope.thumbService.pending = 0;
-      $rootScope.thumbService.status='idle';
    });
-   
+
    $scope.removeAtt = function(att) {
       var serverid = $rootScope.thumbService.getUrl(att.clientid, att.id, 'id');
       fileAttachmentsRemoved.push(serverid);
@@ -466,7 +459,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.attachmentsChanged = true;
    };
 
-   
+
    /*******************
     *
     * Links
@@ -500,8 +493,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       //Start thumbnail creation
 
       $scope.thumbs[index] = '/static/img/att_default_thumb.png';*/
-      
-      
+
+
       var cardid = $scope.cardFormCard.id;
       var clientid = makeid();
       var position = $scope.urlAttachmentsList.length;
@@ -522,7 +515,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $rootScope.thumbService.changeStatus(clientid, 'thumb');
 
       $scope.attachmentsChanged = true;
-      
+
       $http({
          method:'POST',
          url: '/addlink/',
@@ -535,9 +528,9 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       })
       .success(function(data) {
          urlAttachmentsAdded.push(data.id);
-         
+
          /*var position = data.positionInUi;
-         
+
          $scope.thumbs[index] = '/thumbnaillink/' + data.id;
          $scope.urlAttachmentsList[index] = {
             id : data.id,
@@ -552,7 +545,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          if ($rootScope.thumbService.pending==0) {
             $rootScope.thumbService.pending = 'idle';
          }
-        
+
       })
       .error(function(error) {
          console.log(error);
