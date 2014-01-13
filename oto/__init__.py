@@ -4,6 +4,8 @@ from flask.ext.mongoengine import MongoEngine  # @UnresolvedImport
 from json import dumps
 import urllib
 
+from utils import set_user_cookie
+
 app = Flask(__name__)
 app.config.from_object('oto.settings')
 app.url_map.strict_slashes = False
@@ -51,20 +53,6 @@ def before_request():
    pass
 '''
 
-def set_user_cookie(resp):
-   if not 'username' in session:
-      session['username'] = ''
-   if not 'role' in session:
-      session['role'] = 'public'
-      
-   user = {
-           'username': session['username'],
-           'role': session['role']
-           }
-   json = dumps(user).replace(',','|')
-   resp.set_cookie('user', value=json)
-
-
 #routes which need specific decorators
 '''
 Notes
@@ -73,4 +61,5 @@ Notes
 @init_notesapp
 def notes_module(**kwargs):
    resp = make_response(render_template('app.html'))
+   set_user_cookie(resp)
    return resp

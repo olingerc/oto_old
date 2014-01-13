@@ -14,6 +14,8 @@ from oto.adminapi.models import User  # @UnusedWildImport
 
 from oto.notesapi.models import FileAttachment, UrlAttachment
 
+from oto.utils import set_user_cookie
+
 '''
 This api is only for looged in users
 This is checked via method_decorators = [requires_auth] in the api classes
@@ -24,7 +26,10 @@ def init_notesapp(function):
    @wraps(function)
    def decorated_function(*args, **kwargs):
       if 'username' not in session or session['username'] is None or session['username'] == '':
-         return make_response(render_template('app.html')), 401
+         #This bypasses the actual set cookie in the notes route. So call it here!
+         resp = make_response(render_template('app.html'))
+         set_user_cookie(resp)
+         return resp, 401
       #Check if this user already has a floating stack
       try:
          user = User.objects.get(username=session['username'])  # @UndefinedVariable
