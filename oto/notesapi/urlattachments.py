@@ -27,7 +27,6 @@ def saveLinkToMongo():
       programdir = os.path.dirname(os.path.dirname(cwd)) + '/external/'
       
       command = "phantomjs " + programdir + "rasterize.js '" + url + "' '/var/tmp/url.jpg'"
-      print command
       call(command, shell=True)
         
       #save thumbnail to gridfs

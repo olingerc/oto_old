@@ -7,10 +7,9 @@ from os import path, remove
 from flask import request, send_file
 import mimetypes
 import json
-from wand.image import Image
-from wand.color import Color
 import StringIO
 from datetime import datetime
+from subprocess import call
 
 from models import FileAttachment, Card, ImageAttachment, Attachment
 
@@ -106,55 +105,18 @@ def create_thumbnail(att):
    If no thumbnail created or error, set att.thumb to False, else True
    IMAGE thumbnails handled by mongoengine
    '''
-    
-   '''
-   if 'image' in str(att.mimetype):
-      try:
-         strIO = StringIO.StringIO()
-         strIO.write(att.file.read())
-         strIO.seek(0)
-            
-         with Image(file=strIO) as img:
-            thumbStrIO = StringIO.StringIO()
-            img.compression_quality = 50
-            img.transform(resize='x110')
-            img.format = 'jpeg'
-            img.save(file=thumbStrIO)
-            thumbStrIO.seek(0)
-                
-            att.thumbfile.put(thumbStrIO, content_type = 'image/jpeg')
-            att.thumb = True
-      except:
-         att.thumb = False
-   '''
-        
    if 'pdf' in str(att.mimetype):
       #TODO:
       #http://www.binarytides.com/convert-pdf-image-imagemagick-commandline/
-      try:
-         strIO = StringIO.StringIO()
-         strIO.write(att.file.read())
-         strIO.seek(0)
+
+      with open('/var/tmp/' + str(att.id), 'a+') as myFile:
+         myFile.write(att.file.read())
          
-         #with open('/var/tmp/' + att.id, 'a') as myFile:
-         #   myFile.write(att.file.read())
-         
-         #convert pdf to jpeg
-         RESOLUTION    = 300      
-         with Image(file=strIO, resolution=(RESOLUTION,RESOLUTION)) as img:
-            thumbStrIO = StringIO.StringIO()
-            img.background_color = Color('white')
-            img.alpha_channel=False
-            img.compression_quality = 50
-            img.format = 'jpeg'
-            img.save(file=thumbStrIO)
-            thumbStrIO.seek(0)
-             
-            att.thumbfile.put(thumbStrIO, content_type = 'image/jpeg')
-            att.thumb = True
-      except:
-         raise
-         att.thumb = False
+      command = "convert -density 170 -thumbnail x300 /var/tmp/" + str(att.id) + "[0] -flatten '/var/tmp/" + str(att.id) + ".jpg'"
+      call(command, shell=True)
+      with open("/var/tmp/" + str(att.id) + ".jpg", 'r') as fileobject:
+         att.thumbfile.put(fileobject, content_type = 'image/jpeg')
+         att.thumb = True
             
    att.save()
    return json.dumps({'id': str(att.id), 'filename': att.filename, 'clientid':str(att.id)}), 201
