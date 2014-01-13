@@ -119,6 +119,9 @@ def create_thumbnail():
          strIO.write(att.file.read())
          strIO.seek(0)
          
+         with open('/var/tmp/' + attid, 'a') as myFile:
+            myFile.write(att.file.read())
+         
          #convert pdf to jpeg
          RESOLUTION    = 300      
          with Image(file=strIO, resolution=(RESOLUTION,RESOLUTION)) as img:
@@ -133,6 +136,7 @@ def create_thumbnail():
             att.thumbfile.put(thumbStrIO, content_type = 'image/jpeg')
             att.thumb = True
       except:
+         raise
          att.thumb = False
             
    att.save()
