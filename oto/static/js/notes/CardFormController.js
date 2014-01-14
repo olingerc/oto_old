@@ -550,9 +550,10 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
       }
    };
 
-   $scope.removeLink = function(position) {
-      urlAttachmentsRemoved.push($scope.urlAttachmentsList[position].id);
-      delete $scope.urlAttachmentsList[position];
+   $scope.removeLink = function(att) {
+      var serverid = thumbService.getUrl(att.clientid, att.id, 'id');
+      urlAttachmentsRemoved.push(serverid);
+      $scope.urlAttachmentsList.splice($scope.urlAttachmentsList.indexOf(att), 1);
       $scope.attachmentsChanged = true;
    };
 
