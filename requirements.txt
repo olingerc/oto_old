@@ -1,12 +1,12 @@
 //TODO: recheck ubuntu requirements, pip requirements ok
-ubuntu
+ubuntu:
 build-essential
 python-dev
 imagemagik
-mongodb
+mongodb (change host in settings.py)
 libjjpg-devel
 
-pip
+pip:
 python-dateutil (very important to avoid parse errors from mongoengine)
 Flask (Werkzeug, jinja, itsdangerous, markupsafe)
 flask-mongoengine(mongoengine, flask-wtf, pymongo, WTForms)

@@ -105,6 +105,9 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
 
    //Active Card actions
    $scope.startEditCard = function(card) {
+      if ($scope.inArchive()) {
+         return;
+      }
       $scope.$broadcast('startCardEdit', card);
    };
 
