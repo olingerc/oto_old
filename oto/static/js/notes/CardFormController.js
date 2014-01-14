@@ -128,7 +128,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    //EDIT
    $scope.$on('startCardEdit', function(event, card) {
-      if (thumbService.areAttsPending(card.id)) {
+      if (thumbService.areAttsPending(card.id)  || card.saving) {
          return;
       }
       if (window.getSelection) { //Because of double click we select --> unselect

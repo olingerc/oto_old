@@ -88,7 +88,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
 
    $scope.$watch('count', function(count) {
       if ($rootScope.activeCard) {
-         if (thumbService.areAttsPending($rootScope.activeCard.id)) {
+         if (thumbService.areAttsPending($rootScope.activeCard.id) || $rootScope.activeCard.saving) {
             $scope.disableEdit = true;
          } else {
             $scope.disableEdit = false;
