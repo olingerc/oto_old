@@ -5,6 +5,7 @@ https://github.com/witoldsz/angular-http-auth
 put title attribute of current sort on sort button, maybve change icon
 
 #Bugs
+prevent edit of cards still in progress or waiting to be saved
 some bugs still in thumb progress image display in cardform and cardlist
 empty cardformcard scope on cancel
 if no floating stack, it is created but not there yet. error for missing id. reload solves it

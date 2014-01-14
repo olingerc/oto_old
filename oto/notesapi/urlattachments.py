@@ -39,6 +39,7 @@ def saveLinkToMongo():
       urlAttachment.thumb = True
         
    except:
+      urlAttachment.thumb = False
       pass
     
    urlAttachment.save()
