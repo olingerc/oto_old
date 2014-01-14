@@ -1,19 +1,28 @@
 app.service('thumbService', [function() {//TODO: rename to thumbnail service
    var _us = this;
    _us.thumbs = {};
+   _us.count = {};
 
-   _us.storeThumbnail = function(clientid, serverid, att) {
+   _us.storeThumbnail = function(cardid, clientid, serverid, att) {
       if (att) { //differentiate between ng-init on page load (att has serverid) or new att added by client (att has no serverid)
          if (!att.id) return;
       }
       if (clientid && !serverid) {
          //server starts upload
+
+         if (!_us.count[cardid]) {
+            _us.count[cardid] = 1;
+         } else {
+            _us.count[cardid]++;
+         }
+
          _us.thumbs[clientid] = {
             'progress':'init'
          };
       }
       else if (clientid && serverid) {
-         //server has finished upload
+         //server has finished upload and returns with an id
+         _us.count[cardid]--;
          _us.thumbs[clientid] = {
             'progress':'done',
             'id':serverid
@@ -29,6 +38,17 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
             'progress':'done',
             'id':serverid
          };
+      }
+   };
+
+   _us.areAttsPending = function(cardid) {
+      if (!_us.count[cardid]) {
+         return false;
+      }
+      if (_us.count[cardid] === 0) {
+         return false;
+      } else {
+         return true;
       }
    };
 

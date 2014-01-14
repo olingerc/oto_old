@@ -1,7 +1,7 @@
 app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http', '$fileUploader', 'thumbService', function($scope, $rootScope, $filter, $http, $fileUploader, thumbService) {
 
-   var resolvePost = [],
-      resolveUpdate = [];
+   var resolvePost = {},
+      resolveUpdate = {};
 
    /*************
     *
@@ -88,7 +88,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       resetCardForm();
 
       //Save card on server
-      resolvePost.push(function() {
+      resolvePost[clientid] = function() {
          $http({
             method : 'POST',
             url : '/cards/',
@@ -117,18 +117,20 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          }).error(function(error) {
             console.log(error);
          });
-      });
+      };
 
-      if (uploader.queue.length === 0) {
-         angular.forEach(resolvePost, function(func) {
-            func.apply();
-         });
+      if (thumbService.areAttsPending(clientid) === false) {
+         resolvePost[clientid].apply();
+         delete resolvePost[clientid];
       }
 
    };
 
    //EDIT
    $scope.$on('startCardEdit', function(event, card) {
+      if (thumbService.areAttsPending(card.id)) {
+         return;
+      }
       if (window.getSelection) { //Because of double click we select --> unselect
           window.getSelection().removeAllRanges();
       }
@@ -234,7 +236,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.isCardFormVisible = false;
       resetCardForm();
 
-      resolveUpdate.push(function() {
+      resolveUpdate[updatedCardToSend.id] = function() {
          $http.put('/cards/' + updatedCardToSend.id, updatedCardToSend)
             .success(function(updatedCard) {
                //Update attachments in model (server already ok)
@@ -252,12 +254,11 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
             .error(function(error) {
                console.log(error);
             });
-      });
+      };
 
-      if (uploader.queue.length === 0) {
-         angular.forEach(resolveUpdate, function(func) {
-            func.apply();
-         });
+      if (thumbService.areAttsPending(updatedCardToSend.id) === false) {
+         resolveUpdate[updatedCardToSend.id].apply();
+         delete resolveUpdate[updatedCardToSend.id];
       }
    };
 
@@ -401,7 +402,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.fileAttachmentsList[position] = newAtt;
 
       //Update UI
-      thumbService.storeThumbnail(clientid);
+      thumbService.storeThumbnail(cardid, clientid);
       thumbService.changeStatus(clientid, 'init');
 
       $scope.attachmentsChanged = true;
@@ -427,7 +428,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       var clientid = item.formData[0].clientid,
          serverid = response.id;
 
-      thumbService.storeThumbnail(clientid, serverid);
+      thumbService.storeThumbnail(item.formData[0].cardid, clientid, serverid);
       thumbService.changeStatus(serverid, 'done');
       fileAttachmentsAdded.push(serverid);
 
@@ -444,6 +445,17 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
    uploader.bind('complete', function (event, xhr, item, response) {
      // console.info('Complete', xhr, item, response);
+      var cardid = item.formData[0].cardid;
+      if (thumbService.areAttsPending(cardid) === false) {
+         if (resolveUpdate[cardid]) {
+            resolveUpdate[cardid].apply();
+            delete resolveUpdate[cardid];
+         }
+         if (resolvePost[cardid]) {
+            resolvePost[cardid].apply();
+            delete resolvePost[cardid];
+         }
+      }
    });
 
    uploader.bind('progressall', function (event, progress) {
@@ -451,14 +463,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    });
 
    uploader.bind('completeall', function (event, items) {
-      //console.info('Complete all', items);
-      //TODO: check if all atts of one card are done and send that request
-      angular.forEach(resolvePost, function(func) {
-         func.apply();
-      });
-      angular.forEach(resolveUpdate, function(func) {
-         func.apply();
-      });
    });
 
    $scope.removeAtt = function(att) {
@@ -500,12 +504,12 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
       //Update UI
       $scope.urlAttachmentsList[position] = newLink;
-      thumbService.storeThumbnail(clientid);
+      thumbService.storeThumbnail(cardid, clientid);
       thumbService.changeStatus(clientid, 'progress');
 
       $scope.attachmentsChanged = true;
 
-      $scope.$apply(); //to force showing indicator
+//FIXME      $scope.$apply(); //to force showing indicator
       $http({
          method:'POST',
          url: '/addlink/',
@@ -516,10 +520,22 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
             clientid: clientid
          }
       })
-      .success(function(data) {
+      .success(function(data, status, headers, config) {
          urlAttachmentsAdded.push(data.id);
-         thumbService.storeThumbnail(data.clientid, data.id);
+
+         thumbService.storeThumbnail(config.data.cardid, data.clientid, data.id);
          thumbService.changeStatus(data.id, 'done');
+
+         if (thumbService.areAttsPending(config.data.cardid) === false) {
+            if (resolveUpdate[config.data.cardid]) {
+               resolveUpdate[config.data.cardid].apply();
+               delete resolveUpdate[config.data.cardid];
+            }
+            if (resolvePost[config.data.cardid]) {
+               resolvePost[config.data.cardid].apply();
+               delete resolvePost[config.data.cardid];
+            }
+         }
       })
       .error(function(error) {
          console.log(error);

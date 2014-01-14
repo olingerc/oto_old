@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', function($scope, $rootScope, Stacks, Cards) {
+app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', 'thumbService', function($scope, $rootScope, Stacks, Cards, thumbService) {
    /********************
     *
     * parent scope variables
@@ -12,7 +12,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       'id':''
    };
 
-   $rootScope.activeCard = null; //TODO: use Cards factory and store active Card there?
+   $rootScope.activeCard = null; //TODO: use Cards factory and store active Card there? In any case, do not use properties on root scope unless they are obkects themselves
 
    $scope.orderProp = '-modifiedat';
    $scope.setOrder = function(orderProp) {
@@ -82,6 +82,19 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
     * TODO: card header controller?
     * Buttons not in any sub-controller,
     *************/
+
+   $scope.disableEdit = false;
+   $scope.count = thumbService.count;
+
+   $scope.$watch('count', function(count) {
+      if ($rootScope.activeCard) {
+         if (thumbService.areAttsPending($rootScope.activeCard.id)) {
+            $scope.disableEdit = true;
+         } else {
+            $scope.disableEdit = false;
+         }
+      }
+   }, true);
 
    $scope.startAddCard = function() {
       if ($scope.inArchive()) {

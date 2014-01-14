@@ -162,7 +162,7 @@
                   </button>
                   <ul class="dropdown-menu">
                      <li>
-                        <a ng-click="startEditCard(activeCard)">Edit</a>
+                        <button ng-click="startEditCard(activeCard)" ng-disabled='disableEdit'>Edit</button>
                      </li>
 
                      <li class="dropdown-header">
@@ -403,7 +403,7 @@
                         <li ng-repeat="att in card.fileattachments">
                            <a class="att_thumb_link" title="{{att.filename}}"
                               ng-href="{{thumbService.getUrl(att.clientid, att.id, 'download')}}"
-                              ng-init="thumbService.storeThumbnail(att.clientid, att.id, att)"
+                              ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
                               >
                               <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
                               <small ng-show="thumbService.getProgress(att.clientid, att.id) !== ''" class="att_thumb_overlay text-muted text-center">
@@ -417,7 +417,7 @@
                         <li ng-repeat="att in card.urlattachments">
                            <a class="att_thumb_link" title="{{att.url}}" target="_blank"
                               ng-href="{{att.url}}"
-                              ng-init="thumbService.storeThumbnail(att.clientid, att.id, att)"
+                              ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
                               >
                               <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id, 'linkthumb')}}">
                               <small class="att_thumb_overlay"><i class="glyphicon  glyphicon-share-alt"></i></small>
