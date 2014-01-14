@@ -83,7 +83,7 @@ def deleteurlattachment():
       #we do not change it for example whan canceling a card edit
    else:
       changeMofidiedat = True
-    
+
    for urlattachmentid in urlattachmentids:
       urlAttachment = UrlAttachment.objects.get_or_404(id=urlattachmentid)  # @UndefinedVariable
       #TODO: check if exists
