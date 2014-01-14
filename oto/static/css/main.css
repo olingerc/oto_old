@@ -18,6 +18,7 @@
 
 /*Thumblists*/
 .thumblist {margin:0}
+#cardFormContainer .thumblist {margin: 0 10px}
 a.att_thumb_link {
    text-decoration:none;
    position:relative;
