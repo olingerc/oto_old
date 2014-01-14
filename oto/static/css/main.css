@@ -17,55 +17,40 @@
 .status-list {margin:0px}
 
 /*Thumblists*/
-.att_thumb {height:80px}
-.att_thumb:hover {
+.thumblist {margin:0}
+a.att_thumb_link {
+   text-decoration:none;
+   position:relative;
+   display:block;
+   float:left;
+   height:80px;
+}
+
+img.att_thumb {
+   height:80px;
+}
+img.att_thumb:hover {
   border-color: #66afe9;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.9);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.9);
 }
-
-.link-emblem {
+small.att_thumb_overlay {
   padding:2px;
-  position:relative;
-  top:-25px;
-  left:-20px;
+  position:absolute;
+  top:68%;
+  left:5px;
   background:white;
-  opacity:0.7;
-  border-top-right-radius: 3px
+  opacity:0.8;
+  border-radius: 3px;
+  float:left;
+  color:#444
 }
 
-.attprogress {
-  left:-80px;
-  position:relative;
-  color:#d0d0d0;
-  top:0px;
-}
+.attdelbutton {cursor:pointer}
+.attdelbutton:hover {color:red}
 
-.uploadProgress {
-  left:-40px;
-  position:relative;
-  top:0px;
-  display:inline
-}
-
-.thumblist {margin:0}
-
-.thumbnailProgress {
-  left:-80px;
-  position:relative;
-  top:0px;
-}
-
-.linkprogress {
-  left:35px;
-  position:relative;
-  top:-65px;
-}
-
-.attdelbutton:hover {color:red;cursor:pointer}
-
-/*--ADD CARD FORM--*/
+/*--CARD FORM--*/
 #cardFormContainer {padding-bottom:5px}/*background ignores padding, thats whjy form looks larger than cardlist*/
 
 /*Add file*/
@@ -76,11 +61,6 @@
 #addLinkFormInput {display:inline-block;width:100px;}
 #addLinkFormBtnOk {display:inline-block;}
 #addLinkFormBtnCancel {display:inline-block}
-
-/*Thumbs*/
-a.att_thumb_link {text-decoration:none}
-
-
 
 @media (max-width: 1200px) { /*To prevent from being pulled right on small devices*/
     .view_options > .pull-right {

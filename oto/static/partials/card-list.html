@@ -332,43 +332,39 @@
                      </div>
                   <div class='row'>
                      <div  class='col-lg-12'>
-                        <div class="thumblist">
-                           <div class="pull-left" ng-repeat="att in fileAttachmentsList"
+                        <ul class='list-inline thumblist'>
+                           <li ng-repeat="att in fileAttachmentsList"
                               ng-click="$event.stopPropagation()">
-                              <a class="inline att_thumb_link" title="{{att.filename}}"
-                                 ng-href="{{thumbService.getUrl(att.clientid, att.id, 'download')}}">
-                                 <img class="att_thumb img-rounded"
-                                    ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
+                              <a class="att_thumb_link" title="{{att.filename}}"
+                                 ng-href="">
+                                 <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
+                                 <small class="att_thumb_overlay text-center">
+                                    <i class="attdelbutton glyphicon glyphicon-trash"
+                                       ng-click="$event.stopPropagation();removeAtt(att)"
+                                       ng-show="thumbService.allowDelete(att.clientid, att.id)">
+                                    </i>
+                                    {{thumbService.getProgress(att.clientid, att.id)}}
+                                 </small>
                               </a>
-                              <div>
-                              <i class=" attdelbutton glyphicon glyphicon-trash"
-                                 ng-click="$event.stopPropagation();removeAtt(att)"
-                                 ng-show="thumbService.allowDelete(att.clientid, att.id)">
-                              </i>
-                              <p class="text-muted text-center">
-                                 {{thumbService.getProgress(att.clientid, att.id)}}
-                              </p>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="thumblist">
-                     <div class="pull-left" ng-repeat="att in urlAttachmentsList"
-                        ng-click="$event.stopPropagation()">
-                        <a class="inline att_thumb_link" title="{{att.url}}"
-                           ng-href="{{att.url}}">
-                           <img class="att_thumb img-rounded"
-                              ng-src="{{thumbService.getUrl(att.clientid, att.id, 'linkthumb')}}">
-                           <small class="link-emblem"><i class="glyphicon  glyphicon-share-alt"></i></small>
-                        </a>
-                        <i class="inline attdelbutton glyphicon glyphicon-trash"
-                           ng-click="$event.stopPropagation();removeLink(att)"
-                           ng-show="thumbService.allowDelete(att.clientid, att.id)">
-                        </i>
-                     </div>
+                           </li>
+                           <li ng-repeat="att in urlAttachmentsList"
+                              ng-click="$event.stopPropagation()">
+                              <a class="inline att_thumb_link" title="{{att.url}}"
+                                 ng-href="">
+                                 <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id, 'linkthumb')}}">
+                                 <small class="att_thumb_overlay">
+                                    <i class="attdelbutton glyphicon glyphicon-trash"
+                                       ng-click="$event.stopPropagation();removeLink(att)"
+                                       ng-show="thumbService.allowDelete(att.clientid, att.id)">
+                                    </i>
+                                    <i class="glyphicon  glyphicon-share-alt"></i>
+                                 </small>
+                              </a>
+                           </li>
+                        </ul>
                   </div>
                </div>
             </div>
-         </div>
          </div>
       </div>
 
@@ -409,23 +405,23 @@
                               ng-href="{{thumbService.getUrl(att.clientid, att.id, 'download')}}"
                               ng-init="thumbService.storeThumbnail(att.clientid, att.id, att)"
                               >
-                              <img class="att_thumb img-rounded"
-                                 ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
+                              <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
+                              <small ng-show="thumbService.getProgress(att.clientid, att.id) !== ''" class="att_thumb_overlay text-muted text-center">
+                                 {{thumbService.getProgress(att.clientid, att.id)}}
+                              </small>
                             </a>
-                           <p class="text-muted text-center">
-                              {{thumbService.getProgress(att.clientid, att.id)}}
-                           </p>
+
                         </li>
 
                         <!--url Attachments-->
-                        <li
-                        ng-repeat="att in card.urlattachments">
-                           <a class="link_thumb_link" title="{{att.url}}" target="_blank"
+                        <li ng-repeat="att in card.urlattachments">
+                           <a class="att_thumb_link" title="{{att.url}}" target="_blank"
                               ng-href="{{att.url}}"
-                              ng-init="thumbService.storeThumbnail(att.clientid, att.id, att)">
-                                 <img class="att_thumb img-rounded"
-                                    ng-src="{{thumbService.getUrl(att.clientid, att.id, 'linkthumb')}}">
-                                       <small class="link-emblem"><i class="glyphicon  glyphicon-share-alt"></i></small></a>
+                              ng-init="thumbService.storeThumbnail(att.clientid, att.id, att)"
+                              >
+                              <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id, 'linkthumb')}}">
+                              <small class="att_thumb_overlay"><i class="glyphicon  glyphicon-share-alt"></i></small>
+                           </a>
                         </li>
                      </ul>
 
