@@ -72,3 +72,7 @@ small.att_thumb_overlay {
         float: none !important; /*TODO: adjust margin for medium*/
     }
 }
+
+.mute_link {
+   color: #999 !important /*text-muted of bootstrap did not work*/
+}

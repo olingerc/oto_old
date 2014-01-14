@@ -1,4 +1,4 @@
-app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http', '$fileUploader', 'thumbService', function($scope, $rootScope, $filter, $http, $fileUploader, thumbService) {
+app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUploader', 'thumbService', function($scope, $filter, $http, $fileUploader, thumbService) {
 
    var resolvePost = {},
       resolveUpdate = {};

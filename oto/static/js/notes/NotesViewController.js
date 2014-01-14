@@ -12,7 +12,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       'id':''
    };
 
-   $rootScope.activeCard = null; //TODO: use Cards factory and store active Card there? In any case, do not use properties on root scope unless they are obkects themselves
+   $rootScope.notes.activeCard = null; //TODO: use Cards factory and store active Card there? In any case, do not use properties on root scope unless they are obkects themselves
 
    $scope.orderProp = '-modifiedat';
    $scope.setOrder = function(orderProp) {
@@ -83,15 +83,15 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
     * Buttons not in any sub-controller,
     *************/
 
-   $scope.disableEdit = false;
+   $scope.processingCard = false;
    $scope.count = thumbService.count;
 
-   $scope.$watch('count', function(count) {
-      if ($rootScope.activeCard) {
-         if (thumbService.areAttsPending($rootScope.activeCard.id) || $rootScope.activeCard.saving) {
-            $scope.disableEdit = true;
+   $scope.$watch('notes.activeCard', function(activeCard) {
+      if (activeCard) {
+         if (thumbService.areAttsPending(activeCard.id) || activeCard.saving) {
+            $scope.processingCard = true;
          } else {
-            $scope.disableEdit = false;
+            $scope.processingCard = false;
          }
       }
    }, true);

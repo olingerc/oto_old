@@ -4,27 +4,27 @@ app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards'
    $scope.selectCard = function(card) {
       /*TODO: if edit form visible, load card on select*/
      //TODO store active card in factory to avoid all this parenting shit
-      if ($rootScope.activeCard == card) {
-         $rootScope.activeCard = null;
+      if ($rootScope.notes.activeCard == card) {
+         $rootScope.notes.activeCard = null;
       } else {
-         $rootScope.activeCard = card;
+         $rootScope.notes.activeCard = card;
       }
    };
 
    //css for active card
    $scope.cardIsActive = function(card) {
-      return card == $rootScope.activeCard ? true : false;
+      return card == $rootScope.notes.activeCard ? true : false;
    };
 
    $scope.$on('unselectCard', function() {
-      $rootScope.activeCard = null;
+      $rootScope.notes.activeCard = null;
    });
 
    $scope.startEditCard = function(card) {
       if ($scope.inArchive()) {
          return;
       }
-      $rootScope.activeCard = card;
+      $rootScope.notes.activeCard = card;
       $rootScope.$broadcast('startCardEdit', card);
    };
 

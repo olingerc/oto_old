@@ -73,14 +73,18 @@ var app = angular.module('oto', [
 	])
    .run(['$rootScope', '$location', 'Auth',
       function ($rootScope, $location, Auth) {
+         //init rootscope objects. I want to have separete objects for my modules
+         $rootScope.core = {};
+         $rootScope.notes = {};
+
          $rootScope.$on("$routeChangeStart",
             function (event, next, current) {
-               $rootScope.error = null;
+               $rootScope.core.error = null;
                if (!Auth.authorize(next.access)) {
                   if(Auth.isLoggedIn()) {
-                     if ($rootScope.savedLocation) {
+                     if ($rootScope.core.savedLocation) {
                         if (Auth.authorize(next.access)) {
-                           $location.path($rootScope.savedLocation);
+                           $location.path($rootScope.core.savedLocation);
                         } else {
                            $location.path('/401').replace();
                         }
@@ -88,7 +92,7 @@ var app = angular.module('oto', [
                         $location.path('/401').replace();
                      }
                   } else {
-                     $rootScope.savedLocation = $location.url();
+                     $rootScope.core.savedLocation = $location.url();
                      $location.path('/login');
                   }
                }

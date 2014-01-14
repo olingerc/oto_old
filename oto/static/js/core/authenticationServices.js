@@ -52,7 +52,7 @@ app.factory('Auth', function($rootScope, $http, $cookieStore){
                     role: userRoles.public
                 });
                 success();
-                $rootScope.savedLocation = null;
+                $rootScope.core.savedLocation = null;
             }).error(error);
         },
         accessLevels: accessLevels,

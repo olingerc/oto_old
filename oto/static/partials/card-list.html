@@ -157,22 +157,22 @@
                </div>
                <div class='btn-group'>
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                     ng-disabled='!isNotNull(activeCard)'>
+                     ng-disabled='!isNotNull(notes.activeCard)'>
                      <i class="glyphicon  glyphicon-edit"></i><span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
                      <li>
-                        <button ng-click="startEditCard(activeCard)" ng-disabled='disableEdit'>Edit</button>
+                        <a ng-class='{true: "mute_link"}[processingCard || inArchive()]' ng-click="startEditCard(notes.activeCard)" ng-disabled='processingCard || inArchive()'>Edit</a>
                      </li>
 
                      <li class="dropdown-header">
                         Move to stack
                      </li>
                      <li>
-                        <a ng-click="moveCard(activeCard, floatingStack.id)">Floating</a>
+                        <a ng-click="moveCard(notes.activeCard, floatingStack.id)">Floating</a>
                      </li>
                      <li ng-repeat="stack in stacks">
-                        <a ng-click="moveCard(activeCard, stack.id)">{{stack.title}}</a>
+                        <a ng-click="moveCard(notes.activeCard, stack.id)">{{stack.title}}</a>
                      </li>
                      <li class="divider"></li>
                      <li class="dropdown-header">
@@ -180,7 +180,7 @@
                      </li>
                      <li>
                         <a
-                        ng-click="removeCard(activeCard)">{{{true: 'Delete permanently', false: 'Archive'}[inArchive()]}}</a>
+                        ng-click="removeCard(notes.activeCard)">{{{true: 'Delete permanently', false: 'Archive'}[inArchive()]}}</a>
                      </li>
                   </ul>
                </div>

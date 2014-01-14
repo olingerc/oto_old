@@ -10,8 +10,8 @@ app.controller('loginFormController', ['$rootScope', '$scope', '$location', 'Aut
                password: $scope.user.password,
             },
             function(res) {
-               if ($rootScope.savedLocation && $rootScope.savedLocation !== '/login') {
-                  $location.path($rootScope.savedLocation);
+               if ($rootScope.core.savedLocation && $rootScope.core.savedLocation !== '/login') {
+                  $location.path($rootScope.core.savedLocation);
                } else {
                   $location.path('/');
                }

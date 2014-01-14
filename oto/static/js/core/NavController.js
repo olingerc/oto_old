@@ -7,7 +7,7 @@ app.controller('NavController', ['$rootScope', '$scope', '$location', 'Auth', fu
         Auth.logout(function() {
             $location.path('/login');
         }, function() {
-            $rootScope.error = "Failed to logout";
+            $rootScope.core.error = "Failed to logout";
         });
     };
 }]);
