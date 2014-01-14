@@ -18,3 +18,9 @@ var page = require('webpage').create(),
         }
     });
 
+   window.setTimeout(function () {
+       page.render(output);
+       phantom.exit();
+   }, 2500);
+   //Force maximum time of 2.5 seconds
+
