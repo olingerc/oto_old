@@ -79,6 +79,6 @@ app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards'
       }
    }
 
-   //$scope.thumbService = $rootScope.thumbService;
+   $scope.thumbService = thumbService; //only for view, don't use $scope.thumbService to update, but thumbService
 
 }]);

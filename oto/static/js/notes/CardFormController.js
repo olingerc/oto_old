@@ -119,7 +119,6 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
          });
       });
 
-      console.log(uploader)
       if (uploader.queue.length === 0) {
          angular.forEach(resolvePost, function(func) {
             func.apply();
@@ -364,7 +363,7 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
     *
     * **********/
 
-   $rootScope.thumbService = thumbService;
+   $scope.thumbService = thumbService; //only for view, don't use $scope.thumbService to update, but thumbService
 
    $scope.initFileUpload = function() {
       $('#fileInput').click();
@@ -402,8 +401,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       $scope.fileAttachmentsList[position] = newAtt;
 
       //Update UI
-      $rootScope.thumbService.storeThumbnail(clientid);
-      $rootScope.thumbService.changeStatus(clientid, 'init');
+      thumbService.storeThumbnail(clientid);
+      thumbService.changeStatus(clientid, 'init');
 
       $scope.attachmentsChanged = true;
    });
@@ -419,8 +418,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
    uploader.bind('progress', function (event, item, progress) {
       //console.info('Progress: ' + progress, item);
       var clientid = item.formData[0].clientid;
-      $rootScope.thumbService.changeStatus(clientid, progress);
-      $scope.$apply() //important to update cardlist
+      thumbService.changeStatus(clientid, progress);
+      $scope.$apply(); //important for change of thumbnails
    });
 
    uploader.bind('success', function (event, xhr, item, response) {
@@ -428,8 +427,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       var clientid = item.formData[0].clientid,
          serverid = response.id;
 
-      $rootScope.thumbService.storeThumbnail(clientid, serverid);
-      $rootScope.thumbService.changeStatus(serverid, 'done');
+      thumbService.storeThumbnail(clientid, serverid);
+      thumbService.changeStatus(serverid, 'done');
       fileAttachmentsAdded.push(serverid);
 
       $scope.$apply(); //If multiple files, this forces to get thumnail of previously finished ones
@@ -460,11 +459,10 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       angular.forEach(resolveUpdate, function(func) {
          func.apply();
       });
-      $scope.$apply();
    });
 
    $scope.removeAtt = function(att) {
-      var serverid = $rootScope.thumbService.getUrl(att.clientid, att.id, 'id');
+      var serverid = thumbService.getUrl(att.clientid, att.id, 'id');
       fileAttachmentsRemoved.push(serverid);
       $scope.fileAttachmentsList.splice($scope.fileAttachmentsList.indexOf(att), 1);
       $scope.attachmentsChanged = true;
@@ -502,11 +500,12 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
 
       //Update UI
       $scope.urlAttachmentsList[position] = newLink;
-      $rootScope.thumbService.storeThumbnail(clientid);
-      $rootScope.thumbService.changeStatus(clientid, 'progress');
+      thumbService.storeThumbnail(clientid);
+      thumbService.changeStatus(clientid, 'progress');
 
       $scope.attachmentsChanged = true;
 
+      $scope.$apply(); //to force showing indicator
       $http({
          method:'POST',
          url: '/addlink/',
@@ -519,8 +518,8 @@ app.controller('CardFormController', ['$scope', '$rootScope', '$filter', '$http'
       })
       .success(function(data) {
          urlAttachmentsAdded.push(data.id);
-         $rootScope.thumbService.storeThumbnail(data.clientid, data.id);
-         $rootScope.thumbService.changeStatus(data.id, 'done');
+         thumbService.storeThumbnail(data.clientid, data.id);
+         thumbService.changeStatus(data.id, 'done');
       })
       .error(function(error) {
          console.log(error);

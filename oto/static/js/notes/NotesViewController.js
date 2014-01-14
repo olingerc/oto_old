@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards','thumbService', function($scope, $rootScope, Stacks, Cards, thumbService) {
+app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', function($scope, $rootScope, Stacks, Cards) {
    /********************
     *
     * parent scope variables
@@ -77,11 +77,6 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       }
    );
 
-
-   /*
-    * Upload service
-    */
-   $rootScope.thumbService = thumbService; //because cards list header shows active uploads
 
    /******************
     * TODO: card header controller?
