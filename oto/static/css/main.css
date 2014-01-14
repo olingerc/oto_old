@@ -19,6 +19,9 @@
 /*Thumblists*/
 .thumblist {margin:0}
 #cardFormContainer .thumblist {margin: 0 10px}
+.thumbContainer {
+   min-width:60px; /*prevent sflicker when witching from progress to real thumb*/
+}
 a.att_thumb_link {
    text-decoration:none;
    position:relative;

@@ -337,7 +337,10 @@
                               ng-click="$event.stopPropagation()">
                               <a class="att_thumb_link" title="{{att.filename}}"
                                  ng-href="">
-                                 <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
+                                 <div class='thumbContainer'>
+                                    <img class="att_thumb img-rounded" src='/static/img/indicator.gif' ng-show="thumbService.getProgress(att.clientid, att.id) != ''">
+                                    <img class="att_thumb img-rounded" ng-src="/thumbnail/{{thumbService.getUrl(att.clientid, att.id, 'id')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
+                                 </div>
                                  <small class="att_thumb_overlay text-center">
                                     <i class="attdelbutton glyphicon glyphicon-trash"
                                        ng-click="$event.stopPropagation();removeAtt(att)"
@@ -351,7 +354,10 @@
                               ng-click="$event.stopPropagation()">
                               <a class="inline att_thumb_link" title="{{att.url}}"
                                  ng-href="">
-                                 <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id, 'linkthumb')}}">
+                                 <div class='thumbContainer'>
+                                    <img class="att_thumb img-rounded" src='/static/img/indicator.gif' ng-show="thumbService.getProgress(att.clientid, att.id) != ''">
+                                    <img class="att_thumb img-rounded" ng-src="/thumbnaillink/{{thumbService.getUrl(att.clientid, att.id, 'id')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
+                                 </div>
                                  <small class="att_thumb_overlay">
                                     <i class="attdelbutton glyphicon glyphicon-trash"
                                        ng-click="$event.stopPropagation();removeLink(att)"
@@ -402,10 +408,13 @@
                         <!--file Attachments-->
                         <li ng-repeat="att in card.fileattachments">
                            <a class="att_thumb_link" title="{{att.filename}}"
-                              ng-href="{{thumbService.getUrl(att.clientid, att.id, 'download')}}"
+                              ng-href="/download/{{thumbService.getUrl(att.clientid, att.id, 'id')}}"
                               ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
                               >
-                              <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id)}}">
+                              <div class='thumbContainer'>
+                                 <img class="att_thumb img-rounded" src='/static/img/indicator.gif' ng-show="thumbService.getProgress(att.clientid, att.id) != ''">
+                                 <img class="att_thumb img-rounded" ng-src="/thumbnail/{{thumbService.getUrl(att.clientid, att.id, 'id')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
+                              </div>
                               <small ng-show="thumbService.getProgress(att.clientid, att.id) !== ''" class="att_thumb_overlay text-muted text-center">
                                  {{thumbService.getProgress(att.clientid, att.id)}}
                               </small>
@@ -419,7 +428,10 @@
                               ng-href="{{att.url}}"
                               ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
                               >
-                              <img class="att_thumb img-rounded" ng-src="{{thumbService.getUrl(att.clientid, att.id, 'linkthumb')}}">
+                              <div class='thumbContainer'>
+                                 <img class="att_thumb img-rounded" src='/static/img/indicator.gif' ng-show="thumbService.getProgress(att.clientid, att.id) != ''">
+                                 <img class="att_thumb img-rounded" ng-src="/thumbnaillink/{{thumbService.getUrl(att.clientid, att.id, 'id')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
+                              </div>
                               <small class="att_thumb_overlay"><i class="glyphicon  glyphicon-share-alt"></i></small>
                            </a>
                         </li>

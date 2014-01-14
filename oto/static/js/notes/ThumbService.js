@@ -4,8 +4,10 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
    _us.count = {};
 
    _us.storeThumbnail = function(cardid, clientid, serverid, att) {
-      if (att) { //differentiate between ng-init on page load (att has serverid) or new att added by client (att has no serverid)
-         if (!att.id) return;
+      if (att) { //differentiate between ng-init on page load (att has serverid) or new att added by client (att has no serverid) for cardlist
+         if (!att.id) {
+            return;
+         }
       }
       if (clientid && !serverid) {
          //server starts upload
@@ -70,15 +72,11 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
       } else {
          if (_us.thumbs[id].progress ==='init') {
             //Before upload has started
-            return '/static/img/att_default_thumb.png';
+            return '';
          }
          else if (_us.thumbs[id].progress ==='done') {
             //OK
-            if (!what) return '/thumbnail/' + _us.thumbs[id].id;
-            else if (what === 'download') return '/download/' + _us.thumbs[id].id;
-            else if (what === 'linkthumb') return '/thumbnaillink/' + _us.thumbs[id].id;
-            else if (what === 'id') return _us.thumbs[id].id;
-            else return '/thumbnail/' + _us.thumbs[id].id;
+            return _us.thumbs[id].id;
          }
          else if (_us.thumbs[id].progress ==='error') {
             //upload and thumb finished
@@ -86,7 +84,7 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
          }
          else {
             //uploading
-            return '/static/img/indicator.gif';
+            //return '/static/img/indicator.gif';
          }
       }
    };

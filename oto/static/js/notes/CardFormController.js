@@ -509,7 +509,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
 
       $scope.attachmentsChanged = true;
 
-//FIXME      $scope.$apply(); //to force showing indicator
       $http({
          method:'POST',
          url: '/addlink/',

@@ -29,6 +29,6 @@ var page = require('webpage').create(),
          phantom.exit();
          done = true;
          }
-   }, 2500);
-   //Force maximum time of 2.5 seconds
+   }, 3000);
+   //Force maximum time of 3 seconds
 
