@@ -63,7 +63,6 @@ def saveLinkToMongo():
     
 def serve_urlattachment_thumbnail(urlattachmentid):
    urlAttachment = UrlAttachment.objects.get_or_404(id=urlattachmentid)  # @UndefinedVariable
-   print urlattachmentid
     
    strIO = StringIO.StringIO()
    strIO.write(urlAttachment.thumbfile.read())
@@ -90,7 +89,7 @@ def deleteurlattachment():
       urlAttachment.thumbfile.delete()
       urlAttachment.delete()
       
-      if cardid != 'new':
+      if not cardid.startswith('new'):
          card = Card.objects.get_or_404(id=cardid)  # @UndefinedVariable
          if changeMofidiedat == True:
             card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
