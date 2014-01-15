@@ -4,15 +4,15 @@ https://github.com/witoldsz/angular-http-auth
 put title attribute of current sort on sort button, maybve change icon
 directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap progress
 more action buttons instead of dropdown for faster access to freqeuntly used actions
-stack slug in url for better browser history
+stack slug in url for better browser history --> https://github.com/angular-ui/ui-router/blob/master/sample/states.js
 allow easy addition of admin user via commandline
 
 #Bugs
+Better mimetype image recogniation. I think iso files also have image in the mimetype
 Time discrepancy server/client
 Add link  in new card and then cancellin gcauses 404 of urlattachment. but its deleted! The server only tries twice?!
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
 xng-focus with ng-show
-uploading big files crashes server in save to mongo
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
 recheck the cookie things, currently I hack the response into actionable json in the authentication service.How about a remember me option?

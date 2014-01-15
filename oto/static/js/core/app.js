@@ -15,35 +15,35 @@ var app = angular.module('oto', [
 
          //Define routes also on server!
       	$routeProvider.when('/', {
-      	   templateUrl: 'static/partials/landing.html',
+      	   templateUrl: '/static/partials/landing.html',
       		access: access.user
       	});
       	$routeProvider.when('/about', {
-      		templateUrl: 'static/partials/about.html',
+      		templateUrl: '/static/partials/about.html',
       		access: access.public
       	});
          $routeProvider.when('/admin', {
-            templateUrl: 'static/partials/admin.html',
+            templateUrl: '/static/partials/admin.html',
             access: access.admin
          });
          $routeProvider.when('/login', {
-            templateUrl: 'static/partials/login.html',
+            templateUrl: '/static/partials/login.html',
             access: access.anon
          });
       	$routeProvider.when('/notes', {
-      	   templateUrl: 'static/partials/card-list.html',
+      	   templateUrl: '/static/partials/card-list.html',
       		access: access.user
       	});
          $routeProvider.when('/automation', {
-            templateUrl: 'static/partials/automation.html',
+            templateUrl: '/static/partials/automation.html',
             access: access.user
          });
          $routeProvider.when('/401', {
-            templateUrl: 'static/partials/401.html',
+            templateUrl: '/static/partials/401.html',
             access: access.public
          });
       	$routeProvider.otherwise({
-      		templateUrl: 'static/partials/404.html',
+      		templateUrl: '/static/partials/404.html',
       		access: access.public
       	});
 
