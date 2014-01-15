@@ -4,6 +4,7 @@ https://github.com/witoldsz/angular-http-auth
 put title attribute of current sort on sort button, maybve change icon
 directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap progress
 more action buttons instead of dropdown for faster access to freqeuntly used actions
+stack slug in url for better browser history
 
 #Bugs
 Time discrepancy server/client
@@ -13,6 +14,7 @@ xng-focus with ng-show
 uploading big files crashes server in save to mongo
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
+recheck the cookie things, currently I hack the response into actionable json in the authentication service
 
 #Framework questions
 do I need an archive stack like the floating stack?
