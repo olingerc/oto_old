@@ -6,8 +6,6 @@ put title attribute of current sort on sort button, maybve change icon
 
 #Bugs
 Add link  in new card and then cancellin gcauses 404 of urlattachment. but its deleted!
-some bugs still in thumb progress image display in cardform and cardlist
-empty cardformcard scope on cancel
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
 acrchiving a note keeps action button active
 xng-focus with ng-show
