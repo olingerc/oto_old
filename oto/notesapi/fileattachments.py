@@ -59,7 +59,7 @@ def saveToMongo(filename, cardid, position):
    #Put into gridfs
    mimetype = mimetypes.guess_type(filename)[0]
    
-   if 'image' in str(mimetype):
+   if 'image/' in str(mimetype):
       att = ImageAttachment(filename=filename, mimetype = mimetypes.guess_type(filename)[0])
       att.thumb = True
       with open('/tmp/' + filename, 'r') as fileobject:
@@ -88,7 +88,7 @@ def saveToMongo(filename, cardid, position):
       
       
    #Send response or create thumb
-   if 'image' in str(mimetype):
+   if 'image/' in str(mimetype):
       #prepare response
       tosend = {}
       tosend['id'] = str(att.id)
@@ -152,7 +152,7 @@ def deleteatts():
 def serve_file(fileid):
    att = Attachment.objects.get_or_404(id=fileid)  # @UndefinedVariable
 
-   if 'image' in att.mimetype:
+   if 'image/' in att.mimetype:
       strIO = StringIO.StringIO()
       strIO.write(att.image.read())
       strIO.seek(0)
@@ -168,7 +168,7 @@ def serve_file(fileid):
 def serve_thumbnail(fileid):
    att = Attachment.objects.get_or_404(id=fileid)  # @UndefinedVariable
    
-   if 'mimetype' in att  and 'image' in att.mimetype:
+   if 'mimetype' in att  and 'image/' in att.mimetype:
       thumb = att.image.thumbnail
       strIO = StringIO.StringIO()
       strIO.write(thumb.read())

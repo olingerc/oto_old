@@ -8,7 +8,6 @@ stack slug in url for better browser history --> https://github.com/angular-ui/u
 allow easy addition of admin user via commandline
 
 #Bugs
-Better mimetype image recogniation. I think iso files also have image in the mimetype
 Time discrepancy server/client
 Add link  in new card and then cancellin gcauses 404 of urlattachment. but its deleted! The server only tries twice?!
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
