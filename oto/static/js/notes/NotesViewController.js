@@ -149,7 +149,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', '$modal', 'Stacks
       );
    };
 
-  $scope.open = function (card) {
+  $scope.openDetails = function (card) {
     var modalInstance = $modal.open({
       templateUrl: '/static/partials/cardDetailsModal.html',
       controller: CardDetailsModalInstanceCtrl,

@@ -11,6 +11,45 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
    $scope.isCardFormVisible = false;
    resetCardForm();
 
+   /***************
+    * Date picker
+    *
+    *********************/
+
+  $scope.today = function() {
+    $scope.cardFormCard.duedate = new Date();
+  };
+  $scope.today();
+
+  $scope.showWeeks = true;
+  $scope.toggleWeeks = function () {
+    $scope.showWeeks = ! $scope.showWeeks;
+  };
+
+  $scope.clear = function () {
+    $scope.cardFormCard.duedate = null;
+  };
+
+  // Disable weekend selection
+  $scope.disabled = function(date, mode) {
+    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+  };
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+
+    $scope.opened = true;
+  };
+
+  $scope.dateOptions = {
+    'year-format': "'yyyy'",
+    'starting-day': 1
+  };
+
+  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
+  $scope.format = $scope.formats[1];
+
    /*************
     *
     * CardForm Actions
