@@ -2,8 +2,11 @@
 continue developing resource like in delete user in admin controller
 https://github.com/witoldsz/angular-http-auth
 put title attribute of current sort on sort button, maybve change icon
+directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap progress
+more action buttons instead of dropdown for faster access to freqeuntly used actions
 
 #Bugs
+Time discrepancy server/client
 Add link  in new card and then cancellin gcauses 404 of urlattachment. but its deleted!
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
 xng-focus with ng-show

@@ -136,9 +136,9 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
       $rootScope.$broadcast('unselectCard');
       $scope.$parent.search = '';
       $scope.$parent.activestack = {
-      'owner':null,
-        'title':'All',
-        'id':''
+         'owner':null,
+         'title':'All',
+         'id':''
       };
    };
    $scope.listStackArchive = function() {

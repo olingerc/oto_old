@@ -2,8 +2,8 @@
 
 app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards', 'thumbService', function($scope, $rootScope, $filter, Cards, thumbService) {
    $scope.selectCard = function(card) {
-      /*TODO: if edit form visible, load card on select*/
-     //TODO store active card in factory to avoid all this parenting shit
+     //TODO: if edit form visible, load card on select
+     //TODO store active card in factory to avoid $rootscope
       if ($rootScope.notes.activeCard == card) {
          $rootScope.notes.activeCard = null;
       } else {
@@ -49,7 +49,7 @@ app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards'
       var visibleCards = $scope.cards;
       visibleCards = $filter('handlearchive')(visibleCards, $scope.inArchive());
       visibleCards = $filter('bystackid')(visibleCards, $scope.search, $scope.inArchive());
-      visibleCards = $filter('filter')(visibleCards, $scope.query); //The are the ones we watch
+      visibleCards = $filter('filter')(visibleCards, $scope.query); //These are the ones we watch for regrouping
 
       angular.forEach(visibleCards, function(card) {
          if ($scope.orderProp === 'title') {
@@ -79,7 +79,6 @@ app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards'
       }
    }
 
-   $scope.thumbService = thumbService; //only for view, don't use $scope.thumbService to update, but thumbService
-
+   $scope.thumbService = thumbService;
 
 }]);

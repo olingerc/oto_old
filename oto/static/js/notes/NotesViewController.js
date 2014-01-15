@@ -12,7 +12,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       'id':''
    };
 
-   $rootScope.notes.activeCard = null; //TODO: use Cards factory and store active Card there? In any case, do not use properties on root scope unless they are obkects themselves
+   $rootScope.notes.activeCard = null; //TODO: use Cards factory and store active Card there?
 
    $scope.orderProp = '-modifiedat';
    $scope.setOrder = function(orderProp) {
@@ -30,7 +30,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    };
 
    //Stacktitle by stackid. In the card I only store id
-   //TODO: put into stacks factory  and avoid stacks on parent scope?
+   //TODO: put into stacks factory  and avoid stacks on parent scope? by using service in other controllers
    $scope.getStacktitle = function(stackid) {
       var stack = $scope.stacks.filter(function(stack) {
          if (stack['id'] === stackid) {
@@ -52,7 +52,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
 
    $scope.stacks = [];
    //TODO: put into factory initialization with watch on username?
-   //what about stack add/remove/rename?, avoid stacks on parent scope?
+   //what about stack add/remove/rename?, avoid stacks on parent scope? by using service in other controllers
    Stacks.getAll(
       function (allStacks, floatingStack) {
          $scope.stacks = allStacks;
@@ -79,8 +79,9 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
 
 
    /******************
-    * TODO: card header controller?
-    * Buttons not in any sub-controller,
+    *
+    * TODO: card header controller
+    *
     *************/
 
    $scope.processingCard = false; //to enable/disable edit button
