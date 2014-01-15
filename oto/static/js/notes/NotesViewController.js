@@ -83,9 +83,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
     * Buttons not in any sub-controller,
     *************/
 
-   $scope.processingCard = false;
-   $scope.count = thumbService.count;
-
+   $scope.processingCard = false; //to enable/disable edit button
    $scope.$watch('notes.activeCard', function(activeCard) {
       if (activeCard) {
          if (thumbService.areAttsPending(activeCard.id) || activeCard.saving) {
