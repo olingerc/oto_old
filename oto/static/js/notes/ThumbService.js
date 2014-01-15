@@ -1,4 +1,4 @@
-app.service('thumbService', [function() {//TODO: rename to thumbnail service
+app.service('thumbService', [function() {
    var _us = this;
    _us.thumbs = {};
    _us.count = {};
@@ -9,9 +9,7 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
             return;
          }
       }
-      if (clientid && !serverid) {
-         //server starts upload
-
+      if (clientid && !serverid) {         //server starts upload
          if (!_us.count[cardid]) {
             _us.count[cardid] = 1;
          } else {
@@ -22,8 +20,7 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
             'progress':'init'
          };
       }
-      else if (clientid && serverid) {
-         //server has finished upload and returns with an id
+      else if (clientid && serverid) {    //server has finished upload and returns with an id
          _us.count[cardid]--;
          _us.thumbs[clientid] = {
             'progress':'done',
@@ -34,8 +31,7 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
             'id':serverid
          };
       }
-      else {
-         //pageload?
+      else {                               //page load
          _us.thumbs[serverid] = {
             'progress':'done',
             'id':serverid
@@ -59,87 +55,63 @@ app.service('thumbService', [function() {//TODO: rename to thumbnail service
       _us.thumbs[clientid].progress = progress;
    };
 
-   _us.getUrl = function(clientid, serverid, what) {
-      if (serverid) {
-         var id = serverid; //initial pageload
-      } else {
-         var id = clientid;
+   _us.getServerId = function(clientid, serverid, prefix) {
+      if (serverid) {          //initial pageload
+         return prefix + serverid;
       }
 
-      if (!_us.thumbs[id]) {
-         //TODO: launch thumbnail creation here if not existst?
-          return "/static/img/error.jpg";
+      //Either serverid is stored in thumbs[clientid].id after successfull upload or not yet
+      if (!_us.thumbs[clientid]) {
+          return null;
       } else {
-         if (_us.thumbs[id].progress ==='init') {
-            //Before upload has started
-            return '';
-         }
-         else if (_us.thumbs[id].progress ==='done') {
-            //OK
-            return _us.thumbs[id].id;
-         }
-         else if (_us.thumbs[id].progress ==='error') {
-            //upload and thumb finished
-            return '/static/img/error.jpg';
-         }
-         else {
+         if (_us.thumbs[clientid].progress ==='done') {
+            return prefix + _us.thumbs[clientid].id;
+         } else {
             //uploading
-            //return '/static/img/indicator.gif';
+            return null;
          }
       }
    };
 
    _us.getProgress = function(clientid, serverid) {
       if (serverid) {
-         var id = serverid; //initial pageload
-      } else {
-         var id = clientid;
+         return '';
       }
 
-      if (!_us.thumbs[id]) {
-         //TODO: launch thumbnail creation here if not existst?
+      if (!_us.thumbs[clientid]) {
           return "error";
       } else {
-         if (_us.thumbs[id].progress ==='init') {
+         if (_us.thumbs[clientid].progress ==='init') {
             //Before upload has started
-            return 'init';
+            return 'queued';
          }
-         else if (_us.thumbs[id].progress ==='done') {
+         else if (_us.thumbs[clientid].progress ==='done') {
             //OK
             return '';
          }
-         else if (_us.thumbs[id].progress ==='error') {
+         else if (_us.thumbs[clientid].progress ==='error') {
             //upload and thumb finished
             return 'error';
          }
          else {
             //uploading
-            if (_us.thumbs[id].progress === 100) return 'storing';
-            return _us.thumbs[id].progress;
+            if (_us.thumbs[clientid].progress === 100) return 'storing';
+            return _us.thumbs[clientid].progress;
          }
       }
    };
 
    _us.allowDelete = function(clientid, serverid) {
       if (serverid) {
-         var id = serverid; //initial pageload
-      } else {
-         var id = clientid;
+         return true;
       }
 
-      if (!_us.thumbs[id]) {
+      if (!_us.thumbs[clientid]) {
           return false;
       } else {
-         if (_us.thumbs[id].progress ==='init') {
-            return false;
-         }
-         else if (_us.thumbs[id].progress ==='done') {
+         if (_us.thumbs[clientid].progress ==='done') {
             return true;
-         }
-         else if (_us.thumbs[id].progress ==='error') {
-            return false;
-         }
-         else {
+         } else {
             return false;
          }
       }

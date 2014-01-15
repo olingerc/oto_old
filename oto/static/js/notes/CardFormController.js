@@ -265,11 +265,13 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
    //CANCEL
    $scope.$on('cancelCardForm', function() {
       $scope.cancelCardForm();
-      //TODO: cancel uploads
+      //TODO: cancel uploads of that card. Not all uplods
    });
 
    $scope.cancelCardForm = function() {
-      //TODO: only do this if cardform is visible because of lots of broadcast to cancelcardform?
+      if (!$scope.isCardFormVisible) {
+         return;
+      }
       $scope.isCardFormVisible = false;
       if ($scope.cardFormAction === 'edit') {
          //Handle file attachments first
@@ -350,10 +352,17 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
             return false;
          }
 
-         //TODO, changing duedate does not actvate button
          return true;
       } else {
          return $scope.cardForm.$invalid;
+      }
+   };
+
+   $scope.isLinkInputValueInvalid = function() {
+      if ($scope.linkInputValue) {
+         return false;
+      } else {
+         return true;
       }
    };
 
@@ -371,7 +380,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
    };
 
    var uploader = $scope.uploader = $fileUploader.create({
-      scope: $scope,                          // to automatically update the html. Default: $rootScope
+      scope: $scope,
       url: '/upload',
       autoUpload: true,
       removeAfterUpload: true
@@ -379,9 +388,9 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
 
    uploader.bind('afteraddingfile', function (event, item) {
       //console.info('After adding a file', item);
-      var cardid = $scope.cardFormCard.id;
-      var clientid = makeid();
-      var position = $scope.fileAttachmentsList.length;
+      var cardid = $scope.cardFormCard.id,
+         clientid = makeid(),
+         position = $scope.fileAttachmentsList.length;
 
       //Display empty thumb, will be filled later
       var newAtt = {
@@ -400,20 +409,9 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
       ];
 
       $scope.fileAttachmentsList[position] = newAtt;
-
-      //Update UI
-      thumbService.storeThumbnail(cardid, clientid);
-      thumbService.changeStatus(clientid, 'init');
-
       $scope.attachmentsChanged = true;
-   });
 
-   uploader.bind('afteraddingall', function (event, items) {
-      //console.info('After adding all files', items);
-   });
-
-   uploader.bind('beforeupload', function (event, item) {
-      //console.info('Before upload', item);
+      thumbService.storeThumbnail(cardid, clientid, null);
    });
 
    uploader.bind('progress', function (event, item, progress) {
@@ -429,6 +427,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
          serverid = response.id;
 
       thumbService.storeThumbnail(item.formData[0].cardid, clientid, serverid);
+      thumbService.changeStatus(clientid, 'done');
       thumbService.changeStatus(serverid, 'done');
       fileAttachmentsAdded.push(serverid);
 
@@ -458,15 +457,8 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
       }
    });
 
-   uploader.bind('progressall', function (event, progress) {
-      //console.info('Total progress: ' + progress);
-   });
-
-   uploader.bind('completeall', function (event, items) {
-   });
-
    $scope.removeAtt = function(att) {
-      var serverid = thumbService.getUrl(att.clientid, att.id, 'id');
+      var serverid = thumbService.getServerId(att.clientid, att.id);
       fileAttachmentsRemoved.push(serverid);
       $scope.fileAttachmentsList.splice($scope.fileAttachmentsList.indexOf(att), 1);
       $scope.attachmentsChanged = true;
@@ -502,12 +494,10 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
          position:position
       };
 
-      //Update UI
       $scope.urlAttachmentsList[position] = newLink;
-      thumbService.storeThumbnail(cardid, clientid);
-      thumbService.changeStatus(clientid, 'progress');
-
       $scope.attachmentsChanged = true;
+
+      thumbService.storeThumbnail(cardid, clientid, null);
 
       $http({
          method:'POST',
@@ -541,16 +531,8 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
       });
    };
 
-   $scope.isLinkInputValueInvalid = function() {
-      if ($scope.linkInputValue) {
-         return false;
-      } else {
-         return true;
-      }
-   };
-
    $scope.removeLink = function(att) {
-      var serverid = thumbService.getUrl(att.clientid, att.id, 'id');
+      var serverid = thumbService.getServerId(att.clientid, att.id);
       urlAttachmentsRemoved.push(serverid);
       $scope.urlAttachmentsList.splice($scope.urlAttachmentsList.indexOf(att), 1);
       $scope.attachmentsChanged = true;
