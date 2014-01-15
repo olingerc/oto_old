@@ -10,7 +10,6 @@ import subprocess
 import tarfile
 import shutil
 import os
-import oto.settings as settings
 
 from mongoengine.queryset import DoesNotExist
 
