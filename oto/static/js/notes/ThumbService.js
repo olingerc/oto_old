@@ -56,6 +56,7 @@ app.service('thumbService', [function() {
    };
 
    _us.getServerId = function(clientid, serverid, prefix) {
+      if (!prefix) prefix = '';
       if (serverid) {          //initial pageload
          return prefix + serverid;
       }
