@@ -409,6 +409,7 @@
                         <li ng-repeat="att in card.fileattachments">
                            <a class="att_thumb_link" title="{{att.filename}}"
                               ng-href="{{thumbService.getServerId(att.clientid, att.id, '/download/')}}"
+                              target="_self"
                               ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
                               >
                               <div class='thumbContainer'>

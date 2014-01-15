@@ -151,17 +151,19 @@ def deleteatts():
 
 def serve_file(fileid):
    att = Attachment.objects.get_or_404(id=fileid)  # @UndefinedVariable
-    
+
    if 'image' in att.mimetype:
       strIO = StringIO.StringIO()
       strIO.write(att.image.read())
       strIO.seek(0)
+      
+      return send_file(strIO, attachment_filename=att.filename, as_attachment=False)
    else:
       strIO = StringIO.StringIO()
       strIO.write(att.file.read())
       strIO.seek(0)
     
-   return send_file(strIO, attachment_filename=att.filename, as_attachment=True)
+      return send_file(strIO, attachment_filename=att.filename, as_attachment=True)
 
 def serve_thumbnail(fileid):
    att = Attachment.objects.get_or_404(id=fileid)  # @UndefinedVariable
