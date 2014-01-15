@@ -1,0 +1,22 @@
+        <div class="modal-header">
+            <h3>Details of {{card.title}}</h3>
+        </div>
+        <div class="modal-body">
+           The times are on the server
+            <ul class="status-list list-unstyled">
+               <li class="card_time_label">
+                  <small title="created at" class="text-muted"><i class="glyphicon  glyphicon-asterisk"></i>&nbsp;{{card.createdat |date:'yyyy-MM-dd HH:mm:ss'}}</small>
+               </li>
+               <li class="card_mod_label"
+                  ng-show="card.modifiedat != card.createdat">
+                  <small title="modified at" class="text-muted"><i class="glyphicon  glyphicon-pencil"></i>&nbsp;{{card.modifiedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
+               </li>
+               <li class="card_mod_label"
+                  ng-show="{{card.archivedat != null}}">
+                  <small title="archived at" class="text-muted"><i class="glyphicon  glyphicon-trash"></i>&nbsp;{{card.archivedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
+               </li>
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+        </div>

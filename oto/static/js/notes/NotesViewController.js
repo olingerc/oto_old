@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards', 'thumbService', function($scope, $rootScope, Stacks, Cards, thumbService) {
+app.controller('NotesViewController', ['$scope', '$rootScope', '$modal', 'Stacks', 'Cards', 'thumbService', function($scope, $rootScope, $modal, Stacks, Cards, thumbService) {
    /********************
     *
     * parent scope variables
@@ -149,6 +149,18 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
       );
    };
 
+  $scope.open = function (card) {
+    var modalInstance = $modal.open({
+      templateUrl: '/static/partials/cardDetailsModal.html',
+      controller: CardDetailsModalInstanceCtrl,
+      resolve: {
+        card: function () {
+          return card;
+        }
+      }
+    });
+  };
+
    /*******************
     *
     * Utility Functions
@@ -163,4 +175,23 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    };
 
 }]);
+
+
+/**************
+ *
+ * CARD DETAILS MODAL
+ *
+ ***************/
+
+// Please note that $modalInstance represents a modal window (instance) dependency.
+// It is not the same as the $modal service used above.
+
+var CardDetailsModalInstanceCtrl = function ($scope, $modalInstance, card) {
+  $scope.card = card;
+
+  $scope.ok = function () {
+    $modalInstance.close();
+  };
+
+};
 

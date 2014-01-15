@@ -182,6 +182,10 @@
                         <a
                         ng-click="removeCard(notes.activeCard)">{{{true: 'Delete permanently', false: 'Archive'}[inArchive()]}}</a>
                      </li>
+                     <li>
+                        <a
+                        ng-click="open(notes.activeCard)">Details</a>
+                     </li>
                   </ul>
                </div>
             </div>
@@ -399,6 +403,10 @@
                         <li title="due date" class="card_due_label label label-default" ng-show="isNotNull(card.duedate)">
                            <small><i class="glyphicon  glyphicon-time"></i> {{card.duedate  | date:'yyyy-MM-dd'}}</small>
                         </li>
+                        <li class="card_mod_label"
+                           ng-show="{{card.saving}}">
+                           <small class="text-danger">saving...</small>
+                        </li>
                      </ul>
 
                      <!--Card Content-->
@@ -438,27 +446,6 @@
                            </a>
                         </li>
                      </ul>
-
-                     <!--Card status-->
-                     <small>
-                        <ul class="status-list list-inline">
-                           <li class="card_time_label">
-                              <small title="created at" class="text-muted"><i class="glyphicon  glyphicon-asterisk"></i>&nbsp;{{card.createdat |date:'yyyy-MM-dd HH:mm:ss'}}</small>
-                           </li>
-                           <li class="card_mod_label"
-                              ng-show="card.modifiedat != card.createdat">
-                              <small title="modified at" class="text-muted"><i class="glyphicon  glyphicon-pencil"></i>&nbsp;{{card.modifiedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
-                           </li>
-                           <li class="card_mod_label"
-                              ng-show="isNotNull(card.archivedat)">
-                              <small title="archived at" class="text-muted"><i class="glyphicon  glyphicon-trash"></i>&nbsp;{{card.archivedat | date:'yyyy-MM-dd HH:mm:ss'}}</small>
-                           </li>
-                           <li class="card_mod_label"
-                              ng-show="{{card.saving}}">
-                              <small class="text-danger">saving...</small>
-                           </li>
-                        </ul>
-                     </small>
                   </div><!--End of list group item-->
 
                </div><!--End of list group-->
