@@ -12,7 +12,6 @@ Better mimetype image recogniation. I think iso files also have image in the mim
 Time discrepancy server/client
 Add link  in new card and then cancellin gcauses 404 of urlattachment. but its deleted! The server only tries twice?!
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
-xng-focus with ng-show
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
 recheck the cookie things, currently I hack the response into actionable json in the authentication service.How about a remember me option?
@@ -22,7 +21,7 @@ do I need an archive stack like the floating stack?
 can I set required = False for stackid and set stackid = null in archive? Since that particular id no longer exists if corresponding stack is deleted
 
 #Last thing worked on:
-stackslug
+404 URL attachmetn
 
 
 

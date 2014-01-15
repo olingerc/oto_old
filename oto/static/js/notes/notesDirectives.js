@@ -3,9 +3,9 @@ app.directive('xngFocus', function() {
        scope.$watch(attrs.xngFocus,
          function (newValue) {
             if (newValue) {
-               newValue && element.focus();
-            } else {
-               //element.blur();
+               window.setTimeout(function() {
+                  newValue && element.focus();
+               },0);
             }
          },true);
       };
