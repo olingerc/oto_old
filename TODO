@@ -5,23 +5,24 @@ put title attribute of current sort on sort button, maybve change icon
 directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap progress
 more action buttons instead of dropdown for faster access to freqeuntly used actions
 stack slug in url for better browser history
+allow easy addition of admin user via commandline
 
 #Bugs
 Time discrepancy server/client
-Add link  in new card and then cancellin gcauses 404 of urlattachment. but its deleted!
+Add link  in new card and then cancellin gcauses 404 of urlattachment. but its deleted! The server only tries twice?!
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
 xng-focus with ng-show
 uploading big files crashes server in save to mongo
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
-recheck the cookie things, currently I hack the response into actionable json in the authentication service
+recheck the cookie things, currently I hack the response into actionable json in the authentication service.How about a remember me option?
 
 #Framework questions
 do I need an archive stack like the floating stack?
 can I set required = False for stackid and set stackid = null in archive? Since that particular id no longer exists if corresponding stack is deleted
 
 #Last thing worked on:
-Check TODOs
+stackslug
 
 
 
