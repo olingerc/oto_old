@@ -5,6 +5,7 @@ put title attribute of current sort on sort button, maybve change icon
 directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap progress
 stack slug in url for better browser history --> https://github.com/angular-ui/ui-router/blob/master/sample/states.js
 allow easy addition of admin user via commandline
+cardform as modal
 
 #Bugs
 if no floating stack, it is created but not there yet. error for missing id. reload solves it

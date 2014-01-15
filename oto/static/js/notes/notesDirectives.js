@@ -15,7 +15,7 @@ app.directive('thumbProgress', [function() {
     return {
         restrict: 'E',
         replace: true,
-        template: '<img class="att_thumb img-rounded" src="/static/img/indicator.gif" class="att.id">',
+        template: '<div style="margin-top:30px" class="progress progress-striped">  <div class="progress-bar"  role="progressbar" aria-valuenow="100" style="width: 100%">  </div></div>',
         scope: {
            showprogress:'=showprogress'
         },
@@ -23,7 +23,9 @@ app.directive('thumbProgress', [function() {
             $scope.$watch('showprogress', function(showprogress) {
                   if (showprogress) {
                      //TODO: show porgress
+                     element.addClass('active')
                   } else {
+                     element.removeClass('active')
                      element.hide();
                   }
             });
