@@ -110,6 +110,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', 'Stacks', 'Cards'
    };
 
    $scope.removeCard = function(card) {
+      $scope.notes.activeCard = null;
       if ($scope.inArchive()) {
          Cards.remove(
             card.id,
