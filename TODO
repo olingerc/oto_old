@@ -3,12 +3,10 @@ continue developing resource like in delete user in admin controller
 https://github.com/witoldsz/angular-http-auth
 put title attribute of current sort on sort button, maybve change icon
 directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap progress
-more action buttons instead of dropdown for faster access to freqeuntly used actions
 stack slug in url for better browser history --> https://github.com/angular-ui/ui-router/blob/master/sample/states.js
 allow easy addition of admin user via commandline
 
 #Bugs
-Time discrepancy server/client
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
