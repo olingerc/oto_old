@@ -44,7 +44,7 @@ var app = angular.module('oto', [
          });
       	$routeProvider.otherwise({
       		templateUrl: 'static/partials/404.html',
-      		access: access.anon
+      		access: access.public
       	});
 
       	$locationProvider.html5Mode(true);
