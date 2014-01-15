@@ -267,7 +267,8 @@
                                  <div class="col-sm-7">
                                     <input name='inputTitle' type="text" class="form-control" placeholder="Title"
                                        ng-required="isCardFormVisible"
-                                       ng-model="cardFormCard.title">
+                                       ng-model="cardFormCard.title"
+                                       xng-focus="isCardFormVisible">
                                     <span class="text-warning"
                                        ng-show="titleError">{{titleErrorMessage}}</span>
                                  </div>
