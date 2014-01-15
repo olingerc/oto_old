@@ -302,7 +302,7 @@
                               <a class="att_thumb_link" title="{{att.filename}}"
                                  ng-href="">
                                  <div class='thumbContainer'>
-                                    <img class="att_thumb img-rounded" src='/static/img/indicator.gif' ng-show="thumbService.getProgress(att.clientid, att.id) != ''">
+                                    <thumb-progress showprogress="thumbService.getProgress(att.clientid, att.id) != ''"></thumb-progress>
                                     <img class="att_thumb img-rounded" ng-src="{{thumbService.getServerId(att.clientid, att.id, '/thumbnail/')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
                                  </div>
                                  <small class="att_thumb_overlay text-center">

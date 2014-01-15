@@ -10,3 +10,29 @@ app.directive('xngFocus', function() {
          },true);
       };
 });
+
+app.directive('thumbProgress', [function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        template: '<img class="att_thumb img-rounded" src="/static/img/indicator.gif" class="att.id">',
+        scope: {
+           showprogress:'=showprogress'
+        },
+        link: function($scope, element, attrs) {
+            $scope.$watch('showprogress', function(showprogress) {
+                  if (showprogress) {
+                     //TODO: show porgress
+                  } else {
+                     element.hide();
+                  }
+            });
+
+            $scope.$on("$destroy",
+                  function() {
+                      console.log('destroy');
+                  }
+              );
+        }
+    };
+}]);
