@@ -199,10 +199,6 @@ app.controller('NotesViewController', ['$scope', '$modal', 'Stacks', 'Cards', 't
  * CARD DETAILS MODAL
  *
  ***************/
-
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-
 var CardDetailsModalInstanceCtrl = function ($scope, $modalInstance, card) {
   $scope.card = card;
 

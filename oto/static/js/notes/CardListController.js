@@ -1,10 +1,9 @@
 'use strict';
 
-app.controller('CardListController', ['$scope', '$rootScope', '$filter', '$modal', 'Cards', 'thumbService', function($scope, $rootScope, $filter, $modal, Cards, thumbService) {
+app.controller('CardListController', ['$scope', '$filter', '$modal', 'Cards', 'thumbService', function($scope, $filter, $modal, Cards, thumbService) {
 
    $scope.selectCard = function(card) {
-     //TODO: if edit form visible, load card on select
-     //Inform the Cards service about the active card. The service is not used in the Card list view directly, only in the Card Header
+     //Inform the Cards service about the active card. The service is not used in the Card list view directly, only in the Card Header view
       if (Cards.getActiveCard() == card) {
          Cards.setActiveCard(null);
       } else {
