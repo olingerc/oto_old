@@ -22,7 +22,6 @@ app.directive('thumbProgress', [function() {
         link: function($scope, element, attrs) {
             $scope.$watch('showprogress', function(showprogress) {
                   if (showprogress) {
-                     //TODO: show porgress
                      element.addClass('active');
                   } else {
                      element.removeClass('active');

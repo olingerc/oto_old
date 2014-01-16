@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('NotesViewController', ['$scope', '$rootScope', '$modal', 'Stacks', 'Cards', 'thumbService', function($scope, $rootScope, $modal, Stacks, Cards, thumbService) {
+app.controller('NotesViewController', ['$scope', '$modal', 'Stacks', 'Cards', 'thumbService', function($scope, $modal, Stacks, Cards, thumbService) {
    /********************
     *
     * parent scope variables
@@ -11,9 +11,6 @@ app.controller('NotesViewController', ['$scope', '$rootScope', '$modal', 'Stacks
       'title':'',
       'id':''
    };
-
-   //$rootScope.notes.activeCard = null; //TODO: use Cards factory and store active Card there?
-   //$scope.activeCard = Cards.activeCard;
 
    $scope.orderProp = '-modifiedat';
    $scope.setOrder = function(orderProp) {

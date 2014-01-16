@@ -349,8 +349,8 @@
                   <div class="card list-group-item"
                      ng-repeat="card in cardGroup.cards"
                      ng-class="{true: 'active', false: ''}[cardIsActive(card)]"
-                     ng-click='$parent.selectCard(card)'
-                     ng-dblclick="$parent.startEditCard(card)">
+                     ng-click='selectCard(card)'
+                     ng-dblclick="startEditCard(card)">
 
    <!--Start of card-->
                      <!-- Card title row -->

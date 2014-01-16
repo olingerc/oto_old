@@ -21,6 +21,7 @@ app.factory('Cards', ['$http', function($http) {
       },
       setActiveCard: function(card) {
          this.activeCard.value = card; //primitive values not allowed: http://stackoverflow.com/questions/16133299/angularjs-cross-controller-factory-update
+         //But cards are not primitives? Anaway using card directly without value does not work
       },
       activeCard:{value: null},
       getActiveCard: function() {
