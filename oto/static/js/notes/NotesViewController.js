@@ -51,6 +51,7 @@ app.controller('NotesViewController', ['$scope', '$modal', 'Stacks', 'Cards', 't
    $scope.stacks = [];
    //TODO: put into factory initialization?
    //what about stack add/remove/rename?, avoid stacks on parent scope? by using service in other controllers
+   $scope.floatingStack = $scope.activestack = {title: 'Floating'}; //initial value
    Stacks.getAll(
       function (allStacks, floatingStack) {
          $scope.stacks = allStacks;
