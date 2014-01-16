@@ -4,7 +4,7 @@ build-essential
 python-dev
 imagemagik
 mongodb (change host in settings.py)
-libjjpg-devel
+libjjpg-devel for PIL jpeg support
 
 pip:
 python-dateutil (very important to avoid parse errors from mongoengine)
