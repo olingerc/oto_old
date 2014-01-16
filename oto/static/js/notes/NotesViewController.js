@@ -12,7 +12,8 @@ app.controller('NotesViewController', ['$scope', '$rootScope', '$modal', 'Stacks
       'id':''
    };
 
-   $rootScope.notes.activeCard = null; //TODO: use Cards factory and store active Card there?
+   //$rootScope.notes.activeCard = null; //TODO: use Cards factory and store active Card there?
+   //$scope.activeCard = Cards.activeCard;
 
    $scope.orderProp = '-modifiedat';
    $scope.setOrder = function(orderProp) {
@@ -84,10 +85,11 @@ app.controller('NotesViewController', ['$scope', '$rootScope', '$modal', 'Stacks
     *
     *************/
 
+   $scope.activeCard = Cards.activeCard;
    $scope.processingCard = false; //to enable/disable edit button
-   $scope.$watch('notes.activeCard', function(activeCard) {
-      if (activeCard) {
-         if (thumbService.areAttsPending(activeCard.id) || activeCard.saving) {
+   $scope.$watch('activeCard.value', function(value) {
+      if (value) {
+         if (thumbService.areAttsPending(value.id) || value.saving) {
             $scope.processingCard = true;
          } else {
             $scope.processingCard = false;
@@ -111,7 +113,7 @@ app.controller('NotesViewController', ['$scope', '$rootScope', '$modal', 'Stacks
    };
 
    $scope.removeCard = function(card) {
-      $scope.notes.activeCard = null;
+      Cards.setActiveCard(null);
       if ($scope.inArchive()) {
          Cards.remove(
             card.id,

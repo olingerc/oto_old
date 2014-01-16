@@ -1,30 +1,31 @@
 'use strict';
 
 app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards', 'thumbService', function($scope, $rootScope, $filter, Cards, thumbService) {
+
    $scope.selectCard = function(card) {
      //TODO: if edit form visible, load card on select
-     //TODO store active card in factory to avoid $rootscope
-      if ($rootScope.notes.activeCard == card) {
-         $rootScope.notes.activeCard = null;
+     //Inform the Cards service about the active card. The service is not used in the Card list view directly, only in the Card Header
+      if (Cards.getActiveCard() == card) {
+         Cards.setActiveCard(null);
       } else {
-         $rootScope.notes.activeCard = card;
+        Cards.setActiveCard(card);
       }
    };
 
    //css for active card
    $scope.cardIsActive = function(card) {
-      return card == $rootScope.notes.activeCard ? true : false;
+      return card == Cards.getActiveCard() ? true : false;
    };
 
    $scope.$on('unselectCard', function() {
-      $rootScope.notes.activeCard = null;
+     Cards.setActiveCard(null);
    });
 
    $scope.startEditCard = function(card) {
       if ($scope.inArchive()) {
          return;
       }
-      $rootScope.notes.activeCard = card;
+      Cards.setActiveCard(card);
       $rootScope.$broadcast('startCardEdit', card);
    };
 

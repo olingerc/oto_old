@@ -157,27 +157,27 @@
                </div>
                <div class='btn-group'>
                   <button type="button" class="btn btn-default"
-                     ng-disabled='processingCard || inArchive() || !isNotNull(notes.activeCard)'
-                     ng-click="startEditCard(notes.activeCard)">
+                     ng-disabled='processingCard || inArchive() || !isNotNull(activeCard.value)'
+                     ng-click="startEditCard(activeCard.value)">
                      <i class="glyphicon  glyphicon-edit"></i>
                   </button>
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                     ng-disabled='!isNotNull(notes.activeCard)'>
+                     ng-disabled='!isNotNull(activeCard.value)'>
                      <i class="glyphicon  glyphicon-list"></i><span class="caret"></span>
                   </button>
                   <ul class="dropdown-menu">
                      <li>
-                        <a ng-class='{true: "mute_link"}[processingCard || inArchive()]' ng-click="startEditCard(notes.activeCard)" ng-disabled='processingCard || inArchive()'>Edit</a>
+                        <a ng-class='{true: "mute_link"}[processingCard || inArchive()]' ng-click="startEditCard(activeCard.value)" ng-disabled='processingCard || inArchive()'>Edit</a>
                      </li>
 
                      <li class="dropdown-header">
                         Move to stack
                      </li>
                      <li>
-                        <a ng-click="moveCard(notes.activeCard, floatingStack.id)">Floating</a>
+                        <a ng-click="moveCard(activeCard.value, floatingStack.id)">Floating</a>
                      </li>
                      <li ng-repeat="stack in stacks">
-                        <a ng-click="moveCard(notes.activeCard, stack.id)">{{stack.title}}</a>
+                        <a ng-click="moveCard(activeCard.value, stack.id)">{{stack.title}}</a>
                      </li>
                      <li class="divider"></li>
                      <li class="dropdown-header">
@@ -185,11 +185,11 @@
                      </li>
                      <li>
                         <a
-                        ng-click="removeCard(notes.activeCard)">{{{true: 'Delete permanently', false: 'Archive'}[inArchive()]}}</a>
+                        ng-click="removeCard(activeCard.value)">{{{true: 'Delete permanently', false: 'Archive'}[inArchive()]}}</a>
                      </li>
                      <li>
                         <a
-                        ng-click="openDetails(notes.activeCard)">Details</a>
+                        ng-click="openDetails(activeCard.value)">Details</a>
                      </li>
                   </ul>
                </div>
