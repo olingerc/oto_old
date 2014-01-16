@@ -23,18 +23,18 @@ app.directive('thumbProgress', [function() {
             $scope.$watch('showprogress', function(showprogress) {
                   if (showprogress) {
                      //TODO: show porgress
-                     element.addClass('active')
+                     element.addClass('active');
                   } else {
-                     element.removeClass('active')
+                     element.removeClass('active');
                      element.hide();
                   }
             });
 
             $scope.$on("$destroy",
                   function() {
-                      console.log('destroy');
+                     element.removeClass('active');
                   }
-              );
+            );
         }
     };
 }]);
