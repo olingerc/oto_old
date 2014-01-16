@@ -79,7 +79,12 @@ small.att_thumb_overlay {
 
 
 #notesQuery {
-   width:150px
+   width:150px;
+}
+
+#linkInput {
+   width:190px;
+   display:inline
 }
 
 

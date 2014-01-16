@@ -14,6 +14,7 @@
                                  <input name='inputTitle' type="text" class="form-control" placeholder="Title"
                                     ng-required="true"
                                     ng-model="cardFormCard.title"
+                                    ui-keypress="{13:'doCardFormAction()'}"
                                     xng-focus="true">
                                  <span class="text-warning"
                                     ng-show="titleError">{{titleErrorMessage}}</span>
@@ -32,24 +33,7 @@
                         <div class="form-group">
                            <label for="duedate" class="col-sm-2 control-label">Due</label>
                            <div class="col-sm-4">
-                              <div my-if-browser-feature="!inputtypes.date">
-                                 <input id="duedate" type="date" class="form-control" ng-model="cardFormCard.duedate">
-                              </div>
-                              <div my-if-browser-feature="inputtypes.date">
-                                 <p class='input-group'>
-                                    <input type="text"
-                                       class="form-control"
-                                       datepicker-popup="{{format}}"
-                                       ng-model="cardFormCard.duedate"
-                                       is-open="$parent.cardForm.opened"
-                                       datepicker-options="dateOptions"
-                                       date-disabled="disabled(date, mode)"
-                                       close-text="Close">
-                                    <span class="input-group-btn">
-                                     <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                   </span>
-                                </p>
-                             </div>
+                               <input id="duedate" type="date" class="form-control" ng-model="cardFormCard.duedate">
                            </div>
                            <div class="col-sm-6"></div>
                         </div>
@@ -63,9 +47,10 @@
                               <input id="fileInput" type="file" multiple class="upload" ng-file-select>
                            </div>
 
-
-                           <input type="url"
-                              ng-show="isLinkInputVisible"
+                           <input id="linkInput" type="url" class='inline form-control'
+                              ui-keypress="{13:'addLink()'}"
+                              ng-show="$parent.isLinkInputVisible"
+                              xng-focus="$parent.isLinkInputVisible"
                               ng-model='$parent.linkInputValue'><!--outside of form-->
                            <button type="button" id="addLinkFormBtn" class="btn btn-success"
                               ng-click="initAddLink()"

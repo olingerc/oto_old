@@ -3,6 +3,7 @@
 var app = angular.module('oto', [
    'oto.filters',
    'ui.bootstrap',
+   'ui.utils',
    'angularFileUpload',
    'ngRoute',
    'ngResource',
