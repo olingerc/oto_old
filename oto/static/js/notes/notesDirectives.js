@@ -37,3 +37,39 @@ app.directive('thumbProgress', [function() {
         }
     };
 }]);
+
+app.directive('myIfBrowserFeature', function() {
+
+  return {
+    template: '<div ng-if="hasFeatures"><div ng-transclude></div></div>',
+    transclude: true,
+    scope: true,
+    link: function($scope, $element, $attrs) {
+
+      $scope.hasFeatures = true;
+
+      var features = ($attrs.myIfBrowserFeature || "").split(' ');
+
+      var fl = features.length;
+
+      while(fl && $scope.hasFeatures) {
+        var f = features[--fl];
+
+        if(f.length === 0) { continue; }
+
+        var cmp = f.charAt(0) === '!' ? false : true;
+
+        if(cmp === false) { f = f.substr(1); }
+
+        var p = Modernizr;
+        var q = f.split('.');
+
+        while(q.length && p !== undefined) {
+          p = p[q.shift()];
+        }
+
+        $scope.hasFeatures = (!p) == (!cmp);
+      }
+    }
+  };
+});

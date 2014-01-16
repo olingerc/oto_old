@@ -8,9 +8,7 @@ allow easy addition of admin user via commandline
 small link label under thumbs
 
 #Bugs
-file uploads no longer working since modal. does fileupload survive modal close?
 set dates on new for correct sorting until card returns from server
-calendar butoon not workng for duedate
 compare to original card for ok disable not working
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user

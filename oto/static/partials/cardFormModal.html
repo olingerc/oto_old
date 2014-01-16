@@ -1,40 +1,47 @@
+            <div class="modal-header">
+               {{{new: 'Add new card', edit: 'Edit card'}[cardFormAction]}}
+            </div>
+
+
             <div class="modal-body">
-            <div id='cardFormContainer' class='panel panel-primary'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">{{{new: 'Add new card', edit: 'Edit card'}[cardFormAction]}}</h3>
-                    </div>
+               <div id='cardFormContainer' class=''>
 
-                     <div class='col-lg-12 panel-body ' >
 
-                        <form name="$parent.cardForm" id='cardForm' role="form" class="form-horizontal">
-                           <div class="form-group">
-                                 <label for="inputTitle" class="col-sm-1 control-label">Title</label>
-                                 <div class="col-sm-7">
-                                    <input name='inputTitle' type="text" class="form-control" placeholder="Title"
-                                       ng-required="true"
-                                       ng-model="cardFormCard.title">
-                                    <span class="text-warning"
-                                       ng-show="titleError">{{titleErrorMessage}}</span>
-                                 </div>
-                           </div>
-                           <div class="form-group">
-                              <label for="inputContent" class="col-sm-1 control-label">Content</label>
+                     <form name="$parent.cardForm" id='cardForm' role="form" class="form-horizontal">
+                        <div class="form-group">
+                              <label for="inputTitle" class="col-sm-2 control-label">Title</label>
                               <div class="col-sm-7">
-                                 <textarea id='inputContent' type="text" class="form-control" rows="3"
-                                    ng-model="cardFormCard.content">
-                                 </textarea>
+                                 <input name='inputTitle' type="text" class="form-control" placeholder="Title"
+                                    ng-required="true"
+                                    ng-model="cardFormCard.title"
+                                    xng-focus="true">
+                                 <span class="text-warning"
+                                    ng-show="titleError">{{titleErrorMessage}}</span>
                               </div>
+                              <div class="col-sm-3"></div>
+                        </div>
+                        <div class="form-group">
+                           <label for="inputContent" class="col-sm-2 control-label">Content</label>
+                           <div class="col-sm-7">
+                              <textarea id='inputContent' type="text" class="form-control" rows="3"
+                                 ng-model="cardFormCard.content">
+                              </textarea>
                            </div>
-                           <div class="form-group">
-                              <label for="duedate" class="col-sm-1 control-label">Due</label>
-                              <div class="col-sm-4">
-                                 <!--<input id="duedate" type="date" class="form-control" ng-model="cardFormCard.duedate">-->
+                           <div class="col-sm-3"></div>
+                        </div>
+                        <div class="form-group">
+                           <label for="duedate" class="col-sm-2 control-label">Due</label>
+                           <div class="col-sm-4">
+                              <div my-if-browser-feature="!inputtypes.date">
+                                 <input id="duedate" type="date" class="form-control" ng-model="cardFormCard.duedate">
+                              </div>
+                              <div my-if-browser-feature="inputtypes.date">
                                  <p class='input-group'>
                                     <input type="text"
                                        class="form-control"
                                        datepicker-popup="{{format}}"
                                        ng-model="cardFormCard.duedate"
-                                       is-open="opened"
+                                       is-open="$parent.cardForm.opened"
                                        datepicker-options="dateOptions"
                                        date-disabled="disabled(date, mode)"
                                        close-text="Close">
@@ -42,57 +49,48 @@
                                      <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                                    </span>
                                 </p>
-
-
-
-                              </div>
+                             </div>
                            </div>
-                           <div class="form-group">
-                              <div class="col-sm-offset-1 col-sm-11">
-                                 <button id="submitAddCardFormBtn" type="submit" class="btn btn-primary"
-                                    ng-click="doCardFormAction()"
-                                    ng-disabled="isSaveDisabled()">
-                                    <i class="glyphicon glyphicon-ok"></i>
-                                 </button>
-                                 <button class="btn btn-default"
-                                    ng-click="cancelCardForm()">
-                                    <i class="glyphicon  glyphicon-remove"></i>
-                                 </button>
+                           <div class="col-sm-6"></div>
+                        </div>
+                     </form>
 
-                                 <button type="button" id="addFileFormBtn" class="btn btn-success"
-                                    ng-click="initFileUpload()">
-                                    add file
-                                 </button>
-                                 <input id="fileInput" type="file" multiple
-                                    ng-show=false
-                                    ng-file-select>
 
-                                 <input type="url"
-                                    ng-show="isLinkInputVisible"
-                                    ng-model='$parent.linkInputValue'><!--outside of form-->
-                                 <button type="button" id="addLinkFormBtn" class="btn btn-success"
-                                    ng-click="initAddLink()"
-                                    ng-hide='isLinkInputVisible'>
-                                    add link
-                                 </button>
-                                 <button type="button" class="btn btn-success"
-                                    ng-click="addLink()"
-                                    ng-show='isLinkInputVisible'
-                                    ng-disabled="isLinkInputValueInvalid()">
-                                    ok
-                                 </button>
-                                 <button type="button" class="btn btn-success"
-                                    ng-click="cancelAddLink()"
-                                    ng-show='isLinkInputVisible'>
-                                    cancel
-                                 </button>
-                              </div>
+                     <div class='row'>
+                        <div class="col-lg-12">
+                           <div class="fileUpload btn btn-success">
+                              <span>add file</span>
+                              <input id="fileInput" type="file" multiple class="upload" ng-file-select>
                            </div>
-                        </form>
+
+
+                           <input type="url"
+                              ng-show="isLinkInputVisible"
+                              ng-model='$parent.linkInputValue'><!--outside of form-->
+                           <button type="button" id="addLinkFormBtn" class="btn btn-success"
+                              ng-click="initAddLink()"
+                              ng-hide='isLinkInputVisible'>
+                              add link
+                           </button>
+                           <button type="button" class="btn btn-success"
+                              ng-click="addLink()"
+                              ng-show='isLinkInputVisible'
+                              ng-disabled="isLinkInputValueInvalid()">
+                              ok
+                           </button>
+                           <button type="button" class="btn btn-success"
+                              ng-click="cancelAddLink()"
+                              ng-show='isLinkInputVisible'>
+                              cancel
+                           </button>
+                        </div>
                      </div>
+                  </div>
+
+
                   <div class='row'>
                      <div  class='col-lg-12'>
-                        <ul class='list-inline thumblist'>
+                        <ul class='list-inline cardFormContainerthumblist'>
                            <li ng-repeat="att in fileAttachmentsList"
                               ng-click="$event.stopPropagation()">
                               <a class="att_thumb_link" title="{{att.filename}}"
@@ -130,5 +128,15 @@
                         </ul>
                   </div>
                </div>
-            </div>
          </div>
+            <div class="modal-footer">
+                  <button id="submitAddCardFormBtn" type="submit" class="btn btn-primary"
+                     ng-click="doCardFormAction()"
+                     ng-disabled="isSaveDisabled()">
+                     save <i class="glyphicon glyphicon-ok"></i>
+                  </button>
+                  <button class="btn btn-default"
+                     ng-click="cancelCardForm()">
+                     cancel <i class="glyphicon  glyphicon-remove"></i>
+                  </button>
+            </div>

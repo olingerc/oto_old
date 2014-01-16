@@ -75,8 +75,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
   $scope.open = function($event) {
     $event.preventDefault();
     $event.stopPropagation();
-//TODO does not workl
-    $scope.opened = true;
+    $scope.cardForm.opened = !$scope.cardForm.opened;
   };
 
   $scope.dateOptions = {
@@ -388,15 +387,11 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
 
    $scope.thumbService = thumbService; //only for view, don't use $scope.thumbService to update, but thumbService
 
-   $scope.initFileUpload = function() {
-      $('#fileInput').click();
-   };
-
-   var uploader = $scope.uploader = $fileUploader.create({
-      scope: $scope,
+   var uploader = $fileUploader.create({
       url: '/upload',
       autoUpload: true,
-      removeAfterUpload: true
+      removeAfterUpload: true,
+      scope:$scope
    });
 
    uploader.bind('afteraddingfile', function (event, item) {

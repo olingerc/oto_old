@@ -18,7 +18,7 @@
 
 /*Thumblists*/
 .thumblist {margin:0}
-#cardFormContainer .thumblist {margin: 0 10px}
+.cardFormContainerthumblist {margin: 10px 0 0 0 }
 .thumbContainer {
    min-width:60px; /*prevent sflicker when witching from progress to real thumb*/
 }
@@ -57,9 +57,6 @@ small.att_thumb_overlay {
 /*--CARD FORM--*/
 #cardFormContainer {padding-bottom:5px}/*background ignores padding, thats whjy form looks larger than cardlist*/
 
-/*Add file*/
-#addFileFormBtn {margin-left:35px;}
-
 /*Add link*/
 #addLinkFormContainer {display:inline-block;width:300px}
 #addLinkFormInput {display:inline-block;width:100px;}
@@ -78,4 +75,33 @@ small.att_thumb_overlay {
 
 .mute_link {
    color: #999 !important /*text-muted of bootstrap did not work*/
+}
+
+
+#notesQuery {
+   width:150px
+}
+
+
+
+/*
+ * File upload hack: http://geniuscarrier.com/how-to-style-a-html-file-upload-button-in-pure-css/
+ *
+ */
+
+.fileUpload {
+   position: relative;
+   overflow: hidden;
+   margin: 10px;
+}
+.fileUpload input.upload {
+   position: absolute;
+   top: 0;
+   right: 0;
+   margin: 0;
+   padding: 0;
+   font-size: 20px;
+   cursor: pointer;
+   opacity: 0;
+   filter: alpha(opacity=0);
 }
