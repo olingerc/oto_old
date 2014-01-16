@@ -49,7 +49,7 @@ app.controller('NotesViewController', ['$scope', '$modal', 'Stacks', 'Cards', 't
     ******************/
 
    $scope.stacks = [];
-   //TODO: put into factory initialization with watch on username?
+   //TODO: put into factory initialization?
    //what about stack add/remove/rename?, avoid stacks on parent scope? by using service in other controllers
    Stacks.getAll(
       function (allStacks, floatingStack) {
@@ -64,7 +64,7 @@ app.controller('NotesViewController', ['$scope', '$modal', 'Stacks', 'Cards', 't
    Cards.getAll(
       function(cards) {
          $scope.cards = cards;
-         //Keep as array of objects. The controller will regroup by sorting when parameters change change
+         //Keep as array of objects. The controller will regroup by sorting when parameters change
          $scope.cardGroups = [{
             'label': 'unsorted',
             'cards': $scope.cards
@@ -78,7 +78,7 @@ app.controller('NotesViewController', ['$scope', '$modal', 'Stacks', 'Cards', 't
 
    /******************
     *
-    * TODO: card header controller
+    * Cards Header
     *
     *************/
 
