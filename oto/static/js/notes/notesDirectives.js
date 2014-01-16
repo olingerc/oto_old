@@ -15,7 +15,7 @@ app.directive('thumbProgress', [function() {
     return {
         restrict: 'E',
         replace: true,
-        template: '<div style="margin-top:30px" class="progress progress-striped">  <div class="progress-bar"  role="progressbar" aria-valuenow="100" style="width: 100%">  </div></div>',
+        template: '<div style="margin-top:30px;min-width:50px" class="progress progress-striped">  <div class="progress-bar"  role="progressbar" aria-valuenow="100" style="width: 100%">  </div></div>',
         scope: {
            showprogress:'=showprogress'
         },
