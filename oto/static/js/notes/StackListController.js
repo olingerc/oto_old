@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stacks', 'Cards', function ($scope, $rootScope, $filter, Stacks, Cards) {
+app.controller('StackListController', ['$scope', '$filter', 'Stacks', 'Cards', function ($scope, $filter, Stacks, Cards) {
    $scope.stackActionError = false;
    $scope.stackActionErrorMsg = '';
 
@@ -125,15 +125,13 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
 
    //Filter cardsview by active stack
    $scope.listStackUser = function(stack) {
-      $rootScope.$broadcast('cancelCardForm');
-      $rootScope.$broadcast('unselectCard');
+      Cards.setActiveCard(null);
       $scope.$parent.search = stack.id;
       $scope.$parent.activestack = stack;
    };
 
    $scope.listStackAll = function() {
-      $rootScope.$broadcast('cancelCardForm');
-      $rootScope.$broadcast('unselectCard');
+      Cards.setActiveCard(null);
       $scope.$parent.search = '';
       $scope.$parent.activestack = {
          'owner':null,
@@ -142,8 +140,7 @@ app.controller('StackListController', ['$scope', '$rootScope', '$filter', 'Stack
       };
    };
    $scope.listStackArchive = function() {
-      $rootScope.$broadcast('cancelCardForm');
-      $rootScope.$broadcast('unselectCard');
+      Cards.setActiveCard(null);
       $scope.$parent.search = "archive";
       $scope.$parent.activestack = {
          'title':'Archive',

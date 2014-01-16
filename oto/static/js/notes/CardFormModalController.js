@@ -1,15 +1,52 @@
-app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUploader', 'thumbService', function($scope, $filter, $http, $fileUploader, thumbService) {
+app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$modalInstance', 'CardToEdit', '$fileUploader', 'thumbService', function($scope, $filter, $http, $modalInstance, CardToEdit, $fileUploader, thumbService) {
 
    var resolvePost = {},
       resolveUpdate = {};
 
    /*************
     *
-    * Initial form status
+    * Initial form status on modal open
     *
     ***********/
-   $scope.isCardFormVisible = false;
-   resetCardForm();
+   var emptyCard = {
+      title : '',
+      content : '',
+      duedate : ''
+   };
+
+   resetCardForm(); //TODO: actually only initial link input value here is interestin g on carform opne. since it's always a new modal instance'
+
+   //Define state depending or new or add
+   if (CardToEdit) {
+      if (thumbService.areAttsPending(CardToEdit.id)  || CardToEdit.saving) {
+         $modalInstance.close(); //safeguard
+         return;
+      }
+
+      $scope.cardFormAction = 'edit';
+      $scope.cardFormCard = angular.copy(CardToEdit);
+
+      if ($scope.cardFormCard.duedate) {
+         $scope.cardFormCard.duedate = $scope.cardFormCard.duedate.substring(0, 10);
+      }
+      if (!$scope.cardFormCard.fileattachments) {
+         $scope.cardFormCard.fileattachments = [];
+      }
+      if (!$scope.cardFormCard.urlattachments) {
+         $scope.cardFormCard.urlattachments = [];
+      }
+      //otherwise not recognized
+
+      $scope.originalCard = CardToEdit;
+      //we keep original card in order to detect whethter the save button should be enabled
+
+      $scope.fileAttachmentsList = $scope.cardFormCard.fileattachments;
+      $scope.urlAttachmentsList = $scope.cardFormCard.urlattachments;
+   } else {
+      $scope.cardFormAction = 'new';
+      $scope.cardFormCard = angular.copy(emptyCard);
+      $scope.cardFormCard.id = 'new' + makeid();
+   }
 
    /***************
     * Date picker
@@ -30,7 +67,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
     $scope.cardFormCard.duedate = null;
   };
 
-  // Disable weekend selection
+  //Disable weekend selection
   $scope.disabled = function(date, mode) {
     return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
   };
@@ -38,7 +75,7 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
   $scope.open = function($event) {
     $event.preventDefault();
     $event.stopPropagation();
-
+//TODO does not workl
     $scope.opened = true;
   };
 
@@ -77,11 +114,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
       $scope.titleErrorMessage = '';
       //Set temporary objects to empty
       $scope.originalCard = null;
-      var emptyCard = {
-         title : '',
-         content : '',
-         duedate : ''
-      };
       $scope.cardFormCard = angular.copy(emptyCard);
 
       $scope.isLinkInputVisible = false;
@@ -91,19 +123,13 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
    }
 
    $scope.doCardFormAction = function() {
+      $modalInstance.close(); //TODO dismiss?
       if ($scope.cardFormAction == 'edit') {
          editCard();
       } else {
          addCard();
       }
    };
-
-   //ADD CARD
-   $scope.$on('startAddCard', function() {
-      resetCardForm();
-      $scope.isCardFormVisible = true;
-      $scope.cardFormCard.id = 'new' + makeid();
-   });
 
    var addCard = function() {
       var newCard = $scope.cardFormCard;
@@ -121,10 +147,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
 
       //Display card in UI
       $scope.cards.push(newCard);
-
-      //Prepapre UI for next card add
-      $scope.isCardFormVisible = false;
-      resetCardForm();
 
       //Save card on server
       resolvePost[clientid] = function() {
@@ -164,40 +186,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
       }
 
    };
-
-   //EDIT
-   $scope.$on('startCardEdit', function(event, card) {
-      if (thumbService.areAttsPending(card.id)  || card.saving) {
-         return;
-      }
-      if (window.getSelection) { //Because of double click we select --> unselect
-          window.getSelection().removeAllRanges();
-      }
-      else if (document.selection) {
-          document.selection.empty();
-      }
-
-      $scope.isCardFormVisible = true;
-      $scope.cardFormAction = 'edit';
-
-      $scope.cardFormCard = angular.copy(card); //I do not want the UI to update here, thats why I copy.
-      if ($scope.cardFormCard.duedate) {
-         $scope.cardFormCard.duedate = $scope.cardFormCard.duedate.substring(0, 10);
-      }
-      if (!$scope.cardFormCard.fileattachments) {
-         $scope.cardFormCard.fileattachments = [];
-      }
-      if (!$scope.cardFormCard.urlattachments) {
-         $scope.cardFormCard.urlattachments = [];
-      }
-      //otherwise not recognized
-
-      $scope.originalCard = card;
-      //we keep original card in order to detect whethter the save button should be enabled
-
-      $scope.fileAttachmentsList = $scope.cardFormCard.fileattachments;
-      $scope.urlAttachmentsList = $scope.cardFormCard.urlattachments;
-   });
 
    var editCard = function() {
       if ($scope.cardForm.$invalid) {
@@ -271,10 +259,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
       //Display card in UI
       _.extend($scope.originalCard,updatedCardToSend);
 
-      //Prepapre UI for next card add
-      $scope.isCardFormVisible = false;
-      resetCardForm();
-
       resolveUpdate[updatedCardToSend.id] = function() {
          $http.put('/cards/' + updatedCardToSend.id, updatedCardToSend)
             .success(function(updatedCard) {
@@ -301,17 +285,8 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
       }
    };
 
-   //CANCEL
-   $scope.$on('cancelCardForm', function() {
-      $scope.cancelCardForm();
-      //TODO: cancel uploads of that card. Not all uplods
-   });
-
    $scope.cancelCardForm = function() {
-      if (!$scope.isCardFormVisible) {
-         return;
-      }
-      $scope.isCardFormVisible = false;
+      $modalInstance.dismiss();
       if ($scope.cardFormAction === 'edit') {
          //Handle file attachments first
          var filesToDelete = [];
@@ -339,7 +314,6 @@ app.controller('CardFormController', ['$scope', '$filter', '$http', '$fileUpload
          //remove ALL added
          cleanAttsOnCancel(fileAttachmentsAdded, urlAttachmentsAdded);
       }
-      resetCardForm();
    };
 
    function cleanAttsOnCancel(filesToDelete, urlsToDelete) {

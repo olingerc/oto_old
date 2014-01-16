@@ -5,9 +5,12 @@ put title attribute of current sort on sort button, maybve change icon
 directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap progress
 stack slug in url for better browser history --> https://github.com/angular-ui/ui-router/blob/master/sample/states.js
 allow easy addition of admin user via commandline
-cardform as modal
+small link label under thumbs
 
 #Bugs
+set dates on new for correct sorting until card returns from server
+calendar butoon not workng for duedate
+compare to original card for ok disable not working
 if no floating stack, it is created but not there yet. error for missing id. reload solves it
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
@@ -18,7 +21,7 @@ do I need an archive stack like the floating stack?
 can I set required = False for stackid and set stackid = null in archive? Since that particular id no longer exists if corresponding stack is deleted
 
 #Last thing worked on:
-
+cardform as modal
 
 
 

@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards', 'thumbService', function($scope, $rootScope, $filter, Cards, thumbService) {
+app.controller('CardListController', ['$scope', '$rootScope', '$filter', '$modal', 'Cards', 'thumbService', function($scope, $rootScope, $filter, $modal, Cards, thumbService) {
 
    $scope.selectCard = function(card) {
      //TODO: if edit form visible, load card on select
@@ -17,18 +17,30 @@ app.controller('CardListController', ['$scope', '$rootScope', '$filter', 'Cards'
       return card == Cards.getActiveCard() ? true : false;
    };
 
-   $scope.$on('unselectCard', function() {
-     Cards.setActiveCard(null);
-   });
-
    $scope.startEditCard = function(card) {
       if ($scope.inArchive()) {
          return;
       }
-      Cards.setActiveCard(card);
-      $rootScope.$broadcast('startCardEdit', card);
-   };
 
+      if (window.getSelection) { //Because of double click we select --> unselect
+          window.getSelection().removeAllRanges();
+      }
+      else if (document.selection) {
+          document.selection.empty();
+      }
+
+      Cards.setActiveCard(card);
+      var modalInstance = $modal.open({
+         templateUrl: '/static/partials/cardFormModal.html',
+         controller: 'CardFormModalInstanceCtrl',
+         scope: $scope,
+         resolve: {
+            CardToEdit:function() {
+               return card;
+            }
+         }
+      });
+   };
 
    /**********
    *Sort groups //TODO: put into attribute directive for cardlist???

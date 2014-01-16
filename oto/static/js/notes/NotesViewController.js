@@ -96,17 +96,35 @@ app.controller('NotesViewController', ['$scope', '$modal', 'Stacks', 'Cards', 't
 
    $scope.startAddCard = function() {
       if ($scope.inArchive()) {
-         return;
+         return; //safeguard
       }
-      $scope.$broadcast('startAddCard');
+      var modalInstance = $modal.open({
+         templateUrl: '/static/partials/cardFormModal.html',
+         controller: 'CardFormModalInstanceCtrl',
+         scope: $scope,
+         resolve: {
+            CardToEdit:function() {
+               return null;
+            }
+         }
+      });
    };
 
    //Active Card actions
    $scope.startEditCard = function(card) {
       if ($scope.inArchive()) {
-         return;
+         return; //safeguard
       }
-      $scope.$broadcast('startCardEdit', card);
+      var modalInstance = $modal.open({
+         templateUrl: '/static/partials/cardFormModal.html',
+         controller: 'CardFormModalInstanceCtrl',
+         scope: $scope,
+         resolve: {
+            CardToEdit:function() {
+               return card;
+            }
+         }
+      });
    };
 
    $scope.removeCard = function(card) {
@@ -193,4 +211,3 @@ var CardDetailsModalInstanceCtrl = function ($scope, $modalInstance, card) {
   };
 
 };
-

@@ -197,219 +197,77 @@
          </div>
       </div>
 
-     <!--Card Form-->
-      <div class='row'>
-         <div class='col-lg-12'>
-            <div id='cardFormContainer' class='panel panel-primary'
-               ng-show="isCardFormVisible"
-               ng-controller='CardFormController'>
-                    <div class="panel-heading">
-                      <h3 class="panel-title">{{{new: 'Add new card', edit: 'Edit card'}[cardFormAction]}}</h3>
-                    </div>
-
-                     <div class='col-lg-12 panel-body ' >
-
-                        <form name="cardForm" id='cardForm' role="form" class="form-horizontal">
-                           <div class="form-group">
-                                 <label for="inputTitle" class="col-sm-1 control-label">Title</label>
-                                 <div class="col-sm-7">
-                                    <input name='inputTitle' type="text" class="form-control" placeholder="Title"
-                                       ng-required="isCardFormVisible"
-                                       ng-model="cardFormCard.title"
-                                       xng-focus="isCardFormVisible">
-                                    <span class="text-warning"
-                                       ng-show="titleError">{{titleErrorMessage}}</span>
-                                 </div>
-                           </div>
-                           <div class="form-group">
-                              <label for="inputContent" class="col-sm-1 control-label">Content</label>
-                              <div class="col-sm-7">
-                                 <textarea id='inputContent' type="text" class="form-control" rows="3"
-                                    ng-model="cardFormCard.content">
-                                 </textarea>
-                              </div>
-                           </div>
-                           <div class="form-group">
-                              <label for="duedate" class="col-sm-1 control-label">Due</label>
-                              <div class="col-sm-4">
-                                 <!--<input id="duedate" type="date" class="form-control" ng-model="cardFormCard.duedate">-->
-                                 <p class='input-group'>
-                                    <input type="text"
-                                       class="form-control"
-                                       datepicker-popup="{{format}}"
-                                       ng-model="cardFormCard.duedate"
-                                       is-open="opened"
-                                       datepicker-options="dateOptions"
-                                       date-disabled="disabled(date, mode)"
-                                       close-text="Close">
-                                    <span class="input-group-btn">
-                                     <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                   </span>
-                                </p>
-
-
-
-                              </div>
-                           </div>
-                           <div class="form-group">
-                              <div class="col-sm-offset-1 col-sm-11">
-                                 <button id="submitAddCardFormBtn" type="submit" class="btn btn-primary"
-                                    ng-click="doCardFormAction()"
-                                    ng-disabled="isSaveDisabled()">
-                                    <i class="glyphicon glyphicon-ok"></i>
-                                 </button>
-                                 <button class="btn btn-default"
-                                    ng-click="cancelCardForm()">
-                                    <i class="glyphicon  glyphicon-remove"></i>
-                                 </button>
-
-                                 <button type="button" id="addFileFormBtn" class="btn btn-success"
-                                    ng-click="initFileUpload()">
-                                    add file
-                                 </button>
-                                 <input id="fileInput" type="file" multiple
-                                    ng-show=false
-                                    ng-file-select>
-
-                                 <input type="url"
-                                    ng-show="isLinkInputVisible"
-                                    ng-model='linkInputValue'>
-                                 <button type="button" id="addLinkFormBtn" class="btn btn-success"
-                                    ng-click="initAddLink()"
-                                    ng-hide='isLinkInputVisible'>
-                                    add link
-                                 </button>
-                                 <button type="button" class="btn btn-success"
-                                    ng-click="addLink()"
-                                    ng-show='isLinkInputVisible'
-                                    ng-disabled="isLinkInputValueInvalid()">
-                                    ok
-                                 </button>
-                                 <button type="button" class="btn btn-success"
-                                    ng-click="cancelAddLink()"
-                                    ng-show='isLinkInputVisible'>
-                                    cancel
-                                 </button>
-                              </div>
-                           </div>
-                        </form>
-                     </div>
-                  <div class='row'>
-                     <div  class='col-lg-12'>
-                        <ul class='list-inline thumblist'>
-                           <li ng-repeat="att in fileAttachmentsList"
-                              ng-click="$event.stopPropagation()">
-                              <a class="att_thumb_link" title="{{att.filename}}"
-                                 ng-href="">
-                                 <div class='thumbContainer'>
-                                    <thumb-progress showprogress="thumbService.getProgress(att.clientid, att.id) != ''"></thumb-progress>
-                                    <img class="att_thumb img-rounded" ng-src="{{thumbService.getServerId(att.clientid, att.id, '/thumbnail/')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
-                                 </div>
-                                 <small class="att_thumb_overlay text-center">
-                                    <i class="attdelbutton glyphicon glyphicon-trash"
-                                       ng-click="$event.stopPropagation();removeAtt(att)"
-                                       ng-show="thumbService.allowDelete(att.clientid, att.id)">
-                                    </i>
-                                    {{thumbService.getProgress(att.clientid, att.id)}}
-                                 </small>
-                              </a>
-                           </li>
-                           <li ng-repeat="att in urlAttachmentsList"
-                              ng-click="$event.stopPropagation()">
-                              <a class="inline att_thumb_link" title="{{att.url}}"
-                                 ng-href="">
-                                 <div class='thumbContainer'>
-                                    <img class="att_thumb img-rounded" src='/static/img/indicator.gif' ng-show="thumbService.getProgress(att.clientid, att.id) != ''">
-                                    <img class="att_thumb img-rounded" ng-src="{{thumbService.getServerId(att.clientid, att.id, '/thumbnaillink/')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
-                                 </div>
-                                 <small class="att_thumb_overlay">
-                                    <i class="attdelbutton glyphicon glyphicon-trash"
-                                       ng-click="$event.stopPropagation();removeLink(att)"
-                                       ng-show="thumbService.allowDelete(att.clientid, att.id)">
-                                    </i>
-                                    <i class="glyphicon  glyphicon-share-alt"></i>
-                                 </small>
-                              </a>
-                           </li>
-                        </ul>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-
       <!--Cards list-->
 
       <div class='row'>
          <div class='col-lg-12'>
             <div ng-controller="CardListController">
                <div ng-repeat="cardGroup in cardGroups">
-               <small class="text-muted" >{{cardGroup.label}}</small>
-               <div class='list-group'>
-                  <div class="card list-group-item"
-                     ng-repeat="card in cardGroup.cards"
-                     ng-class="{true: 'active', false: ''}[cardIsActive(card)]"
-                     ng-click='selectCard(card)'
-                     ng-dblclick="startEditCard(card)">
+                  <small class="text-muted" >{{cardGroup.label}}</small>
+                  <div class='list-group'>
+                     <div class="card list-group-item"
+                        ng-repeat="card in cardGroup.cards"
+                        ng-class="{true: 'active', false: ''}[cardIsActive(card)]"
+                        ng-click='selectCard(card)'
+                        ng-dblclick="startEditCard(card)">
 
    <!--Start of card-->
-                     <!-- Card title row -->
-                     <h4 class='pull-left list-group-item-heading'>{{card.title}}</h4>
-                     <ul class="clearfix list-inline label-list"><!--just add pull-right to align right-->
-                        <li></li>
-                        <li class="label label-default" ng-show='activestack.title==="All"'>{{getStacktitle(card.stackid)}}</li>
-                        <li class="label label-default" ng-show="isNotNull(card.stacktitleafterarchived)">original: {{card.stacktitleafterarchived}}</li>
-                        <li title="due date" class="card_due_label label label-default" ng-show="isNotNull(card.duedate)">
-                           <small><i class="glyphicon  glyphicon-time"></i> {{card.duedate  | date:'yyyy-MM-dd'}}</small>
-                        </li>
-                        <li class="card_mod_label"
-                           ng-show="{{card.saving}}">
-                           <small class="text-danger">saving...</small>
-                        </li>
-                     </ul>
+                        <!-- Card title row -->
+                        <h4 class='pull-left list-group-item-heading'>{{card.title}}</h4>
+                        <ul class="clearfix list-inline label-list"><!--just add pull-right to align right-->
+                           <li></li>
+                           <li class="label label-default" ng-show='activestack.title==="All"'>{{getStacktitle(card.stackid)}}</li>
+                           <li class="label label-default" ng-show="isNotNull(card.stacktitleafterarchived)">original: {{card.stacktitleafterarchived}}</li>
+                           <li title="due date" class="card_due_label label label-default" ng-show="isNotNull(card.duedate)">
+                              <small><i class="glyphicon  glyphicon-time"></i> {{card.duedate  | date:'yyyy-MM-dd'}}</small>
+                           </li>
+                           <li class="card_mod_label"
+                              ng-show="{{card.saving}}">
+                              <small class="text-danger">saving...</small>
+                           </li>
+                        </ul>
 
-                     <!--Card Content-->
-                     <p>{{card.content}}</p>
+                        <!--Card Content-->
+                        <p>{{card.content}}</p>
 
-                     <!--Tumbnails-->
-                     <ul class='list-inline thumblist'>
-                        <!--file Attachments-->
-                        <li ng-repeat="att in card.fileattachments">
-                           <a class="att_thumb_link" title="{{att.filename}}"
-                              ng-href="{{thumbService.getServerId(att.clientid, att.id, '/download/')}}"
-                              target="_self"
-                              ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
-                              >
-                              <div class='thumbContainer'>
-                                 <img class="att_thumb img-rounded" src='/static/img/indicator.gif' ng-show="thumbService.getProgress(att.clientid, att.id) != ''">
-                                 <img class="att_thumb img-rounded" ng-src="{{thumbService.getServerId(att.clientid, att.id, '/thumbnail/')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
-                              </div>
-                              <small ng-show="thumbService.getProgress(att.clientid, att.id) !== ''" class="att_thumb_overlay text-muted text-center">
-                                 {{thumbService.getProgress(att.clientid, att.id)}}
-                              </small>
-                            </a>
+                        <!--Tumbnails-->
+                        <ul class='list-inline thumblist'>
+                           <!--file Attachments-->
+                           <li ng-repeat="att in card.fileattachments">
+                              <a class="att_thumb_link" title="{{att.filename}}"
+                                 ng-href="{{thumbService.getServerId(att.clientid, att.id, '/download/')}}"
+                                 target="_self"
+                                 ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
+                                 >
+                                 <div class='thumbContainer'>
+                                    <thumb-progress showprogress="thumbService.getProgress(att.clientid, att.id) != ''"></thumb-progress>
+                                    <img class="att_thumb img-rounded" ng-src="{{thumbService.getServerId(att.clientid, att.id, '/thumbnail/')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
+                                 </div>
+                                 <small ng-show="thumbService.getProgress(att.clientid, att.id) !== ''" class="att_thumb_overlay text-muted text-center">
+                                    {{thumbService.getProgress(att.clientid, att.id)}}
+                                 </small>
+                               </a>
 
-                        </li>
+                           </li>
 
-                        <!--url Attachments-->
-                        <li ng-repeat="att in card.urlattachments">
-                           <a class="att_thumb_link" title="{{att.url}}" target="_blank"
-                              ng-href="{{att.url}}"
-                              ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
-                              >
-                              <div class='thumbContainer'>
-                                 <img class="att_thumb img-rounded" src='/static/img/indicator.gif' ng-show="thumbService.getProgress(att.clientid, att.id) != ''">
-                                 <img class="att_thumb img-rounded" ng-src="{{thumbService.getServerId(att.clientid, att.id, '/thumbnaillink/')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
-                              </div>
-                              <small class="att_thumb_overlay"><i class="glyphicon  glyphicon-share-alt"></i></small>
-                           </a>
-                        </li>
-                     </ul>
-                  </div><!--End of list group item-->
-               </div><!--End of list group-->
+                           <!--url Attachments-->
+                           <li ng-repeat="att in card.urlattachments">
+                              <a class="att_thumb_link" title="{{att.url}}" target="_blank"
+                                 ng-href="{{att.url}}"
+                                 ng-init="thumbService.storeThumbnail(card.id, att.clientid, att.id, att)"
+                                 >
+                                 <div class='thumbContainer'>
+                                    <thumb-progress showprogress="thumbService.getProgress(att.clientid, att.id) != ''"></thumb-progress>
+                                    <img class="att_thumb img-rounded" ng-src="{{thumbService.getServerId(att.clientid, att.id, '/thumbnaillink/')}}" ng-show="thumbService.getProgress(att.clientid, att.id) == ''">
+                                 </div>
+                                 <small class="att_thumb_overlay"><i class="glyphicon  glyphicon-share-alt"></i></small>
+                              </a>
+                           </li>
+                        </ul>
+                     </div><!--End of list group item-->
+                  </div><!--End of list group-->
+               </div>
             </div>
-</div>
-
          </div>
       </div>
    </section>
