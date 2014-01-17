@@ -5,6 +5,8 @@ app.factory('Auth', function($rootScope, $http, $cookieStore){
         userRoles = routingConfig.userRoles,
         currentUser = JSON.parse($cookieStore.get('user').replace('|',',')) || { username: '', role: userRoles.public };
 
+    $cookieStore.remove('user');
+
     function changeUser(user) {
         _.extend(currentUser, user);
         /*

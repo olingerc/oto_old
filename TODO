@@ -20,6 +20,7 @@ if no floating stack, it is created but not there yet. error for missing id. rel
 #Framework questions
 do I need an archive stack like the floating stack?
 can I set required = False for stackid and set stackid = null in archive? Since that particular id no longer exists if corresponding stack is deleted
+to slash or not to slash: https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions#how-to-make-a-trailing-slash-optional-for-all-routes
 
 #Last thing worked on:
 Authentication with remember me
