@@ -73,7 +73,7 @@ function getDateWithTime(date) {
    if (curr_min < 10)
       curr_min = "0" + curr_min;
 
-   return curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec;
+   return curr_year + "-" + curr_month + "-" + curr_date + "T" + curr_hour + ":" + curr_min + ":" + curr_sec;
 }
 /*
 function dynamicSort(property) {
