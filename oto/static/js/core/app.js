@@ -43,55 +43,40 @@ var app = angular.module('oto', [
             templateUrl: '/static/partials/401.html',
             access: access.public
          });
-      	$routeProvider.otherwise({
-      		templateUrl: '/static/partials/404.html',
-      		access: access.public
-      	});
+         $routeProvider.when('/404', {
+            templateUrl: '/static/partials/404.html',
+            access: access.public
+         });
+         $routeProvider.otherwise({redirectTo:'/404'});
 
       	$locationProvider.html5Mode(true);
 
-         var interceptor = ['$location', '$q', function($location, $q) {
-            function success(response) {
-               return response;
-            }
-
-            function error(response) {
-               if(response.status === 401) {
-                  $location.path('/login');
-                  return $q.reject(response);
-               } else {
-                  return $q.reject(response);
+         $httpProvider.interceptors.push(function($q, $location) {
+            return {
+               'responseError': function(response) {
+                  if(response.status === 401 || response.status === 403) {
+                     $location.path('/login');
+                     return $q.reject(response);
+                  }
+                  else {
+                     return $q.reject(response);
+                  }
                }
-            }
-
-            return function(promise) {
-               return promise.then(success, error);
             };
-         }];
-
-         $httpProvider.responseInterceptors.push(interceptor);
+         });
       }
 	])
    .run(['$rootScope', '$location', 'Auth',
       function ($rootScope, $location, Auth) {
          //init rootscope objects. I want to have separete objects for my modules
          $rootScope.core = {};
-         $rootScope.notes = {};
 
          $rootScope.$on("$routeChangeStart",
             function (event, next, current) {
                $rootScope.core.error = null;
                if (!Auth.authorize(next.access)) {
                   if(Auth.isLoggedIn()) {
-                     if ($rootScope.core.savedLocation) {
-                        if (Auth.authorize(next.access)) {
-                           $location.path($rootScope.core.savedLocation);
-                        } else {
-                           $location.path('/401').replace();
-                        }
-                     } else {
-                        $location.path('/401').replace();
-                     }
+                     $location.path('/401').replace(); //tell user that he is not allowed
                   } else {
                      $rootScope.core.savedLocation = $location.url();
                      $location.path('/login');
