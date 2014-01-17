@@ -37,7 +37,8 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       }
       //otherwise not recognized
 
-      $scope.originalCard = angular.copy($scope.cardFormCard);
+      $scope.originalCard = CardToEdit; //I need a direct reference to to update it later
+      $scope.originalCardNoHash = angular.copy($scope.cardFormCard); //I need this to enable/disable save button comparison. the above vontains $$hash
       //we keep original card in order to detect whethter the save button should be enabled
 
       $scope.fileAttachmentsList = $scope.cardFormCard.fileattachments;
@@ -75,6 +76,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       $scope.titleErrorMessage = '';
       //Set temporary objects to empty
       $scope.originalCard = null;
+      $scope.originalCardNoHash = null;
       $scope.cardFormCard = angular.copy(emptyCard);
 
       $scope.isLinkInputVisible = false;
@@ -315,13 +317,13 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
             return true;
          }
 
-         if ($scope.attachmentsChanged === true && angular.equals($scope.cardFormCard, $scope.originalCard)) {
+         if ($scope.attachmentsChanged === true && angular.equals($scope.cardFormCard, $scope.originalCardNoHash)) {
             return false;
          }
-         if ($scope.attachmentsChanged === false && !angular.equals($scope.cardFormCard, $scope.originalCard)) {
+         if ($scope.attachmentsChanged === false && !angular.equals($scope.cardFormCard, $scope.originalCardNoHash)) {
             return false;
          }
-         if ($scope.attachmentsChanged === true && !angular.equals($scope.cardFormCard, $scope.originalCard)) {
+         if ($scope.attachmentsChanged === true && !angular.equals($scope.cardFormCard, $scope.originalCardNoHash)) {
             return false;
          }
 
