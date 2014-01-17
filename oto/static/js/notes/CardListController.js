@@ -79,6 +79,9 @@ app.controller('CardListController', ['$scope', '$filter', '$modal', 'Cards', 't
 
       $scope.cardGroups = [];
       angular.forEach(groupsObj, function(cards, label) {
+         //sort within groups, otherwise new ones always appear at the end
+         cards  = $filter('orderBy')(cards, $scope.orderProp);
+
          $scope.cardGroups.push({
             'label':label,
             'cards':cards

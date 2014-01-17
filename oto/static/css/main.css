@@ -87,6 +87,30 @@ small.att_thumb_overlay {
    display:inline
 }
 
+/* ui-reset */
+.ui-resetwrap {
+        display: inline-block;
+        position: relative;
+}
+.ui-resetwrap input {
+    display:inline-block;
+    padding-right:22px;
+}
+.ui-reset {
+     display:inline;
+     cursor: pointer;
+     z-index: 2;
+     height: 100%;
+     font-size:15px;
+     color: #a5a5a5;
+     line-height:1.5em;
+     margin-left:-22px;
+     top:15px
+}
+
+.ui-reset i{
+   top:3px;
+}
 
 
 /*

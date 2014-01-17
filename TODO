@@ -6,36 +6,22 @@ directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap p
 stack slug in url for better browser history --> https://github.com/angular-ui/ui-router/blob/master/sample/states.js
 allow easy addition of admin user via commandline
 small link label under thumbs
-
-#Bugs
-set dates on new for correct sorting until card returns from server
-compare to original card for ok disable not working
-if no floating stack, it is created but not there yet. error for missing id. reload solves it
 do I really need to change the Marshaller for attachments? It works for stack with referencefield user
 use g object to get user at every request.
 recheck the cookie things, currently I hack the response into actionable json in the authentication service.How about a remember me option?
+
+#Bugs
+-Client
+
+-Server
+if no floating stack, it is created but not there yet. error for missing id. reload solves it
+
+-Both
 
 #Framework questions
 do I need an archive stack like the floating stack?
 can I set required = False for stackid and set stackid = null in archive? Since that particular id no longer exists if corresponding stack is deleted
 
 #Last thing worked on:
-Chack above bugs
+Compare to original card
 
-
-
-
-at the end of layout.html:
-     // Partial views... Load up front to make transitions smoother
-        script(type="text/ng-template", id="404")
-            include partials/404
-        script(type="text/ng-template", id="admin")
-            include partials/admin
-        script(type="text/ng-template", id="home")
-            include partials/home
-        script(type="text/ng-template", id="login")
-            include partials/login
-        script(type="text/ng-template", id="private")
-            include partials/private
-        script(type="text/ng-template", id="register")
-            include partials/register

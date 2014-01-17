@@ -14,7 +14,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       duedate : ''
    };
 
-   resetCardForm(); //TODO: actually only initial link input value here is interestin g on carform opne. since it's always a new modal instance'
+   resetCardForm(); //TODO: actually only initial link input value here is interesting during debugging on carform opne. since it's always a new modal instance'
 
    //Define state depending or new or add
    if (CardToEdit) {
@@ -37,7 +37,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       }
       //otherwise not recognized
 
-      $scope.originalCard = CardToEdit;
+      $scope.originalCard = angular.copy($scope.cardFormCard);
       //we keep original card in order to detect whethter the save button should be enabled
 
       $scope.fileAttachmentsList = $scope.cardFormCard.fileattachments;
@@ -95,14 +95,15 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
    };
 
    var addCard = function() {
-      $modalInstance.close(); //TODO dismiss?
+      $modalInstance.close();
       var newCard = $scope.cardFormCard;
       var clientid = $scope.cardFormCard.id;
       newCard.stackid = $scope.activestack.id;
       newCard.clientid = clientid;
       newCard.fileattachments = angular.copy($scope.fileAttachmentsList);
       newCard.urlattachments = angular.copy($scope.urlAttachmentsList);
-      //TODO: set modifiedat and createdat for correct sorting until real dates come back from server
+      newCard.createdat = getDateWithTime();
+      newCard.modifiedat = getDateWithTime();
       newCard.saving = true;
 
       if (newCard.duedate == '') {
@@ -155,7 +156,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       if ($scope.cardForm.$invalid) {
          return; //safeguard
       }
-      $modalInstance.close(); //TODO dismiss?
+      $modalInstance.close();
       //Handle attachments first
       var filesToDelete = [];
       //1)Those in added AND removed --> delete
@@ -204,16 +205,11 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
          });
       }
 
-      if (angular.equals($scope.originalCard, $scope.cardFormCard) && $scope.attachmentsChanged === false) {
-         $scope.isCardFormVisible = false;
-         return;
-         //Nothing was changed (safeguard)
-      }
       var updatedCardToSend = $scope.cardFormCard;
       updatedCardToSend.clientid = $scope.cardFormCard.id;
       updatedCardToSend.fileattachments = angular.copy($scope.fileAttachmentsList);
       updatedCardToSend.urlattachments = angular.copy($scope.urlAttachmentsList);
-      //TODO: set modifiedat and createdat for correct sorting until real dates come back from server
+      updatedCardToSend.modifiedat = getDateWithTime();
       updatedCardToSend.saving = true;
 
       if (updatedCardToSend.duedate == '') {
@@ -221,7 +217,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       }
 
       //Display card in UI
-      _.extend($scope.originalCard,updatedCardToSend);
+      _.extend($scope.originalCard, updatedCardToSend);
 
       resolveUpdate[updatedCardToSend.id] = function() {
          $http.put('/cards/' + updatedCardToSend.id, updatedCardToSend)

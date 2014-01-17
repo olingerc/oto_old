@@ -37,3 +37,38 @@ app.directive('thumbProgress', [function() {
         }
     };
 }]);
+
+/*Heavily inspired by angularui utils*/
+app.directive('otoReset', function() {
+    return {
+       restrict:'A',
+       require:'ngModel',
+       scope:{
+          ngShow:'='
+       },
+       link: function(scope, element, attrs, ctrl) {
+            var aElement,wElement;
+            wElement = angular.element('<span class="ui-resetwrap" />');
+            aElement = angular.element('<a class="ui-reset"><i class="glyphicon  glyphicon-remove-circle"></i></a>');
+            element.wrap(wElement).after(aElement);
+
+            if (attrs.ngShow) {
+               scope.$watch('ngShow', function(show) {
+                  if (show) {
+                     element.parent().show();
+                  } else {
+                     element.parent().hide();
+                  }
+               });
+            }
+
+            aElement.bind('click', function (e) {
+              e.preventDefault();
+              scope.$apply(function () {
+                  ctrl.$setViewValue('');
+                  ctrl.$render();
+              });
+            });
+         }
+       };
+});

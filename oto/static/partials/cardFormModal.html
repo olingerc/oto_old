@@ -51,7 +51,9 @@
                               ui-keypress="{13:'addLink()'}"
                               ng-show="$parent.isLinkInputVisible"
                               xng-focus="$parent.isLinkInputVisible"
-                              ng-model='$parent.linkInputValue'><!--outside of form-->
+                              ng-model='$parent.linkInputValue'
+                              oto-reset
+                              ><!--outside of form-->
                            <button type="button" id="addLinkFormBtn" class="btn btn-success"
                               ng-click="initAddLink()"
                               ng-hide='isLinkInputVisible'>

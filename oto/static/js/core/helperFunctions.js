@@ -49,6 +49,32 @@ function getDateNoTime(date) {
 
    return curr_year + "-" + curr_month + "-" + curr_date;// + " " + curr_hour + ":" + curr_min + ":00";
 }
+
+
+function getDateWithTime(date) {
+   if (!date) {
+      var d = new Date();
+   } else {
+      var d = new Date(date);
+   }
+   var curr_date = d.getDate();
+   var curr_month = d.getMonth() + 1;
+   var curr_year = d.getFullYear();
+   var curr_hour = d.getHours();
+   var curr_min = d.getMinutes();
+   var curr_sec= d.getSeconds();
+
+   if (curr_date < 10)
+      curr_date = "0" + curr_date;
+   if (curr_month < 10)
+      curr_month = "0" + curr_month;
+   if (curr_hour < 10)
+      curr_hour = "0" + curr_hour;
+   if (curr_min < 10)
+      curr_min = "0" + curr_min;
+
+   return curr_year + "-" + curr_month + "-" + curr_date + " " + curr_hour + ":" + curr_min + ":" + curr_sec;
+}
 /*
 function dynamicSort(property) {
     var sortOrder = 1;

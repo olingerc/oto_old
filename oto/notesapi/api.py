@@ -205,7 +205,7 @@ class CardListResource(ListMongoResource):
       doc = Card()
       Marshaller(doc).loads(card)
       doc.owner = user
-      doc.createdat = datetime.now().strftime('%Y%m%d%H%M%S')
+      doc.createdat = datetime.now().strftime('%Y%m%d%H%M%S') # override client
       doc.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
       doc.id = ObjectId()
       if 'fileattachments' in request.form:
@@ -302,7 +302,7 @@ class CardSingleResource(SingleMongoResource):
          card.duedate = None
          
       card.owner = user #the client sent None as owner since it did not have the info
-      card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')
+      card.modifiedat = datetime.now().strftime('%Y%m%d%H%M%S')  # override client
       card.save()
       
       #hide owner from client
