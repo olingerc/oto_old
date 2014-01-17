@@ -20,7 +20,7 @@ do I need an archive stack like the floating stack?
 can I set required = False for stackid and set stackid = null in archive? Since that particular id no longer exists if corresponding stack is deleted
 
 #Last thing worked on:
-cardform as modal
+Chack above bugs
 
 
 
