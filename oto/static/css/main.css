@@ -112,6 +112,8 @@ small.att_thumb_overlay {
    top:3px;
 }
 
+.logo {height:30px;margin-bottom:-8px;margin-top:-12px}
+
 
 /*
  * File upload hack: http://geniuscarrier.com/how-to-style-a-html-file-upload-button-in-pure-css/
