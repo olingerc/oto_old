@@ -24,10 +24,16 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       }
 
       $scope.cardFormAction = 'edit';
-      _.extend($scope.cardFormCard, CardToEdit);
+      $scope.cardFormCard = angular.copy(CardToEdit);
 
       if ($scope.cardFormCard.duedate) {
          $scope.cardFormCard.duedate = $scope.cardFormCard.duedate.substring(0, 10);
+      }
+      if (!$scope.cardFormCard.fileattachments) {
+         $scope.cardFormCard.fileattachments = [];
+      }
+      if (!$scope.cardFormCard.urlattachments) {
+         $scope.cardFormCard.urlattachments = [];
       }
       //otherwise not recognized
 
