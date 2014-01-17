@@ -93,9 +93,11 @@
       //iOS status bar in web app bug
           var updateStatusBar = navigator.userAgent.match(/iphone|ipad|ipod/i) &&
               parseInt(navigator.appVersion.match(/OS (\d)/)[1], 10) >= 7;
+              
+              //webapp does not have safari in the name!
 
           if (updateStatusBar) {
-              document.body.style.webkitTransform = 'translate3d(0, 20px, 0)';
+              //document.body.style.webkitTransform = 'translate3d(0, 20px, 0)';
           }
       </script>
 
