@@ -38,7 +38,7 @@ def requires_auth_admin(f):
          make_response(render_template('app.html')), 401
       else:
          if session['role'] != 'admin':
-            make_response(render_template('app.html')), 401
+            make_response(render_template('app.html')), 403
       return f(*args, **kwargs)
    return decorated_function
 
