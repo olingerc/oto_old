@@ -5,6 +5,8 @@ from flask_cuddlyrest import CuddlyRest
 from functools import wraps
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from flask.ext.login import LoginManager
+
 
 import subprocess
 import tarfile
@@ -19,6 +21,22 @@ from oto.notesapi.models import *  # @UnusedWildImport
 from oto.adminapi.models import *  # @UnusedWildImport
 from oto import app
 from oto.settings import MONGODB_SETTINGS
+
+#Login Mangager
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(userid):
+   try:
+      user = User.objects.get(id=userid)
+      return user
+   
+   except DoesNotExist:
+      return None
+   except:
+      raise
+   
 
 #RESTful api manager
 api = CuddlyRest(app)

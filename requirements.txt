@@ -12,3 +12,4 @@ Flask (Werkzeug, jinja, itsdangerous, markupsafe)
 flask-mongoengine(mongoengine, flask-wtf, pymongo, WTForms)
 flask-restful (aniso8601, six, pytz)
 PIL (verify that libjpg is installed and correctly linked before installing PIL)
+flask-login 0.2.9
