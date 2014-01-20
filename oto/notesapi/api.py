@@ -12,7 +12,7 @@ from oto.notesapi.models import *  # @UnusedWildImport
 from oto.adminapi.models import *  # @UnusedWildImport
 from oto import app
 
-from oto.adminapi.api import requires_auth
+from oto.adminapi.api import requires_auth_api
 
 #Custom api calls:
 import customapi  # @UnusedImport
@@ -23,7 +23,7 @@ api = CuddlyRest(app)
 
 '''
 This api is only for logged in users
-This is checked via method_decorators = [requires_auth] fom the admin api module and in the Cuddly classes
+This is checked via method_decorators = [requires_auth_api] fom the admin api module and in the Cuddly classes
 '''
 
 '''
@@ -53,7 +53,7 @@ class StackListResource(ListMongoResource):
    I overwrite these classes to filter by owner and hide owner from client
    '''
    
-   method_decorators = [requires_auth]
+   method_decorators = [requires_auth_api]
    def __init__(self):
       super(ListMongoResource, self).__init__(Stack)
       self.document = Stack
@@ -119,7 +119,7 @@ class StackSingleResource(SingleMongoResource):
    '''
    
    
-   method_decorators = [requires_auth]
+   method_decorators = [requires_auth_api]
    def __init__(self):
       super(SingleMongoResource, self).__init__(Stack)
       self.document = Stack
@@ -159,7 +159,7 @@ my own subclass, I also have to rewrite the _init_ of the SingleResource
 
 
 class CardListResource(ListMongoResource):
-   method_decorators = [requires_auth]
+   method_decorators = [requires_auth_api]
    '''
    All /basename/ requests will hit this resource.
  
@@ -263,7 +263,7 @@ class CardListResource(ListMongoResource):
 
 
 class CardSingleResource(SingleMongoResource):
-   method_decorators = [requires_auth]
+   method_decorators = [requires_auth_api]
    '''
    All /basename/:pk requests will hit this resource.
 

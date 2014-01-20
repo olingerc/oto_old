@@ -11,3 +11,14 @@ class User (db.Document):
                   {'fields': ['username'], 'unique': True}
                ]
    }
+   
+class Rememberme (db.Document):
+   username = db.StringField(max_length=255, required=True)
+   hash = db.StringField(required=True)
+   valid = db.BooleanField(default=False, required=True)
+   
+   meta = {
+      'indexes': [
+                  {'fields': ['hash'], 'unique': True}
+               ]
+   }

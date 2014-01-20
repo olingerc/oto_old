@@ -1,7 +1,6 @@
 #Features
 continue developing resource like in delete user in admin controller
 put title attribute of current sort on sort button, maybve change icon
-directive for porgress thumb to make it nicer, maybe jquery knob? or bootstrap progress
 stack slug in url for better browser history --> https://github.com/angular-ui/ui-router/blob/master/sample/states.js
 allow easy addition of admin user via commandline
 small link label under thumbs
@@ -13,7 +12,6 @@ recheck the cookie things, currently I hack the response into actionable json in
 -Client
 
 -Server
-if no floating stack, it is created but not there yet. error for missing id. reload solves it
 
 -Both
 
@@ -23,5 +21,5 @@ can I set required = False for stackid and set stackid = null in archive? Since 
 to slash or not to slash: https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions#how-to-make-a-trailing-slash-optional-for-all-routes
 
 #Last thing worked on:
-Authentication with remember me
+Test cookie a bit further and then think about how to redo iphone UI
 

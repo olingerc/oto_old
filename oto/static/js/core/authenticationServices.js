@@ -3,7 +3,16 @@
 app.factory('Auth', function($rootScope, $http, $cookieStore){
     var accessLevels = routingConfig.accessLevels,
         userRoles = routingConfig.userRoles,
-        currentUser = JSON.parse($cookieStore.get('user').replace('|',',')) || { username: '', role: userRoles.public };
+        //currentUser = JSON.parse($cookieStore.get('user').replace('|',',')) || { username: '', role: userRoles.public };
+        currentUser = { username: '', role: userRoles.public };
+
+        currentUser = $cookieStore.get('user');
+
+         if (currentUser) {
+            currentUser = JSON.parse(currentUser.replace('|',','));
+         } else {
+            currentUser = { username: '', role: userRoles.public };
+         }
 
     $cookieStore.remove('user');
 

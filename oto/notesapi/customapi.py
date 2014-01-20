@@ -9,7 +9,7 @@ import fileattachments
 import urlattachments
 from json import dumps
 
-from oto.adminapi.api import requires_auth
+from oto.adminapi.api import requires_auth_api
 from oto.adminapi.models import User  # @UnusedWildImport
 
 from oto.notesapi.models import UrlAttachment, Attachment
@@ -18,7 +18,7 @@ from oto.utils import set_user_cookie
 
 '''
 This api is only for looged in users
-This is checked via method_decorators = [requires_auth] in the api classes
+This is checked via method_decorators = [requires_auth_api] in the admin api classes
 '''
 
 #on notes page load, we need to check if the floating stack for that user already exists
@@ -26,10 +26,11 @@ def init_notesapp(function):
    @wraps(function)
    def decorated_function(*args, **kwargs):
       if 'username' not in session or session['username'] is None or session['username'] == '':
-         #This bypasses the actual set cookie in the notes route. So call it here!
+         #This bypasses the actual set cookie for angularAuthentication in the notes route. So call it here!
          resp = make_response(render_template('app.html'))
          set_user_cookie(resp)
          return resp, 401
+
       #Check if this user already has a floating stack
       try:
          user = User.objects.get(username=session['username'])  # @UndefinedVariable
@@ -42,13 +43,14 @@ def init_notesapp(function):
          try:
             stack = Stack(
                        title='Floating',
-                       owner = user 
+                       owner = user,
+                       createdat = datetime.now().strftime('%Y%m%d%H%M%S')
                     )
+            stack.save()
+         
          except:
             return dumps({'error':'could not create floating stack'}), 500
-         stack.createdat = datetime.now().strftime('%Y%m%d%H%M%S')
-         stack.save()
-         
+        
          
       #Remove floating 'new' atts
       attinstorage = Attachment.objects.filter(cardid__startswith='new')
@@ -74,43 +76,43 @@ Attachments view functions
 #FILES
     
 @app.route('/upload', methods = ['POST'])
-@requires_auth
+@requires_auth_api
 def uploadfiles():
    return fileattachments.uploadFiles()
 
 @app.route('/deleteatts', methods = ['POST'])
-@requires_auth
+@requires_auth_api
 def deleteatts():
    return fileattachments.deleteatts()
 
 @app.route('/createthumb', methods = ['POST'])
-@requires_auth
+@requires_auth_api
 def createthumb():
    return fileattachments.create_thumbnail()
 
 @app.route('/thumbnail/<fileid>')
-@requires_auth
+@requires_auth_api
 def serve_thumbnail(fileid):
    return fileattachments.serve_thumbnail(fileid)
 
 @app.route('/download/<fileid>')
-@requires_auth
+@requires_auth_api
 def serve_file(fileid):
    return fileattachments.serve_file(fileid)
 
 
 #LINKS
 @app.route('/addlink', methods = ['POST'])
-@requires_auth
+@requires_auth_api
 def addlink():
    return urlattachments.saveLinkToMongo()
 
 @app.route('/thumbnaillink/<urlattachmentid>')
-@requires_auth
+@requires_auth_api
 def serve_urlattachment_thumbnail(urlattachmentid):
    return urlattachments.serve_urlattachment_thumbnail(urlattachmentid)
 
 @app.route('/deletelink', methods = ['POST'])
-@requires_auth
+@requires_auth_api
 def delete_urlattachment():
    return urlattachments.deleteurlattachment()

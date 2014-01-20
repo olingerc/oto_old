@@ -1,4 +1,4 @@
-from flask import request, session, send_file, after_this_request, make_response, render_template
+from flask import request, session, send_file, after_this_request, make_response, render_template, g
 from flask_cuddlyrest.views import ListMongoResource, SingleMongoResource, catch_all
 from flask_cuddlyrest.marshaller import Marshaller
 from flask_cuddlyrest import CuddlyRest
@@ -23,11 +23,48 @@ from oto.settings import MONGODB_SETTINGS
 #RESTful api manager
 api = CuddlyRest(app)
 
-def requires_auth(f):
+def requires_auth_route(f):
    @wraps(f)
    def decorated_function(*args, **kwargs):
+      #First check if existing session, otherwise check for cookie, then abort 401
       if 'username' not in session or session['username'] is None or session['username'] == '':
-         make_response(render_template('app.html')), 401
+         #User not in session --> check for rememberme cookie
+         if 'oto_rememberme' in request.cookies:
+            rmcookie = request.cookies['oto_rememberme']
+            rmcookie = rmcookie.split('_')
+            
+            try:
+               rm = Rememberme.objects.get(hash=rmcookie[1], valid=True)
+               if rm['username'] == rmcookie[0]:
+                  #COOKIE VALID --> store in session and PROCEED (invalidate and set new cookie)
+                  user = User.objects.get(username=rmcookie[0])
+                  session['username'] = user.username
+                  session['role'] = user.role
+                  
+                  #invalidate old one
+                  rm['valid'] = False
+                  rm.save()
+                  
+                  #create new one and send to client
+                  rndhash = os.urandom(16).encode('base-64') #TODOstore hashed in db to avoid visible username in cookie
+                  rm = Rememberme(username=user.username, hash=rndhash, valid=True)
+                  rm.save()
+                  
+                  g.new_rm_cookie = rm #keep to set in next response, empty when set
+                  g.rm_cookie = rm #keep for logout TODO: empty after logout
+                  
+                  return f(*args, **kwargs)
+               else:
+                  #hash and username do not correspond, very unlikely --> invalidate cookie anayway and ask for new login
+                  rm['valid'] = False
+                  make_response(render_template('app.html')), 401
+            except:
+               #cookie exists but no longer valid
+               make_response(render_template('app.html')), 401
+         else:
+            #No rememberme cookie there --> new login
+            make_response(render_template('app.html')), 401
+            
       return f(*args, **kwargs)
    return decorated_function
 
@@ -39,6 +76,16 @@ def requires_auth_admin(f):
       else:
          if session['role'] != 'admin':
             make_response(render_template('app.html')), 403
+      return f(*args, **kwargs)
+   return decorated_function
+
+
+
+def requires_auth_api(f):
+   @wraps(f)
+   def decorated_function(*args, **kwargs):
+      if 'username' not in session or session['username'] is None or session['username'] == '':
+         make_response(render_template('app.html')), 401
       return f(*args, **kwargs)
    return decorated_function
 
@@ -98,12 +145,27 @@ def checklogin():
    data = request.json
    username = data['username']
    given_password = data['password']
+   
+   rememberme = data['rememberme']
+   
    try:      
       user = User.objects.get(username=username)  # @UndefinedVariable
       if check_password_hash(user.password, given_password) == True:
          session['username'] = user.username
          session['role'] = user.role
-         return json.dumps({'username':user.username, 'role':user.role}), 200
+         
+         if rememberme is True:
+            #set cookie and store in db
+            rndhash = os.urandom(16).encode('base-64') #TODOstore hashed in db to avoid visible username in cookie
+            rm = Rememberme(username=user.username, hash=rndhash, valid=True)
+            rm.save()
+            
+            resp = make_response(json.dumps({'username':user.username, 'role':user.role}), 200)
+            resp.set_cookie('oto_rememberme', value=user.username + "_" + rndhash, max_age=432000) #TODO: hash cookie
+            return resp
+            
+         else:
+            return json.dumps({'username':user.username, 'role':user.role}), 200
       else:
          logout()
          return json.dumps({ "error": 'does not exist or wrong password' }), 500
@@ -117,13 +179,13 @@ def checklogin():
    
 @app.route('/logout', methods=['POST'])
 def logout():
-   if not 'username' in session:
-      session['username'] = ''
-   if not 'role' in session:
-      session['role'] = 'public'
    session['username'] = ''
    session['role'] = 'public'
-   return 'ok', 200
+
+   resp = make_response('ok', 200)
+   resp.set_cookie('oto_rememberme', '', expires = 0)
+   
+   return resp
 
 
 @app.route('/_usersession')
