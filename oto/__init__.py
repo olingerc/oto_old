@@ -3,6 +3,9 @@ from flask import Flask, Response, session, render_template, send_from_directory
 from flask.ext.mongoengine import MongoEngine  # @UnresolvedImport
 from json import dumps
 import urllib
+import time
+
+from flask_sockets import Sockets
 
 from utils import set_user_cookie
 
@@ -12,6 +15,9 @@ app.url_map.strict_slashes = False
 
 #Create mongo instance
 db = MongoEngine(app)
+
+#websocket
+sockets = Sockets(app)
 
 #import apis
 import notesapi.api
@@ -76,3 +82,11 @@ def favicon():
 @app.errorhandler(404)
 def page_not_found(e):
    return make_response(render_template('app.html')), 404
+
+
+#websocket part: http://stackoverflow.com/questions/19899578/how-do-i-get-this-websocket-example-to-work-with-flask
+@sockets.route('/wsapi')
+def echo_socket(ws):
+   while True:
+      message = ws.receive()
+      ws.send(message)
