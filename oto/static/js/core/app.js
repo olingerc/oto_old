@@ -39,6 +39,11 @@ var app = angular.module('oto', [
             templateUrl: '/static/partials/automation.html',
             access: access.user
          });
+         $routeProvider.when('/sandbox', {
+            templateUrl: '/static/partials/sandbox.html',
+            access: access.public,
+            controller:'SandboxCtrl'
+         });
          $routeProvider.when('/401', {
             templateUrl: '/static/partials/401.html',
             access: access.public

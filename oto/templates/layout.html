@@ -58,6 +58,10 @@
                   <a href="/admin"
                      access-level='accessLevels.admin'>Admin</a>
                </li>
+               <li active-nav>
+                  <a href="/sandbox"
+                     access-level='accessLevels.public'>Sandbox</a>
+               </li>
           </ul>
          <ul class="nav navbar-nav navbar-right">
                <li active-nav>
@@ -93,7 +97,7 @@
       //iOS status bar in web app bug
           var updateStatusBar = navigator.userAgent.match(/iphone|ipad|ipod/i) &&
               parseInt(navigator.appVersion.match(/OS (\d)/)[1], 10) >= 7;
-              
+
               //webapp does not have safari in the name!
 
           if (updateStatusBar) {
@@ -137,5 +141,7 @@
       <script src="/static/js/landing/LandingController.js"></script>
 
       <script src="/static/js/automation/AutomationControllers.js"></script>
+
+      <script src="/static/js/sandbox/SandboxCtrl.js"></script>
    </body>
 </html>
