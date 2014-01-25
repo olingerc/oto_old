@@ -35,6 +35,11 @@ var app = angular.module('oto', [
       	   templateUrl: '/static/partials/card-list.html',
       		access: access.user
       	});
+         $routeProvider.when('/watchlist', {
+            templateUrl: '/static/partials/watchlist.html',
+            access: access.user,
+            controller: 'WatchlistController'
+         });
          $routeProvider.when('/automation', {
             templateUrl: '/static/partials/automation.html',
             access: access.user
