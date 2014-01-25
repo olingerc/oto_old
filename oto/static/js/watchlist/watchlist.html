@@ -24,10 +24,17 @@
    </div>
 </div>
 
-<div class='row'>
+<div class='row' ng-show='showSearchResults'>
+   <div class='col-md-12'>
+      <span ng-show='searching'>Searching...</span>
+   </div>
+</div>
+
+<div class='row' ng-show='showSearchResults'>
    <div class='col-md-12'>
       <!--Search result-->
-      <span ng-show='searching'>Searching...</span>
+      <h3 ng-show='showSearchResults && !searching'>Search Results <button ng-show='showSearchResults && !searching' class='btn btn-success' ng-click='showSearchResults=false'>Close</button></h3>
+      
       <div class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12"  ng-if="searchResults.length > 0" ng-hide='searching'>
         <a href="#" class="list-group-item col-xs-12 col-sm-12 col-md-6 col-lg-6" 
          ng-repeat='series in searchResults'>
@@ -50,12 +57,43 @@
                  <dt>Runtime</dt>
                  <dd>{{series.runtime}}</dd>
                </dl>
-               <button class='btn btn-success pull-right'>Add</button>
+               <button class='btn btn-success pull-right' ng-click='addSeries(series)'>Add</button>
                <div class='clearfix'></div>
 
         </a>
       </div>
       <!--No results-->
       <p  ng-if="searchResults.length == 0" ng-hide='searching'>No results for {{query}}</p>
+      
+   </div>
+</div>
+
+<div class='row' ng-show='loadingCollection'>
+   <div class='col-md-12'>
+      <span>Loading collection...</span>
+   </div>
+</div>
+<div class='row' ng-hide='loadingCollection'>
+   <div class='col-md-12'>
+      <!--Series collection-->
+      <h3>Series Collection</h3>
+      <div class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12"
+         ng-if="seriesCollection.length > 0">
+        <a href="#" class="list-group-item col-xs-12 col-sm-12 col-md-6 col-lg-6" 
+         ng-repeat='series in seriesCollection'>
+          <h4 class="list-group-item-heading">{{series.name}}</h4>
+               <img class='seriesThumb img-rounded  pull-left' ng-src='{{series.thumb}}'>
+               <dl class="dl-horizontal pull-left">
+                 <dt>Next episode</dt>
+                 <dd>{{series.nextEpisode}}</dd>
+                 <dt>Seasons</dt>
+                 <dd>{{series.totalSeasons}}</dd>
+                 <dt>Episodes</dt>
+                 <dd>{{series.totalEpisodes}}</dd>
+               </dl>
+               <button class='btn btn-success pull-right' ng-click='removeSeries($index)'>Remove</button>
+               <div class='clearfix'></div>
+        </a>
+      </div>
    </div>
 </div>
