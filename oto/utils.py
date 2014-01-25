@@ -29,6 +29,6 @@ def set_user_cookie(resp):
            'username': session['username'],
            'role': session['role']
            }
-   json = json.dumps(user).replace(',','|')
-   resp.set_cookie('user', value=json)
+   userjson = json.dumps(user).replace(',','|')
+   resp.set_cookie('user', value=userjson)
    print resp

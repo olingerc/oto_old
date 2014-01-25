@@ -2,13 +2,59 @@
 <div class="header-section">
 	<div class="header-row">
 		<div class="">
-			<h1 class="">Watchlist <small> Follow movies and tv shows release dates. Store favourites.</small></h1>
+			<h1 class="">Watchlist <small> Follow movies and tv shows</small></h1>
 		</div>
 	</div>
 </div>
 <div class="header-push">
 </div>
 
-<div>
- Write it!
+<div class='row morepadding'>
+   <div class='col-md-12'>
+      <form class="form-inline" role="form">
+        <div class="form-group">
+          <input ng-model='query' type="email" class="form-control" id="searchInut" placeholder="enter name">
+        </div>
+        <button type="submit" class="btn btn-default">Search</button>
+        <div class="btn-group">
+           <button type="button" ng-class='{active: searchFor == "tvshows"}' class="btn btn-default" ng-click='setSearchFor("tvshows")'>TV Shows</button>
+           <button type="button" ng-class='{active: searchFor == "movies"}' class="btn btn-default" ng-click='setSearchFor("movies")'>Movies</button>
+        </div>
+      </form>
+   </div>
+</div>
+
+<div class='row'>
+   <div class='col-md-12'>
+      <!--Search result-->
+      <div class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12"  ng-if="searchResults.length > 0">
+        <a href="#" class="list-group-item col-xs-12 col-sm-12 col-md-6 col-lg-6" 
+         ng-repeat='series in searchResults'>
+          <h4 class="list-group-item-heading">{{series.name}}</h4>
+                <img class='seriesThumb img-rounded  pull-left' ng-src='{{series.thumb}}'>
+
+               <dl class="dl-horizontal pull-left">
+                 <dt>First aired</dt>
+                 <dd>{{series.firstAired}}</dd>
+                 <dt>Status</dt>
+                 <dd>{{series.status}}</dd>
+                 <dt>Next episode</dt>
+                 <dd>{{series.nextEpisode}}</dd>
+                 <dt>Rating</dt>
+                 <dd>{{series.rating}}</dd>
+                 <dt>Seasons</dt>
+                 <dd>{{series.totalSeasons}}</dd>
+                 <dt>Episodes</dt>
+                 <dd>{{series.totalEpisodes}}</dd>
+                 <dt>Runtime</dt>
+                 <dd>{{series.runtime}}</dd>
+               </dl>
+               <button class='btn btn-success pull-right'>Add</button>
+               <div class='clearfix'></div>
+
+        </a>
+      </div>
+      <!--No results-->
+      <p  ng-if="searchResults.length == 0">No results for {{query}}</p>
+   </div>
 </div>

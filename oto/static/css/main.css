@@ -136,3 +136,28 @@ small.att_thumb_overlay {
    opacity: 0;
    filter: alpha(opacity=0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * WATCHLIST
+ */
+
+.morepadding {
+   margin-bottom:15px
+}
+
+.seriesThumb {
+   max-height:140px;
+   max-width:140px;
+}
