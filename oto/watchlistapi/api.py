@@ -1,11 +1,13 @@
-from flask import session, make_response, render_template, request
+from flask import session, make_response, render_template, request, send_from_directory, send_file
 from json import dumps
 from pytvdbapi import api
 from pytvdbapi.error import ConnectionError, BadData, TVDBIndexError
+import urllib
 
 
 from oto import app
 import oto.settings as settings
+from flask.helpers import send_file
 
 tvdb = api.TVDB(settings.TVDBAPIKEY, banners=True)
 
@@ -52,8 +54,28 @@ def convert(show):
    showobj['runtime'] = show.Runtime
    
    try:
-      showobj['thumb'] = 'http://thetvdb.com/banners/' + show.banner
+      posters = [b for b in show.banner_objects if b.BannerType == "poster"]
+      fanart = [b for b in show.banner_objects if b.BannerType == "fanart"]
+      season = [b for b in show.banner_objects if b.BannerType == "season"]
+      
+      if len(posters) > 0:
+         urllib.urlretrieve(posters[0].banner_url, "/var/tmp/" + str(show.seriesid) + ".jpg")
+         showobj['thumb'] = "/seriesthumb/" + str(show.seriesid)
+      elif len(fanart) > 0:
+         urllib.urlretrieve(fanart[0].banner_url, "/var/tmp/" + str(show.seriesid) + ".jpg")
+         showobj['thumb'] = "/seriesthumb/" + str(show.seriesid)
+      elif len (season) > 0:
+         urllib.urlretrieve(season[0].banner_url, "/var/tmp/" + str(show.seriesid) + ".jpg")
+         showobj['thumb'] = "/seriesthumb/" + str(show.seriesid)
+      else:
+         showobj['thumb'] = '/static/img/att_default_thumb.png'
    except:
-      showobj['thumb'] = 'static/img/conan1.jpg'
+      raise
+      showobj['thumb'] = '/static/img/att_default_thumb.png'
 
    return showobj
+
+@app.route('/seriesthumb/<thumb>', methods = ['GET'])
+def getfile(thumb):
+   return send_file('/var/tmp/' + thumb + ".jpg")
+  

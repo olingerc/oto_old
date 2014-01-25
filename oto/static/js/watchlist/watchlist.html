@@ -27,7 +27,8 @@
 <div class='row'>
    <div class='col-md-12'>
       <!--Search result-->
-      <div class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12"  ng-if="searchResults.length > 0">
+      <span ng-show='searching'>Searching...</span>
+      <div class="list-group col-xs-12 col-sm-12 col-md-12 col-lg-12"  ng-if="searchResults.length > 0" ng-hide='searching'>
         <a href="#" class="list-group-item col-xs-12 col-sm-12 col-md-6 col-lg-6" 
          ng-repeat='series in searchResults'>
           <h4 class="list-group-item-heading">{{series.name}}</h4>
@@ -55,6 +56,6 @@
         </a>
       </div>
       <!--No results-->
-      <p  ng-if="searchResults.length == 0">No results for {{query}}</p>
+      <p  ng-if="searchResults.length == 0" ng-hide='searching'>No results for {{query}}</p>
    </div>
 </div>
