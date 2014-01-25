@@ -9,4 +9,6 @@ TRAP_BAD_REQUEST_ERRORS = True
 DEBUG = True
 SECRET_KEY = 'temporary_OTO_secret_key' # make sure to change this TODO
 
+TVDBAPIKEY = 'D9FCFA36AD7B6F8D'
+
 

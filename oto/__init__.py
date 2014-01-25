@@ -18,6 +18,7 @@ import notesapi.api
 from notesapi.customapi import init_notesapp
 import adminapi.api
 from adminapi.api import requires_auth_route
+import watchlistapi.api
 
 #basic routing to agular app
 @app.route('/')

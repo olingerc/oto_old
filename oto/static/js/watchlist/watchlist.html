@@ -11,9 +11,9 @@
 
 <div class='row morepadding'>
    <div class='col-md-12'>
-      <form class="form-inline" role="form">
+      <form class="form-inline" role="form" ng-submit='searchSeries()'>
         <div class="form-group">
-          <input ng-model='query' type="email" class="form-control" id="searchInut" placeholder="enter name">
+          <input ng-model='query' type="text" class="form-control" id="searchInut" placeholder="enter name">
         </div>
         <button type="submit" class="btn btn-default">Search</button>
         <div class="btn-group">
