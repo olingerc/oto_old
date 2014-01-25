@@ -4,7 +4,6 @@ import datetime
 from bson.dbref import DBRef  # @UnresolvedImport
 from bson.objectid import ObjectId  # @UnresolvedImport
 from flask import session
-from json import dumps
 
 class MongoEncoder(json.JSONEncoder):
    def default(self, value, **kwargs):
@@ -30,6 +29,6 @@ def set_user_cookie(resp):
            'username': session['username'],
            'role': session['role']
            }
-   json = dumps(user).replace(',','|')
+   json = json.dumps(user).replace(',','|')
    resp.set_cookie('user', value=json)
    print resp
