@@ -21,7 +21,7 @@ class Movie(db.Document):
    }
    
 class Collection(db.Document):
-   owner = db.ReferenceField(User, required=False)
+   owner = db.ReferenceField(User, required=True)
    shows = db.ListField(db.ReferenceField(Show, reverse_delete_rule=4))
    movies = db.ListField(db.ReferenceField(Movie, reverse_delete_rule=4))
    

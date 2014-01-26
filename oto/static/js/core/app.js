@@ -37,7 +37,7 @@ var app = angular.module('oto', [
       	});
          $routeProvider.when('/watchlist', {
             templateUrl: '/static/js/watchlist/watchlist.html',
-            access: access.public,
+            access: access.user,
             controller: 'WatchlistController'
          });
          $routeProvider.when('/automation', {

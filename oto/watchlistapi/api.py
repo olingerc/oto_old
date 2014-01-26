@@ -1,4 +1,4 @@
-from flask import request, send_file
+from flask import request, send_file, session
 from json import dumps
 from pytvdbapi import api
 from pytvdbapi.error import ConnectionError, BadData, TVDBIndexError
@@ -11,12 +11,17 @@ from collections import OrderedDict
 
 from oto import app
 from oto.watchlistapi.models import *
+from oto.adminapi.models import *
+
+from oto.adminapi.api import requires_auth_api
+
 import oto.settings as settings
 import datetime
 
 tvdb = api.TVDB(settings.TVDBAPIKEY, banners=True)
 
 @app.route('/searchseries', methods = ['GET'])
+@requires_auth_api
 def searchseries():
    query = request.args.get('query', None)
    if query is not None:
@@ -50,12 +55,18 @@ def getfile(thumb):
    return send_file('/var/tmp/' + thumb + ".jpg")
 
 @app.route('/addseries', methods = ['POST'])
+@requires_auth_api
 def addseries():
    show = request.json['show']
+   #get user
    try:
-      collection = Collection.objects.get(owner=None)
+      user = User.objects.get(username=session['username'])  # @UndefinedVariable
    except DoesNotExist:
-      collection = Collection(owner=None)
+      return {'error':'could not retrieve user object'}, 500
+   try:
+      collection = Collection.objects.get(owner=user)
+   except DoesNotExist:
+      collection = Collection(owner=user, shows=[], movies=[])
       
    newshow = Show(tvdbid=str(show['id']))
    newshow.save()
@@ -64,11 +75,17 @@ def addseries():
    return dumps(show), 201
 
 @app.route('/getseries', methods = ['GET'])
+@requires_auth_api
 def getseries():
+   #get user
    try:
-      collection = Collection.objects.get(owner=None)
+      user = User.objects.get(username=session['username'])  # @UndefinedVariable
    except DoesNotExist:
-      collection = Collection(owner=None, shows=[])
+      return {'error':'could not retrieve user object'}, 500
+   try:
+      collection = Collection.objects.get(owner=user)
+   except DoesNotExist:
+      collection = Collection(owner=user, shows=[], movies=[])
       collection.save()
    except:
       raise

@@ -10,6 +10,7 @@ recheck the cookie things, currently I hack the response into actionable json in
 
 #Bugs
 -Client
+watchlist: Allow only one object in collection with same series name. indexOf not good for new search with same name
 
 -Server
 

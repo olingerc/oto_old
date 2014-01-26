@@ -2,7 +2,7 @@
 <div class="header-section">
 	<div class="header-row">
 		<div class="">
-			<h1 class="">Watchlist <small> Follow movies and tv shows</small></h1>
+			<h1 class="">Watchlist</small></h1>
 		</div>
 	</div>
 </div>
@@ -15,7 +15,7 @@
         <div class="form-group">
           <input ng-model='query' type="text" class="form-control" id="searchInut" placeholder="enter name">
         </div>
-        <button type="submit" class="btn btn-default">Search</button>
+        <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
         <div class="btn-group">
            <button type="button" ng-class='{active: searchFor == "tvshows"}' class="btn btn-default" ng-click='setSearchFor("tvshows")'>TV Shows</button>
            <button type="button" ng-class='{active: searchFor == "movies"}' class="btn btn-default" ng-click='setSearchFor("movies")'>Movies</button>
@@ -73,7 +73,7 @@
       <span>Loading collection...</span>
    </div>
 </div>
-<div class='row' ng-hide='loadingCollection'>
+<div class='row' ng-hide='loadingCollection || seriesCollection.length == 0'>
    <div class='col-md-12'>
       <!--Series collection-->
       <h3>Series Collection</h3>
@@ -92,12 +92,18 @@
              <span class='label label-primary' ng-if='series.nextEpisode != null'>Next: {{series.nextEpisode}}</span>
              <span class='label label-primary' ng-if='series.nextEpisode == null'>Ended</span>
           </h5>
-          <button class='btn btn-success btm-sm pull-right' ng-click='removeSeries($index)'>Remove</button>
+          <button class='removeSeriesBtn btn btn-success btm-sm pull-right' ng-click='removeSeries($index)'><span class="glyphicon glyphicon-trash"></span></button>
           <div class='clearfix'></div>
           <select class='form-control'>
              <option value="{{ep | getse}}" ng-repeat='ep in series.episodelist'>{{ep}}</option>
           </select>
         </a>
       </div>
+   </div>
+</div>
+
+<div class='row' ng-hide='loadingCollection || seriesCollection.length > 0'>
+   <div class='col-md-12'>
+      <span>No series in your collection</span>
    </div>
 </div>

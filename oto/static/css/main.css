@@ -162,3 +162,9 @@ small.att_thumb_overlay {
    width:100%;
    margin: 4px 0;
 }
+
+.removeSeriesBtn{
+   position:absolute;
+   top:0;
+   right:0;
+}
