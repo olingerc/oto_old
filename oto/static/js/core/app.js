@@ -2,6 +2,7 @@
 
 var app = angular.module('oto', [
    'oto.filters',
+   'oto.filtersWatch',
    'ui.bootstrap',
    'ui.utils',
    'angularFileUpload',

@@ -73,7 +73,7 @@ app.controller('WatchlistController', ['$scope', '$http' ,'Auth', function($scop
    
 }]);
 
-angular.module('oto.filters', [])
+angular.module('oto.filtersWatch', [])
   .filter('getse', function() {
     return function(complete) {
       return complete.substring(0, complete.indexOf(' '));
