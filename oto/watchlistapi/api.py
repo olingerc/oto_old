@@ -82,7 +82,8 @@ def getseries():
       except:
          raise
       else:
-         showsarray.append(convert(thisshow))
+         showobj = convert(thisshow)
+         showsarray.append(showobj)
    return dumps(showsarray), 200
 
 def convert(show):
@@ -93,31 +94,31 @@ def convert(show):
    showobj['status'] = show.Status
    showobj['totalSeasons'] = getTotalSeasons(show)
    showobj['totalEpisodes'] = getTotalEpisodes(show)
-   showobj['nextEpisode'] = getNextEpisode(show)
    showobj['network'] = show.Network
    showobj['rating'] = show.Rating
    showobj['runtime'] = show.Runtime
    showobj['id'] = show.id
+   showobj = episodelist_next(show, showobj) #puts in list and next aired, avoids parsing all episodes twice
    
    try:
       #Get available data
+      series = [b for b in show.banner_objects if b.BannerType == "series"]
       posters = [b for b in show.banner_objects if b.BannerType == "poster"]
       fanart = [b for b in show.banner_objects if b.BannerType == "fanart"]
-      season = [b for b in show.banner_objects if b.BannerType == "season"]
       
       #Search most appropriate
       foundthumb = False
-      if len(posters) > 0:
+      if len (series) > 0:
+         filename = series[0].BannerPath
+         tvdburl = series[0].banner_url
+         foundthumb = True
+      elif len(posters) > 0:
          filename = posters[0].BannerPath
          tvdburl = posters[0].banner_url
          foundthumb = True
       elif len(fanart) > 0:
          filename = fanart[0].BannerPath
          tvdburl = fanart[0].banner_url
-         foundthumb = True
-      elif len (season) > 0:
-         filename = season[0].BannerPath
-         tvdburl = season[0].banner_url
          foundthumb = True
       else:
          foundthumb = False
@@ -139,9 +140,12 @@ def convert(show):
 
 def getTotalSeasons(show):
    total = len(show)
-   if 0 in show:
+   try:
+      specials = show[0].season_number
       total = total -1
-   
+   except TVDBIndexError:
+      #the show has no specials
+      pass
    return total
 
 def getTotalEpisodes(show):
@@ -151,21 +155,21 @@ def getTotalEpisodes(show):
    
    return total
 
-def getNextEpisode(show):
-   #TODO walk backwards and find first before now. return the one after that
-   alldates = {}
-   for season in show[1:]:
-      for episode in season[1:]:
-         firstAired = str(episode.FirstAired)
-         alldates[firstAired] = {
-                                    'season': season.season_number,
-                                    'episode': episode.EpisodeNumber
-                                    }
-   alldates = OrderedDict(sorted(alldates.items(), key=lambda t: t[0]))
-   
+def episodelist_next(show, showobj):
    now = datetime.datetime.now().strftime('%Y-%m-%d')
-   for aired, se in alldates.iteritems():
-      if aired > now:
-         return aired + ", S" + str(se['season']) + "E" + str(se['episode'])
-      
-   return 'Ended'
+   found = False
+   nextaired = None
+   episodelist = []
+
+   for season in show:
+      for episode in season:
+         if str(episode.FirstAired) >= now and found != True:
+            nextaired = str(episode.FirstAired) + ", " + 'S' + str(season.season_number) + "E" + str(episode.EpisodeNumber)
+            found = True
+         episodelist.append('S' + str(season.season_number) + "E" + str(episode.EpisodeNumber) + " " + str(episode.FirstAired) + " " + episode.EpisodeName)
+         
+   showobj['episodelist'] = episodelist
+   showobj['nextEpisode'] = nextaired
+   return showobj
+
+   

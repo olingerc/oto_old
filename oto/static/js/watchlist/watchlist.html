@@ -81,18 +81,22 @@
          ng-if="seriesCollection.length > 0">
         <a href="#" class="list-group-item col-xs-12 col-sm-12 col-md-6 col-lg-6" 
          ng-repeat='series in seriesCollection'>
-          <h4 class="list-group-item-heading">{{series.name}}</h4>
-               <img class='seriesThumb img-rounded  pull-left' ng-src='{{series.thumb}}'>
-               <dl class="dl-horizontal pull-left">
-                 <dt>Next episode</dt>
-                 <dd>{{series.nextEpisode}}</dd>
-                 <dt>Seasons</dt>
-                 <dd>{{series.totalSeasons}}</dd>
-                 <dt>Episodes</dt>
-                 <dd>{{series.totalEpisodes}}</dd>
-               </dl>
-               <button class='btn btn-success pull-right' ng-click='removeSeries($index)'>Remove</button>
-               <div class='clearfix'></div>
+          <h4 class="list-group-item-heading pull-left">
+             
+          </h4>
+          <img class='seriesThumb img-rounded' ng-src='{{series.thumb}}'>
+          <h5 class='pull-left'>
+             <span class='text-muted'>{{series.name | limitTo:40}}</span>
+             <span class='label label-primary' ng-if='series.totalSeasons > 1'>{{series.totalSeasons}} seasons</span>
+             <span class='label label-primary' ng-if='series.totalSeasons == 1'>1 season</span>
+             <span class='label label-primary' ng-if='series.nextEpisode != null'>Next: {{series.nextEpisode}}</span>
+             <span class='label label-primary' ng-if='series.nextEpisode == null'>Ended</span>
+          </h5>
+          <button class='btn btn-success btm-sm pull-right' ng-click='removeSeries($index)'>Remove</button>
+          <div class='clearfix'></div>
+          <select class='form-control'>
+             <option value="{{ep | getse}}" ng-repeat='ep in series.episodelist'>{{ep}}</option>
+          </select>
         </a>
       </div>
    </div>

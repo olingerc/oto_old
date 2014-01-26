@@ -73,3 +73,10 @@ app.controller('WatchlistController', ['$scope', '$http' ,'Auth', function($scop
    };
    
 }]);
+
+angular.module('oto.filters', [])
+  .filter('getse', function() {
+    return function(complete) {
+      return complete.substring(0, complete.indexOf(' '));
+    };
+  });

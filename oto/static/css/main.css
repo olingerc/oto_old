@@ -158,6 +158,7 @@ small.att_thumb_overlay {
 }
 
 .seriesThumb {
-   max-height:140px;
-   max-width:140px;
+   max-height:98px; /*keeps fixed height for all list-ite,s*/
+   width:100%;
+   margin: 4px 0;
 }
