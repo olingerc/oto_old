@@ -68,11 +68,34 @@ def addseries():
    except DoesNotExist:
       collection = Collection(owner=user, shows=[], movies=[])
       
-   newshow = Show(tvdbid=str(show['id']))
+   newshow = Show(tvdbid=str(show['id']), owner=user)
    newshow.save()
    collection.shows.append(newshow)
    collection.save()
    return dumps(show), 201
+
+@app.route('/updateseries', methods = ['POST'])
+@requires_auth_api
+def updateseries():
+   showid = request.json['showid']
+   #get user
+   try:
+      user = User.objects.get(username=session['username'])  # @UndefinedVariable
+   except DoesNotExist:
+      return {'error':'could not retrieve user object'}, 500
+   try:
+      show = Show.objects.get(tvdbid=str(showid), owner=user)
+   except DoesNotExist:
+      return {'error':'show does not exist'}, 500
+   
+   if 'lastwatched' in request.json:
+      show['lastwatched'] = request.json['lastwatched']
+      
+   if 'lastdownloaded' in request.json:
+      show['lastdownloaded'] = request.json['lastdownloaded']
+   show.save()
+
+   return 'ok', 200
 
 @app.route('/getseries', methods = ['GET'])
 @requires_auth_api
@@ -99,11 +122,17 @@ def getseries():
       except:
          raise
       else:
-         showobj = convert(thisshow)
+         showobj = convert(thisshow, show)
          showsarray.append(showobj)
    return dumps(showsarray), 200
 
-def convert(show):
+def convert(show, showincoll):
+   #get user
+   try:
+      user = User.objects.get(username=session['username'])  # @UndefinedVariable
+   except DoesNotExist:
+      return {'error':'could not retrieve user object'}, 500
+   
    show.update()
    showobj = {}
    showobj['name'] = show.SeriesName
@@ -152,6 +181,10 @@ def convert(show):
    except:
       raise
       showobj['thumb'] = '/static/img/att_default_thumb.png'
+      
+   if showincoll:
+      showobj['lastdownloaded'] = showincoll['lastdownloaded']
+      showobj['lastwatched'] = showincoll['lastwatched']
 
    return showobj
 

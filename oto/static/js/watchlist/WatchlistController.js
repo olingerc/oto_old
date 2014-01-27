@@ -1,4 +1,4 @@
-app.controller('WatchlistController', ['$scope', '$http' ,'Auth', function($scope, $http, Auth) {
+app.controller('WatchlistController', ['$scope', '$http', function($scope, $http) {
    
    /*
     * Initial
@@ -69,6 +69,26 @@ app.controller('WatchlistController', ['$scope', '$http' ,'Auth', function($scop
    
    $scope.removeSeries = function(showindex) {
       $scope.seriesCollection.splice(showindex, 1);
+   };
+   
+   $scope.setLastDownloaded = function(show) {
+         $http.post('/updateseries', {showid:show.id, lastdownloaded: show.activeEpisode})
+            .success(function(response) {
+               console.log(response);
+            })
+            .error(function(response) {
+               console.log(response.error);
+            });       
+   };
+   
+   $scope.setLastWatched = function(show) {
+         $http.post('/updateseries', {showid:show.id, lastwatched: show.activeEpisode})
+            .success(function(response) {
+               console.log(response);
+            })
+            .error(function(response) {
+               console.log(response.error);
+            });       
    };
    
 }]);

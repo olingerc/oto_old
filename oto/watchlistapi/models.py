@@ -3,12 +3,13 @@ from oto.adminapi.models import User
 
 class Show(db.Document):
    tvdbid = db.StringField(required=True)
-   owner = db.ReferenceField(User, required=False)
-   lastwatched = db.StringField(required=False)
+   owner = db.ReferenceField(User, required=True)
+   lastwatched = db.StringField(default=None, required=False)
+   lastdownloaded = db.StringField(default = None, required=False)
    thumb = db.FileField(required=False)
     
    meta = {
-      'indexes': ['tvdbid']
+      'indexes': ['tvdbid', {'fields': ('tvdbid', 'owner'), 'unique': True}]
    }
    
 class Movie(db.Document):

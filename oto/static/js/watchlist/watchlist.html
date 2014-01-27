@@ -94,9 +94,13 @@
           </h5>
           <button class='removeSeriesBtn btn btn-success btm-sm pull-right' ng-click='removeSeries($index)'><span class="glyphicon glyphicon-trash"></span></button>
           <div class='clearfix'></div>
-          <select class='form-control'>
-             <option value="{{ep | getse}}" ng-repeat='ep in series.episodelist'>{{ep}}</option>
+          <select ng-init'set series.activeEpisode=series.lastwatched' class='form-control pull-left' ng-model='series.activeEpisode' ng-options='ep for ep in series.episodelist'>
+             <!--<option value="{{ep | getse}}" ng-repeat='ep in series.episodelist'>{{ep}}</option>-->
           </select>
+          <div class='btn-group pull-right'>
+             <div class='btn btn-default' ng-click='setLastDownloaded(series)'>LD</div>
+             <div class='btn btn-default' ng-click='setLastWatched(series)'>LW</div>
+          </div>
         </a>
       </div>
    </div>
