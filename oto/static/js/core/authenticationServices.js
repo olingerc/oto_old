@@ -17,7 +17,7 @@ app.factory('Auth', function($rootScope, $http, $cookieStore){
     $cookieStore.remove('user');
 
     function changeUser(user) {
-        _.extend(currentUser, user);
+        angular.extend(currentUser, user); //before it was _.
         /*
          * angular.extend(dst, src);
          * Extends the destination object dst by copying all of the properties from the src object(s) to dst. You can specify multiple src objects.
