@@ -126,7 +126,7 @@ def getseries():
          showsarray.append(showobj)
    return dumps(showsarray), 200
 
-def convert(show, showincoll):
+def convert(show, showincoll=None):
    #get user
    try:
       user = User.objects.get(username=session['username'])  # @UndefinedVariable
