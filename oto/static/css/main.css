@@ -168,3 +168,14 @@ small.att_thumb_overlay {
    top:0;
    right:0;
 }
+
+.episodeTable {
+   max-height:100px;
+   overflow-y: auto;
+   overflow-x:hidden
+   
+}
+
+.episodeTable tr.active{
+   font-weight:bold
+}

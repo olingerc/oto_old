@@ -72,9 +72,10 @@ app.controller('WatchlistController', ['$scope', '$http', function($scope, $http
    };
    
    $scope.setLastDownloaded = function(show) {
+      show.lastdownloaded=show.activeEpisode;
          $http.post('/updateseries', {showid:show.id, lastdownloaded: show.activeEpisode})
             .success(function(response) {
-               console.log(response);
+               //console.log(response);
             })
             .error(function(response) {
                console.log(response.error);
@@ -82,20 +83,30 @@ app.controller('WatchlistController', ['$scope', '$http', function($scope, $http
    };
    
    $scope.setLastWatched = function(show) {
-         $http.post('/updateseries', {showid:show.id, lastwatched: show.activeEpisode})
-            .success(function(response) {
-               console.log(response);
-            })
-            .error(function(response) {
-               console.log(response.error);
-            });       
+      show.lastwatched=show.activeEpisode;
+      $http.post('/updateseries', {showid:show.id, lastwatched: show.activeEpisode})
+         .success(function(response) {
+            //console.log(response);
+         })
+         .error(function(response) {
+            console.log(response.error);
+         });       
+   };
+   
+   $scope.setActiveEpisode = function(series, ep) {
+      series.activeEpisode=ep;
+   };
+   
+   $scope.epIsNextAired = function(show, ep) {
+      if (show.nextEpisode) {
+         var seEp = ep.substring(0, ep.indexOf(' '));
+         var seNext = show.nextEpisode.split(",")[1];
+         if (seEp.trim() === seNext.trim()) {
+            return true;
+         }
+      }
+      return false;
    };
    
 }]);
-
-angular.module('oto.filtersWatch', [])
-  .filter('getse', function() {
-    return function(complete) {
-      return complete.substring(0, complete.indexOf(' '));
-    };
-  });
+  
