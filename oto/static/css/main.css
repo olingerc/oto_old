@@ -179,3 +179,8 @@ small.att_thumb_overlay {
 .episodeTable tr.active{
    font-weight:bold
 }
+
+.episodeTable td.lastWatched {
+   background-color: #3276b1;
+   color:white
+}
