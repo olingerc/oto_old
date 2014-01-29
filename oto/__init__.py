@@ -27,6 +27,7 @@ import watchlistapi.api
 @app.route('/login')
 @app.route('/401')
 @app.route('/automation')
+@app.route('/watchlist')
 @requires_auth_route
 def basic_pages(**kwargs):
    resp = make_response(render_template('app.html'))
