@@ -176,11 +176,15 @@ small.att_thumb_overlay {
    
 }
 
-.episodeTable tr.active{
+.episodeTable tr.activeBold{
    font-weight:bold
 }
 
-.episodeTable td.lastWatched {
+.episodeTable td.lastAired {
    background-color: #3276b1;
    color:white
+}
+
+.successImp {
+   background-color: #dff0d8 !important;   
 }

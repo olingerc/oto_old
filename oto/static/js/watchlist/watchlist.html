@@ -87,7 +87,7 @@
           <img class='seriesThumb img-rounded' ng-src='{{series.thumb}}'>
           <h5 class='pull-left'>
              <span class='text-muted'>{{series.name | limitTo:40}}</span>
-             <span class='label label-muted' ng-if='series.totalSeasons > 1'>{{series.totalSeasons}} seasons</span>
+             <span class='label label-primary' ng-if='series.totalSeasons > 1'>{{series.totalSeasons}} seasons</span>
              <span class='label label-primary' ng-if='series.totalSeasons == 1'>1 season</span>
              <span class='label label-primary' ng-if='series.nextEpisode != null'>Next: {{series.nextEpisode}}</span>
              <span class='label label-warning' ng-if='series.nextEpisode == null'>Ended</span>
@@ -96,8 +96,8 @@
           <div class='clearfix'></div>
           <div class='episodeTable'>
           <table class='table  table-condensed'>
-             <tr ng-repeat='ep in series.episodelist' ng-click="setActiveEpisode(series, ep)" ng-class="{'active': series.activeEpisode==ep}">
-                <td ng-class="{'lastWatched': ep == series.lastwatched, 'success': ep == series.lastdownloaded}">
+             <tr ng-repeat='ep in series.episodelist | reverse' ng-click="setActiveEpisode(series, ep)" ng-class="{'activeBold': series.activeEpisode==ep}">
+                <td ng-class="{'warning': ep == series.lastdownloaded, 'successImp': ep == series.lastwatched, 'success': ep == series.lastwatched, 'lastAired':epIsNextAired(series, ep)}">
                    <small class='text-muted' ng-if="ep == series.lastwatched">W </small>
                    <small class='text-warning' ng-if="ep == series.lastdownloaded">D </small>
                    <small class='text-warning' ng-if="epIsNextAired(series, ep)">Next aired </small>
