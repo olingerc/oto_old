@@ -163,7 +163,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       var filesToDelete = [];
       //1)Those in added AND removed --> delete
       jQuery.each(fileAttachmentsAdded, function(key, value) {
-         if (fileAttachmentsRemoved.indexOf(value) > -1) {
+         if (fileAttachmentsRemoved.indexOf(value) > -1  && filesToDelete.indexOf(value) == -1) {
             filesToDelete.push(value);
          }
       });
@@ -180,7 +180,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
             },
             data : $.param({
                cardid : $scope.cardFormCard.id,
-               array : JSON.stringify(_.uniq(filesToDelete))
+               array : JSON.stringify(filesToDelete)
             })
          });
       }
@@ -188,7 +188,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       //Handle urls next the same way
       var urlsToDelete = [];
       jQuery.each(urlAttachmentsAdded, function(key, value) {
-         if (urlAttachmentsRemoved.indexOf(value) > -1) {
+         if (urlAttachmentsRemoved.indexOf(value) > -1 && urlsToDelete.indexOf(value) == -1) {
             urlsToDelete.push(value);
          }
       });
@@ -202,7 +202,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
             },
             data : $.param({
                cardid : $scope.cardFormCard.id,
-               array : JSON.stringify(_.uniq(urlsToDelete))
+               array : JSON.stringify(urlsToDelete)
             })
          });
       }
@@ -219,7 +219,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
       }
 
       //Display card in UI
-      _.extend($scope.originalCard, updatedCardToSend);
+      angular.extend($scope.originalCard, updatedCardToSend); //previoulsy _.
 
       resolveUpdate[updatedCardToSend.id] = function() {
          $http.put('/cards/' + updatedCardToSend.id, updatedCardToSend)
@@ -254,7 +254,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
          var filesToDelete = [];
          //1)Those in added AND removed --> delete
          jQuery.each(fileAttachmentsAdded, function(key, value) {
-            if (fileAttachmentsRemoved.indexOf(value) > -1) {
+            if (fileAttachmentsRemoved.indexOf(value) > -1  && filesToDelete.indexOf(value) == -1) {
                filesToDelete.push(value);
             }
          });
@@ -265,7 +265,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
          //Handle url attachments next and the same way
          var urlsToDelete = [];
          jQuery.each(urlAttachmentsAdded, function(key, value) {
-            if (urlAttachmentsRemoved.indexOf(value) > -1) {
+            if (urlAttachmentsRemoved.indexOf(value) > -1 && urlsToDelete.indexOf(value) == -1) {
                urlsToDelete.push(value);
             }
          });
@@ -288,7 +288,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
             },
             data : $.param({
                cardid : $scope.cardFormCard.id,
-               array : JSON.stringify(_.uniq(filesToDelete)),
+               array : JSON.stringify(filesToDelete),
                changeModifiedat : false
             })
          });
@@ -302,7 +302,7 @@ app.controller('CardFormModalInstanceCtrl', ['$scope', '$filter', '$http', '$mod
             },
             data : $.param({
                cardid : $scope.cardFormCard.id,
-               array : JSON.stringify(_.uniq(urlsToDelete)),
+               array : JSON.stringify(urlsToDelete),
                changeModifiedat : false
             })
          });
