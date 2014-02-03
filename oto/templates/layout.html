@@ -67,22 +67,23 @@
                      access-level='accessLevels.admin'>Admin</a>
                </li>
           </ul>
-         <ul class="nav navbar-nav navbar-right">
-               <li active-nav>
-                  <a href="/about"
-                     access-level='accessLevels.public'>About</a>
-               </li>
-               <li active-nav>
-                  <a class="navbar-link" href="/login"
-                     access-level='accessLevels.anon'>Log in</a>
-               </li>
-               <li>
-                  <a class="navbar-link" href="#"
-                     access-level='accessLevels.user'
-                     ng-click='logout()'>Log out, {{user.username}}</a>
-               </li>
-         </ul>
+            <ul class="nav navbar-nav navbar-right">
+                  <li active-nav>
+                     <a href="/about"
+                        access-level='accessLevels.public'>About</a>
+                  </li>
+                  <li active-nav>
+                     <a class="navbar-link" href="/login"
+                        access-level='accessLevels.anon'>Log in</a>
+                  </li>
+                  <li>
+                     <a class="navbar-link" href="#"
+                        access-level='accessLevels.user'
+                        ng-click='logout()'>Log out, {{user.username}}</a>
+                  </li>
+            </ul>
          </div>
+         <div ng-include="core.subnavurl"></div>
       </nav>
       {% endraw %}
 
@@ -137,6 +138,8 @@
       <script src="/static/js/notes/StackListController.js"></script>
       <script src="/static/js/notes/CardFormModalController.js"></script>
       <script src="/static/js/notes/CardListController.js"></script>
+
+      <script src="/static/js/household/CompensateController.js"></script>
 
       <script src="/static/js/admin/AdminControllers.js"></script>
 

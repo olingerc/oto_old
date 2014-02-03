@@ -173,7 +173,7 @@ small.att_thumb_overlay {
    max-height:100px;
    overflow-y: auto;
    overflow-x:hidden
-   
+
 }
 
 .episodeTable tr.activeBold{
@@ -186,5 +186,27 @@ small.att_thumb_overlay {
 }
 
 .successImp {
-   background-color: #dff0d8 !important;   
+   background-color: #dff0d8 !important;
+}
+
+
+
+/*
+ * SUBNAV
+ *
+ *
+ */
+
+.navbar.subnav {
+   margin-bottom:0px;
+   border-radius: 0;
+   min-height:35px
+}
+
+.navbar.subnav li {
+   padding:0
+}
+
+.navbar.subnav a {
+   padding:7px 15px
 }

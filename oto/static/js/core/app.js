@@ -46,6 +46,7 @@ var app = angular.module('oto', [
          });
          $routeProvider.when('/household/compensate', {
             templateUrl: '/static/js/household/compensate.html',
+            controller: 'CompensateController',
             access: access.public
          });
          $routeProvider.when('/automation', {
@@ -86,6 +87,10 @@ var app = angular.module('oto', [
 
          $rootScope.$on("$routeChangeStart",
             function (event, next, current) {
+               //Reset subnav
+               $rootScope.core.subnavurl = '';
+
+
                $rootScope.core.error = null;
                if (!Auth.authorize(next.access)) {
                   if(Auth.isLoggedIn()) {
