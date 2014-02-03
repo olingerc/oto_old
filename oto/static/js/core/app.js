@@ -40,6 +40,14 @@ var app = angular.module('oto', [
             access: access.user,
             controller: 'WatchlistController'
          });
+         $routeProvider.when('/household', {
+            redirectTo: '/household/compensate',
+            access: access.public
+         });
+         $routeProvider.when('/household/compensate', {
+            templateUrl: '/static/js/household/compensate.html',
+            access: access.public
+         });
          $routeProvider.when('/automation', {
             templateUrl: '/static/partials/automation.html',
             access: access.user

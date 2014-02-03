@@ -18,7 +18,7 @@ from oto.adminapi.api import requires_auth_api
 import oto.settings as settings
 import datetime
 
-tvdb = api.TVDB(settings.TVDBAPIKEY, banners=True)
+tvdb = None#api.TVDB(settings.TVDBAPIKEY, banners=True)
 
 @app.route('/searchseries', methods = ['GET'])
 @requires_auth_api
