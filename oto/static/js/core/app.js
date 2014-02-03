@@ -8,6 +8,7 @@ var app = angular.module('oto', [
    'ngRoute',
    'ngResource',
    'ngCookies',
+   'ngTable'
    ])
 	.config(['$routeProvider', '$locationProvider', '$httpProvider',
       function($routeProvider, $locationProvider, $httpProvider) {
