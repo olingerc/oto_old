@@ -13,14 +13,6 @@ app.controller('WatchlistController', ['$scope', '$rootScope', '$http', function
    $scope.searching = false;
 
    /*
-    * Common Series/Movies
-    */
-
-   $scope.setSearchFor = function(type) {
-      $scope.searchFor = type;
-   };
-
-   /*
     * Series
     */
 
