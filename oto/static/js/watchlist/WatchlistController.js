@@ -1,27 +1,29 @@
-app.controller('WatchlistController', ['$scope', '$http', function($scope, $http) {
-   
+app.controller('WatchlistController', ['$scope', '$rootScope', '$http', function($scope, $rootScope, $http) {
+
    /*
     * Initial
     */
-   
+
+   $rootScope.core.subnavurl = '/static/js/watchlist/subnav.html';
+
    $scope.searchFor = 'tvshows';
    $scope.showSearchResults = false;
    $scope.query = 'Dexter';
    $scope.searchResults = [];
    $scope.searching = false;
-   
+
    /*
     * Common Series/Movies
     */
-   
+
    $scope.setSearchFor = function(type) {
       $scope.searchFor = type;
    };
-   
+
    /*
     * Series
     */
-   
+
 
    $scope.seriesCollection = [];
    $scope.loadingCollection = true;
@@ -53,7 +55,7 @@ app.controller('WatchlistController', ['$scope', '$http', function($scope, $http
             });
       }
    };
-   
+
    $scope.addSeries = function(show) {
       if ($scope.seriesCollection.indexOf(show) < 0) {
          //TODO Allow only one object with same series name. indexOf not good for new search with same name
@@ -66,11 +68,11 @@ app.controller('WatchlistController', ['$scope', '$http', function($scope, $http
             });
       }
    };
-   
+
    $scope.removeSeries = function(showindex) {
       $scope.seriesCollection.splice(showindex, 1);
    };
-   
+
    $scope.setLastDownloaded = function(show) {
       show.lastdownloaded=show.activeEpisode;
          $http.post('/updateseries', {showid:show.id, lastdownloaded: show.activeEpisode})
@@ -79,9 +81,9 @@ app.controller('WatchlistController', ['$scope', '$http', function($scope, $http
             })
             .error(function(response) {
                console.log(response.error);
-            });       
+            });
    };
-   
+
    $scope.setLastWatched = function(show) {
       show.lastwatched=show.activeEpisode;
       $http.post('/updateseries', {showid:show.id, lastwatched: show.activeEpisode})
@@ -90,13 +92,13 @@ app.controller('WatchlistController', ['$scope', '$http', function($scope, $http
          })
          .error(function(response) {
             console.log(response.error);
-         });       
+         });
    };
-   
+
    $scope.setActiveEpisode = function(series, ep) {
       series.activeEpisode=ep;
    };
-   
+
    $scope.epIsNextAired = function(show, ep) {
       if (show.nextEpisode) {
          var seEp = ep.substring(0, ep.indexOf(' '));
@@ -107,7 +109,7 @@ app.controller('WatchlistController', ['$scope', '$http', function($scope, $http
       }
       return false;
    };
-   
+
 }]);
 
 app.filter('reverse', function() {
@@ -115,4 +117,4 @@ app.filter('reverse', function() {
     return items.slice().reverse();
   };
 });
-  
+

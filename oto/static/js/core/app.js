@@ -36,6 +36,10 @@ var app = angular.module('oto', [
       		access: access.user
       	});
          $routeProvider.when('/watchlist', {
+            redirectTo: '/watchlist/series',
+            access: access.user
+         });
+         $routeProvider.when('/watchlist/series', {
             templateUrl: '/static/js/watchlist/watchlist.html',
             access: access.user,
             controller: 'WatchlistController'

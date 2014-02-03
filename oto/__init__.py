@@ -28,6 +28,7 @@ import watchlistapi.api
 @app.route('/401')
 @app.route('/automation')
 @app.route('/watchlist')
+@app.route('/watchlist/series')
 @app.route('/household')
 @app.route('/household/compensate')
 @requires_auth_route
