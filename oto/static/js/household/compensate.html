@@ -1,15 +1,38 @@
+<span>Add month</span>
+<div class='btn-group'>
+   <div class='btn btn-default' ng-click='addBefore()'>Before</div>
+   <div class='btn btn-default' ng-click='addAfter()'>After</div>
+</div>
 <table class='table' ng-table>
-   <div class='btn btn-default' ng-click='addRow()'>Add</div>
    <tr ng-repeat='data in compData'>
       <td data-title="'Month'">
           <span ng-if="!data.$edit">{{data.month}}</span>
           <div ng-if="data.$edit"><input class="form-control" type="text" ng-model="data.month" /></div>
       </td>
-      <td data-title="'Claire'">{{data.incomeCK}}</td>
-      <td data-title="'Claire RC'">{{data.recalcCK}}</td>
-      <td data-title="'Chris'">{{data.incomeCO}}</td>
-      <td data-title="'Chris RC'">{{data.recalcCO}}</td>
-      <td data-title="'Paid'">{{data.paidOn}}</td>
+      <td data-title="'Claire'">
+          <span ng-if="!data.$edit">{{data.incomeCK}}</span>
+          <div ng-if="data.$edit"><input class="form-control" type="text" ng-model="data.incomeCK" /></div>
+      </td>
+      <td data-title="'Claire RC'">
+          <span ng-if="!data.$edit">{{data.recalcCK}}</span>
+          <div ng-if="data.$edit"><input class="form-control" type="text" ng-model="data.recalcCK" /></div>
+      </td>
+      <td data-title="'Chris'">
+          <span ng-if="!data.$edit">{{data.incomeCO}}</span>
+          <div ng-if="data.$edit"><input class="form-control" type="text" ng-model="data.incomeCO" /></div>
+      </td>
+      <td data-title="'Chris RC'">
+          <span ng-if="!data.$edit">{{data.recalcCO}}</span>
+          <div ng-if="data.$edit"><input class="form-control" type="text" ng-model="data.recalcCO" /></div>
+      </td>
+      <td data-title="'Chris -> Claire'">
+          <span ng-if="!data.$edit">{{data.chrisDue}}</span>
+          <div ng-if="data.$edit"><input class="form-control" type="text" ng-model="data.chrisDue" /></div>
+      </td>
+      <td data-title="'Paid'">
+          <span ng-if="!data.$edit">{{data.paidOn}}</span>
+          <div ng-if="data.$edit"><input class="form-control" type="date" ng-model="data.paidOn" /></div>
+      </td>
       <td data-title="'Actions'" width="200">
           <a ng-if="!data.$edit" href="" class="btn btn-default btn-xs" ng-click="data.$edit = true">Edit</a>
           <a ng-if="data.$edit" href="" class="btn btn-primary btn-xs" ng-click="data.$edit = false">Save</a>

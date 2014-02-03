@@ -10,6 +10,7 @@ app.controller('CompensateController', ['$scope', '$rootScope', function($scope,
          incomeCO:'3000',
          recalcCO:'50',
          noteCO:'Second',
+         chrisDue:0,
          paidOn:'2014-05-06'
       },
       {
@@ -20,6 +21,7 @@ app.controller('CompensateController', ['$scope', '$rootScope', function($scope,
          incomeCO:'3000',
          recalcCO:'50',
          noteCO:'Second',
+         chrisDue:0,
          paidOn:'2014-05-06'
       },
       {
@@ -30,12 +32,20 @@ app.controller('CompensateController', ['$scope', '$rootScope', function($scope,
          incomeCO:'3000',
          recalcCO:'50',
          noteCO:'Second',
+         chrisDue:0,
          paidOn:'2014-05-06'
       }
    ];
 
-   $scope.addRow = function() {
-      $scope.compData.push({});
+   $scope.addBefore = function() {
+      var first = $scope.compData[0].month;
+      //TODO: reduce by one
+      $scope.compData.unshift({month:first});
+   };
+   $scope.addAfter = function() {
+      var last = $scope.compData[$scope.compData.length - 1].month;
+      //TODO: reduce by one
+      $scope.compData.push({month:last});
    };
 
 }]);
