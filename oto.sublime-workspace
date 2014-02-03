@@ -1,0 +1,563 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "oto/static/js/notes/CardListController.js",
+			"settings":
+			{
+				"buffer_size": 3025,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "diff --git a/oto/static/js/notes/CardListController.js b/oto/static/js/notes/CardListController.js\nindex ae20743..689865c 100644\n--- a/oto/static/js/notes/CardListController.js\n+++ b/oto/static/js/notes/CardListController.js\n@@ -14,17 +14,7 @@ app.controller('CardListController', ['$scope', '$filter', '$modal', 'Cards', 't\n    //css for active card\n    $scope.cardIsActive = function(card) {\n       return card == Cards.getActiveCard() ? true : false;\n-   };\n-\n-   $scope.startEditCard = function(card) {\n-      if ($scope.inArchive()) {\n-         return;\n-      }\n-\n-      if (window.getSelection) { //Because of double click we select --> unselect\n-          window.getSelection().removeAllRanges();\n-      }\n-      else if (document.selection) {\n+   };1123132\n           document.selection.empty();\n       }\n \n",
+			"settings":
+			{
+				"buffer_size": 815,
+				"line_ending": "Unix",
+				"name": "Git Diff",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"contents": "* 24e79ca - (HEAD, origin/master, master) (4 days ago) (2014-01-20 17:18:09 +0100) <Christophe Olinger> - Rememeber me cookies! - Fixed no floating stack for new user bug\n* 892e2a5 - (7 days ago) (2014-01-17 20:32:23 +0100) <Christophe Olinger> iOS is crappy\n* aad55c6 - (7 days ago) (2014-01-17 17:10:32 +0100) <Christophe Olinger> 403 means no you will never be allowed 401 means you probably mistyped something, try again!\n* 07707da - (7 days ago) (2014-01-17 16:49:37 +0100) <Christophe Olinger> Client side rememeber me done\n* 818d2fd - (7 days ago) (2014-01-17 16:38:06 +0100) <Christophe Olinger> Include authentication source commits https://github.com/fnakstad/angular-client-side-auth\n* 57e4255 - (7 days ago) (2014-01-17 16:21:18 +0100) <Christophe Olinger> Add rememberme checkbox\n* 5f31948 - (7 days ago) (2014-01-17 15:51:49 +0100) <Christophe Olinger> Start working on authentication again, I want to have remember me\n* d5ac187 - (7 days ago) (2014-01-17 15:48:45 +0100) <Christophe Olinger> Logo 2\n* a71d71d - (7 days ago) (2014-01-17 15:47:35 +0100) <Christophe Olinger> Temporary logo\n* 4006a08 - (7 days ago) (2014-01-17 15:38:02 +0100) <Christophe Olinger> keep reference to original card (with hash and eveything) to update before server returns\n* b51d13f - (7 days ago) (2014-01-17 15:37:22 +0100) <Christophe Olinger> Client and serverside strings need to be equal for correct sorting\n* 7537ebf - (7 days ago) (2014-01-17 15:12:27 +0100) <Christophe Olinger> Using extend was ok, but I had to check for null atts listst\n* cab7d40 - (7 days ago) (2014-01-17 15:01:17 +0100) <Christophe Olinger> use extend instead of angular copy. this includes file atts\n* 728c7f1 - (7 days ago) (2014-01-17 14:57:23 +0100) <Christophe Olinger> - reset directive - fix compare to original card - fix set date on client for correct worting\n* 96d44f3 - (7 days ago) (2014-01-17 13:00:12 +0100) <Christophe Olinger> Optimize for iOS\n* 7a8e620 - (7 days ago) (2014-01-17 10:20:24 +0100) <Christophe Olinger> No status bar on iOS\n* 90eb4ed - (7 days ago) (2014-01-17 10:10:50 +0100) <Christophe Olinger> logo\n* e7996f1 - (7 days ago) (2014-01-17 09:12:41 +0100) <Christophe Olinger> Remove blockmove for ios\n* fec88bb - (8 days ago) (2014-01-16 21:37:48 +0100) <Christophe Olinger> iOS\n* 6b37dcf - (8 days ago) (2014-01-16 21:37:37 +0100) <Christophe Olinger> Fix bug\n* e89a42a - (8 days ago) (2014-01-16 21:37:25 +0100) <Christophe Olinger> Initial floating stack\n* 4902b53 - (8 days ago) (2014-01-16 16:44:16 +0100) <Christophe Olinger> Update requirements.txt\n* 67e8c5c - (8 days ago) (2014-01-16 16:39:58 +0100) <Christophe Olinger> Things\n* 5786423 - (8 days ago) (2014-01-16 16:19:15 +0100) <Christophe Olinger> - Add file input css hack to avoit jquerry click(). This caused an angular $apply error - Card form css and html corrections - Calendar button (everything inside form in $modalInstance has to refer to $parent - Try iphone native duedate selection -Change notes query size\n* 6d1e61a - (8 days ago) (2014-01-16 14:38:28 +0100) <Christophe Olinger> Clean up\n* 62ec58e - (8 days ago) (2014-01-16 14:32:48 +0100) <Christophe Olinger> Refactor cardForm as modal\n* 7cdc398 - (8 days ago) (2014-01-16 13:06:59 +0100) <Christophe Olinger> Cleanup\n* 2f75d55 - (8 days ago) (2014-01-16 12:01:32 +0100) <Christophe Olinger> Clean up\n* ce0075a - (8 days ago) (2014-01-16 11:55:39 +0100) <Christophe Olinger> Clean up thumb Prorgess directive\n* edb7a94 - (8 days ago) (2014-01-16 11:55:20 +0100) <Christophe Olinger> activeCard in the Cards Factory\n* b6f58fc - (9 days ago) (2014-01-15 21:02:22 +0100) <Christophe Olinger> Half ass try for progress thumb\n* 37ceb19 - (9 days ago) (2014-01-15 16:31:23 +0100) <Christophe Olinger> Initial thumbProgress directive\n* a74975e - (9 days ago) (2014-01-15 15:25:09 +0100) <Christophe Olinger> Less details in times\n* 82c8703 - (9 days ago) (2014-01-15 15:21:12 +0100) <Christophe Olinger> Fast access to edit\n* c89931a - (9 days ago) (2014-01-15 15:13:37 +0100) <Christophe Olinger> Improved datepicker\n* 086a971 - (9 days ago) (2014-01-15 14:51:19 +0100) <Christophe Olinger> Clean up comments\n* 5be62be - (9 days ago) (2014-01-15 14:41:49 +0100) <Christophe Olinger> Update angular-ui to 0.10\n* e31635d - (9 days ago) (2014-01-15 14:41:38 +0100) <Christophe Olinger> CardDetails Modal\n* 43e4d50 - (9 days ago) (2014-01-15 13:41:03 +0100) <Christophe Olinger> Fix: remove url of not saved new cards\n* 5e27504 - (9 days ago) (2014-01-15 12:48:05 +0100) <Christophe Olinger> Fixed iso image mimetype bug by adding image/ as mimetype for images recognition\n* 3fe0660 - (9 days ago) (2014-01-15 12:43:23 +0100) <Christophe Olinger> Focus on title input on card form show\n* b57a11a - (9 days ago) (2014-01-15 12:40:30 +0100) <Christophe Olinger> xng-focus fixed\n* 47c97e3 - (9 days ago) (2014-01-15 12:33:40 +0100) <Christophe Olinger> Cleanup and / in routes\n* a30e329 - (9 days ago) (2014-01-15 12:08:43 +0100) <Christophe Olinger> Update TODO\n* 8f818da - (9 days ago) (2014-01-15 10:54:39 +0100) <Christophe Olinger> Update TODO list\n* f717fac - (9 days ago) (2014-01-15 10:54:28 +0100) <Christophe Olinger> Fixed: can not open images. The trick is the target attribute in the anchor element. Without thism angular hijacks the route change. with the attribute, angular directly sends to server\n* de054c8 - (9 days ago) (2014-01-15 10:53:31 +0100) <Christophe Olinger> Bug when prefix not defined. This would prepend 'undefined'\n* b653c6b - (9 days ago) (2014-01-15 10:53:07 +0100) <Christophe Olinger> Fixed: only not logged in users can view a 404 page\n* a6870b3 - (9 days ago) (2014-01-15 10:52:39 +0100) <Christophe Olinger> Remove unnecessary import\n* b0ad6e3 - (9 days ago) (2014-01-15 09:51:41 +0100) <Christophe Olinger> Clean up comments\n* 0564af8 - (9 days ago) (2014-01-15 09:36:46 +0100) <Christophe Olinger> - Removing card now disables card actions button\n* 66c4a8e - (9 days ago) (2014-01-15 09:33:24 +0100) <Christophe Olinger> Update TODO list\n* dd80454 - (9 days ago) (2014-01-15 09:33:16 +0100) <Christophe Olinger> Clean up ThumbService\n* 84717b3 - (9 days ago) (2014-01-15 09:32:56 +0100) <Christophe Olinger> Add comment\n* 68b54fc - (9 days ago) (2014-01-15 09:32:35 +0100) <Christophe Olinger> Increase max allowed wait time for url thumb generation\n* 47ef730 - (9 days ago) (2014-01-15 09:32:18 +0100) <Christophe Olinger> Update angular file upload lib\n* 06fdafa - (10 days ago) (2014-01-14 17:21:07 +0100) <Christophe Olinger> Reworked thumblist with progress img to prevent empty progress images\n* 62c963f - (10 days ago) (2014-01-14 16:47:43 +0100) <Christophe Olinger> Update angular to 1.2.8\n* 0694abc - (10 days ago) (2014-01-14 16:15:35 +0100) <Christophe Olinger> Remember bug\n* 0dedfde - (10 days ago) (2014-01-14 15:52:40 +0100) <Christophe Olinger> Dlete link not yet updated. Now ok\n* a672c36 - (10 days ago) (2014-01-14 14:39:22 +0100) <Christophe Olinger> Put all rootScope properties in objects for my modules Work on disable edit button\n* 17fc301 - (10 days ago) (2014-01-14 13:53:02 +0100) <Christophe Olinger> Small stsuff\n* d2deea0 - (10 days ago) (2014-01-14 13:43:33 +0100) <Christophe Olinger> Margin on thumblist in card form\n* 3d5d4b8 - (10 days ago) (2014-01-14 13:43:05 +0100) <Christophe Olinger> Mx wait time for url thumbs\n* b9c89ba - (10 days ago) (2014-01-14 13:12:37 +0100) <Christophe Olinger> Change color of saving text\n* 47b7feb - (10 days ago) (2014-01-14 13:12:27 +0100) <Christophe Olinger> Force maximum wait time for phantomjs\n* d862e94 - (10 days ago) (2014-01-14 13:01:48 +0100) <Christophe Olinger> Handle queued card edits without uploads\n* e382b9e - (10 days ago) (2014-01-14 12:54:32 +0100) <Christophe Olinger> Keep track of cards to post or update while checinkg for ongoing att uploads\n* 22c7172 - (10 days ago) (2014-01-14 11:46:36 +0100) <Christophe Olinger> - ThumbService in own file\n* 0545965 - (10 days ago) (2014-01-14 11:44:39 +0100) <Christophe Olinger> - Do not update thumbService of $scope but the service itself!!! This fixes a lot of problems - Checked the $scope $apply requirements\n* e0f182a - (10 days ago) (2014-01-14 11:27:00 +0100) <Christophe Olinger> Beautify url thumbs\n* a5696dd - (10 days ago) (2014-01-14 10:51:22 +0100) <Christophe Olinger> Simplified thumblists and rechecked css for thumbs and overlays on thumbs\n* 7518c5b - (11 days ago) (2014-01-13 16:57:11 +0100) <Christophe Olinger> Use imagemagik command line to convert pdf This allows telling it to only look at first page via [0]\n* 62ced8a - (11 days ago) (2014-01-13 16:42:47 +0100) <Christophe Olinger> Made queing simpler but now I had to introduce a resolce que for posts and puts\n* f75e7ec - (11 days ago) (2014-01-13 10:48:36 +0100) <Christophe Olinger> Stub for pdf thumbnaik\n* 1b7c15b - (11 days ago) (2014-01-13 09:36:12 +0100) <Christophe Olinger> - Change progress indication for uploads - On multiple file uploads aff $scope $apply to get thumbnail loaded into image\n* eccdef1 - (11 days ago) (2014-01-13 08:59:21 +0100) <Christophe Olinger> The notes route would prevent setting a cookie on first call, since the cookie is not yet set. I now set the cookie also in the first page request, even if its a 401 response\n* 08a3e13 - (13 days ago) (2014-01-11 21:24:34 +0100) <Christophe Olinger> Note about future commandline pdf comvert. allows selecting first page pdf only\n* 06f3c06 - (13 days ago) (2014-01-11 20:59:25 +0100) <Christophe Olinger> - Adding python datetutils gets rid of parse errors from mongoengine\n* 9ca7796 - (13 days ago) (2014-01-11 20:57:01 +0100) <Christophe Olinger> for got strftime in api\n* a4a78df - (13 days ago) (2014-01-11 20:44:35 +0100) <Christophe Olinger> Revert last two commits\n* 07cffc1 - (13 days ago) (2014-01-11 20:39:42 +0100) <Christophe Olinger> Removed all strftime to fix time bug on panther\n* 49e8c59 - (13 days ago) (2014-01-11 20:31:21 +0100) <Christophe Olinger> Trying to resolve time bug on panther\n* 65bc0aa - (origin/tryupload2) (2 weeks ago) (2014-01-10 21:20:13 +0100) <Christophe Olinger> thumbservice for links\n* 15a6c74 - (2 weeks ago) (2014-01-10 20:39:26 +0100) <Christophe Olinger> uploadService to thumbService\n* b8e7e33 - (2 weeks ago) (2014-01-10 20:33:08 +0100) <Christophe Olinger> Fixed bug when adding files to a previously empty card\n* bfb74d3 - (2 weeks ago) (2014-01-10 20:25:51 +0100) <Christophe Olinger> - A few cleanups in uploading/removing file atts\n* d11b4e4 - (2 weeks ago) (2014-01-10 20:19:58 +0100) <Christophe Olinger> make sure fileAttachmentsList is an object\n* 599f0c1 - (2 weeks ago) (2014-01-10 20:09:35 +0100) <Christophe Olinger> uploading files finished\n* 238809a - (2 weeks ago) (2014-01-10 15:36:13 +0100) <Christophe Olinger> WIP\n* 74efa93 - (2 weeks ago) (2014-01-10 14:24:34 +0100) <Christophe Olinger> WIP\n* 3328331 - (2 weeks ago) (2014-01-10 12:59:57 +0100) <Christophe Olinger> Fixed empty size badges in stacklist\n* 4950dc3 - (2 weeks ago) (2014-01-10 12:57:02 +0100) <Christophe Olinger> -Fixed bug in post stack api\n* ba02dbf - (2 weeks ago) (2014-01-10 12:52:53 +0100) <Christophe Olinger> changed 'new' to unique id\n* 21ed809 - (2 weeks ago) (2014-01-10 12:40:58 +0100) <Christophe Olinger> WIP\n* f3032c7 - (2 weeks ago) (2014-01-09 20:30:44 +0100) <Christophe Olinger> WIP\n* 66226a8 - (2 weeks ago) (2014-01-09 16:00:11 +0100) <Christophe Olinger> WIP\n* 5c44cd2 - (2 weeks ago) (2014-01-08 17:18:33 +0100) <Christophe Olinger> Working on other\n* 745ea73 - (origin/thumbservice) (2 weeks ago) (2014-01-07 17:24:25 +0100) <Christophe Olinger> Trying out file upload\n* 1105edf - (3 weeks ago) (2014-01-06 23:06:55 +0100) <Christophe Olinger> Trying some sort of thumbnail thingy\n* b996bd7 - (3 weeks ago) (2014-01-06 21:06:52 +0100) <Christophe Olinger> Sortlabel feature DONE! - Add sorting by label of cardGroups in the CardListController - Some formatting cleanup\n* 0f774f3 - (origin/sortlabel3) (3 weeks ago) (2014-01-06 17:25:24 +0100) <Christophe Olinger> Working sortlabels!!!\n* f4e749c - (origin/sortlabel2) (3 weeks ago) (2014-01-06 14:20:42 +0100) <Christophe Olinger> Final try 2\n* d86a79a - (3 weeks ago) (2014-01-06 14:20:08 +0100) <Christophe Olinger> Final try\n* a6e867f - (3 weeks ago) (2014-01-06 13:42:22 +0100) <Christophe Olinger> Testing another variant for sortlabel\n* 3c59787 - (origin/sortlabel) (3 weeks ago) (2014-01-04 00:13:02 +0100) <Christophe Olinger> Still working on sortlabel. Now going to All and any other does not show label. Correct reset on all?\n* 0c46b9a - (3 weeks ago) (2014-01-03 21:48:20 +0100) <Christophe Olinger> Put directives into own file\n* 577ffae - (3 weeks ago) (2014-01-03 21:45:52 +0100) <Christophe Olinger> Put cativecard into rootscope for now. Try Cards factory later.\n* 3a1b902 - (3 weeks ago) (2014-01-03 21:33:00 +0100) <Christophe Olinger> Fix some bugs introduced by creating another child scope in card repeat\n* 3f0ba58 - (3 weeks ago) (2014-01-03 20:58:28 +0100) <Christophe Olinger> Removed activestackid and activestacktitle, replaced it with activestack\n* 11501d3 - (3 weeks ago) (2014-01-03 20:38:46 +0100) <Christophe Olinger> Continued work on sortLabel directive. Resetting the sortLabels array on order or stack change was key.\n* 94b5efa - (3 weeks ago) (2014-01-03 17:18:50 +0100) <Christophe Olinger> Initial try of sort label directive. Lots of bugs\n* 184408f - (3 weeks ago) (2014-01-03 15:21:22 +0100) <Christophe Olinger> - big card form edit - rechecked bootstrap - changed click and double click behaviour - added action button like in iOS - BUG: add docus directive but does not work!!!\n* 51f387d - (3 weeks ago) (2014-01-03 09:32:35 +0100) <Christophe Olinger> Reworked cardlist header row\n* dbfd292 - (3 weeks ago) (2014-01-03 09:05:07 +0100) <Christophe Olinger> Reworked CardForm html and css\n* c89e380 - (3 weeks ago) (2014-01-03 00:06:32 +0100) <Christophe Olinger> Started working on cardform html\n* 90c3fee - (3 weeks ago) (2014-01-02 22:51:24 +0100) <Christophe Olinger> Reformat\n* ea8e50b - (3 weeks ago) (2014-01-02 22:51:13 +0100) <Christophe Olinger> Ugly typo\n* cc17acf - (3 weeks ago) (2014-01-02 22:41:36 +0100) <Christophe Olinger> First clean up of CardForm, 2B continued\n* 2643a91 - (3 weeks ago) (2014-01-02 22:21:44 +0100) <Christophe Olinger> Renamed card controller to cardlist controller\n* 161ebb4 - (3 weeks ago) (2014-01-02 22:20:05 +0100) <Christophe Olinger> Bug in car controller\n* f2e2831 - (3 weeks ago) (2014-01-02 22:18:15 +0100) <Christophe Olinger> Updated angular file upload to 1.2.3\n* 1680c64 - (3 weeks ago) (2014-01-02 22:11:23 +0100) <Christophe Olinger> Big chunk of controller refactoring to be more angular like. Only cardform controller is remaining.\n* 6db8964 - (3 weeks ago) (2014-01-02 17:13:51 +0100) <Christophe Olinger> Refactoring notes app. Modularizing, reducing parent scope into correct child scopes. Generally do things more angular like and less HACKISH :-)\n* 349ea14 - (3 weeks ago) (2014-01-02 16:07:44 +0100) <Christophe Olinger> - Rename stackcontroller to stacklist controller - Build stack factory - Add watch expression for cards changes to update stack sizes - Add 'add' and 'rename' to Stacks factory\n* 7bf9daa - (3 weeks ago) (2014-01-02 15:17:17 +0100) <Christophe Olinger> Comment out an unused factory\n* 098fc33 - (3 weeks ago) (2014-01-02 15:03:20 +0100) <Christophe Olinger> First test of angualr factory. Using Stacks to learn\n* 99d1e86 - (3 weeks ago) (2014-01-02 14:08:41 +0100) <Christophe Olinger> - Create angular app as gloab variable and use it to create new factories, controllers, ... - Use alternative style to define controllers. better for minification and more consistent with rest of project style\n* 4916093 - (3 weeks ago) (2014-01-02 12:44:45 +0100) <Christophe Olinger> Correct behaviour of back button on forbidden page access\n* ce2af43 - (3 weeks ago) (2014-01-02 12:31:51 +0100) <Christophe Olinger> Use hosted libraries\n* 82d3a39 - (3 weeks ago) (2014-01-02 12:23:22 +0100) <Christophe Olinger> Ongoing work on authentication\n* acc85f2 - (3 weeks ago) (2014-01-02 11:18:56 +0100) <Christophe Olinger> Replace 401 error handler with make_response\n* c13b959 - (5 weeks ago) (2013-12-18 22:26:09 +0100) <Christophe Olinger> Realtive path for externals\n* b7db442 - (5 weeks ago) (2013-12-18 19:20:24 +0100) <Christophe Olinger> Use angular min script files\n* 53d2f81 - (5 weeks ago) (2013-12-18 17:20:15 +0100) <Christophe Olinger> Changed string on admin page\n* e744f12 - (5 weeks ago) (2013-12-18 17:19:08 +0100) <Christophe Olinger> Rechecked python module requirements\n* 97050f8 - (5 weeks ago) (2013-12-18 17:03:26 +0100) <Christophe Olinger> Fixed bugs in authorization\n* 529ad85 - (5 weeks ago) (2013-12-18 16:22:10 +0100) <Christophe Olinger> Completed the db export feature. Seems very slow on the a2hosting server\n* 9e03f6f - (5 weeks ago) (2013-12-18 12:59:18 +0100) <Christophe Olinger> Add pyc and class to gitignore and remove previously commited pyc files\n* 0824146 - (5 weeks ago) (2013-12-17 16:44:05 +0100) <Christophe Olinger> Forgot file\n* 8749986 - (5 weeks ago) (2013-12-17 16:41:42 +0100) <Christophe Olinger> Initial try for database export function, not working yet\n* 7e134a1 - (5 weeks ago) (2013-12-17 15:37:02 +0100) <Christophe Olinger> Clean up first commit\n* 6dc8e73 - (5 weeks ago) (2013-12-17 15:29:56 +0100) <Christophe Olinger> first commit\n",
+			"settings":
+			{
+				"buffer_size": 17373,
+				"line_ending": "Unix",
+				"name": "Git Log Graph",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"file": "TODO",
+			"settings":
+			{
+				"buffer_size": 1251,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "oto/static/js/core/NavController.js",
+			"settings":
+			{
+				"buffer_size": 1089,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "oto/static/js/admin/AdminControllers.js",
+			"settings":
+			{
+				"buffer_size": 3139,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "You can easily try the following yourself in a text editor that supports regular expressions, such as EditPad Pro. If you do not have such an editor, you can download the free evaluation version of EditPad Pro to try this out. EditPad Pro's this is sp cppöö engine is fully functional in the demo version. As a quick test, copy and paste the text of this page into EditPad Pro. Then select Search|Show Search Panel from the menu. In the search pane that appears near the bottom, type in this is sp cppöö in the box labeled \"Search Text\". Mark the \"Regular expression\" checkbox, and click the Find First button. This is the leftmost button on the search panel. See how EditPad Pro's this is sp cppöö engine finds the first match. Click the Find Next button, which sits next to the Find First button, to find further matches. When there are no further matches, the Find Next button's icon flashes briefly.\n\nNow try to search using the this is sp cppöö reg(ular expressions?|ex(p|es)?). This this is sp cppöö finds all names, singular and plural, I have used on this page to say \"this is sp cppöö\". If we only had plain text search, we would have needed 5 searches. With this is sp cppööes, we need just one search. this is sp cppööes save you time when using a tool like EditPad Pro. Select Count Matches in the Search menu to see how many times this regular expression can match the file you have open in EditPad Pro.\n\nIf you are a programmer, your software will run faster since even a simple this is sp cppöö engine applying the above this is sp cppöö once will outperform a state of the art plain text search algorithm searching through the data five times. Regular expressions also reduce development time. With a this is sp cppöö engine, it takes only one line (e.g. in Perl, PHP, Python, Ruby, Java, or .NET) or a couple of lines (e.g. in C using PCRE) of code to, say, check if the user's input looks like a valid email address.",
+			"settings":
+			{
+				"buffer_size": 1934,
+				"line_ending": "Unix",
+				"name": "You can easily try the following yourself in a tex"
+			}
+		},
+		{
+			"file": "oto/static/js/notes/NotesViewController.js",
+			"settings":
+			{
+				"buffer_size": 5209,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "oto/static/partials/login.html",
+			"settings":
+			{
+				"buffer_size": 1561,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"git ",
+				"Git: Commit"
+			],
+			[
+				"git",
+				"Git: Commit history"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Discover Packages"
+			]
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"print ('hallo')",
+			"print 'hallo'"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/christophe/workspace/oto/oto.sublime-project",
+		"/home/christophe/workspace/oto/oto/static/js/login/LoginController.js",
+		"/home/christophe/workspace/oto/oto/static/partials/login.html",
+		"/home/christophe/workspace/oto/oto/templates/layout.html",
+		"/home/christophe/workspace/oto/oto/static/js/notes/StacksFactory.js",
+		"/home/christophe/workspace/oto/oto/static/js/notes/ThumbService.js",
+		"/home/christophe/workspace/oto/oto/static/js/notes/NotesViewController.js",
+		"/home/christophe/workspace/oto/oto/static/js/notes/notesFilters.js",
+		"/home/christophe/workspace/oto/oto/static/js/notes/notesDirectives.js",
+		"/home/christophe/workspace/oto/Notes",
+		"/home/christophe/workspace/oto/oto/settings.py",
+		"/home/christophe/workspace/oto/oto/static/js/core/app.js",
+		"/home/christophe/workspace/oto/oto/static/js/core/authenticationDirectives.js",
+		"/home/christophe/workspace/oto/oto/notesapi/fileattachments.py",
+		"/home/christophe/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/christophe/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/christophe/.config/sublime-text-3/Packages/User/Package Control.sublime-settings",
+		"/home/christophe/workspace/oto/oto/static/js/core/NavController.js",
+		"/home/christophe/.config/sublime-text-3/Packages/Git/Git.sublime-settings",
+		"/home/christophe/.config/sublime-text-3/Packages/Package Control/Package Control.sublime-settings",
+		"/home/christophe/workspace/oto/.pydevproject"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"search",
+			"Search",
+			"search",
+			"cppöö",
+			"regex",
+			" function",
+			"function",
+			"'activeNav",
+			"di",
+			"    Auth.logout(function() {\n            $location.path('/login');\n        }, function() {\n            $rootScope.core.error = \"Failed to logout\";\n        });\n    };\n}]);",
+			"\n            scope.location = $location;\n            scope.$watch('location.absUrl()', function(newPath) {\n                if (path === newPath || path === newPat",
+			"element.removeClass('active');",
+			"');                ",
+			".$watch('location.absUrl()', function(newPath) {",
+			"element.addClass('active');",
+			"element.removeClass('active');"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"Hey"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "oto/static/js/notes/CardListController.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3025,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								629,
+								629
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 815,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								815,
+								815
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Diff/Diff.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 17373,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3073,
+								3073
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Git/syntax/Git Graph.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "TODO",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1251,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "oto/static/js/core/NavController.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1089,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1050,
+								1050
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "oto/static/js/admin/AdminControllers.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3139,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1146,
+								1146
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 342.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1934,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								443,
+								443
+							]
+						],
+						"settings":
+						{
+							"auto_name": "You can easily try the following yourself in a tex",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "oto/static/js/notes/NotesViewController.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5209,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "oto/static/partials/login.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1561,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/AngularJS/AngularJS.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 112.0
+	},
+	"project": "oto.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"login",
+				"oto/static/partials/login.html"
+			],
+			[
+				"notes",
+				"oto/static/js/notes/NotesViewController.js"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 211.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
